@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>導師專屬工作台</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --gold-light: #FFD700;
+            --gold-main: #D4AF37;
+            --gold-dark: #B8860B;
+            --bg-gradient: radial-gradient(circle at top, #2C2C2C 0%, #0A0A0A 100%);
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: #E0E0E0;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 50px 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            letter-spacing: 6px;
+            font-weight: 800;
+            margin: 0;
+            filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.4));
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: var(--gold-main);
+            letter-spacing: 4px;
+            margin-top: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .menu-grid {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* 調整間距讓四個按鈕視覺更平衡 */
+        }
+
+        /* 精緻按鈕主體 */
+        .btn {
+            position: relative;
+            background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 22px;
+            padding: 26px 24px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.6), 
+                        inset 0 1px 2px rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        /* 呼吸發光邊框效果 */
+        @keyframes border-glow {
+            0% { border-color: rgba(212, 175, 55, 0.4); }
+            50% { border-color: rgba(255, 215, 0, 0.8); }
+            100% { border-color: rgba(212, 175, 55, 0.4); }
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            border-color: var(--gold-light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8), 
+                        inset 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .icon-box {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #333, #000);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            margin-right: 22px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .text-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .btn-desc {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        .remote-tag {
+            margin-left: auto;
+            background: rgba(0,0,0,0.4);
+            color: var(--gold-main);
+            font-size: 0.65rem;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--gold-dark);
+            letter-spacing: 1px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 50px 20px;
+            font-size: 0.7rem;
+            color: #444;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>導師專屬</h1>
+        <div class="subtitle">Personal Mentor Station</div>
+    </header>
+
+    <div class="menu-grid">
+        <a href="http://www.webcoursestest.hairweb.net" class="btn">
+            <div class="icon-box">🗺️</div>
+            <div class="text-content">
+                <span class="btn-title">經營地圖</span>
+                <span class="btn-desc">戰略佈局與核心思維</span>
+            </div>
+        </a>
+
+        <a href="https://www.client.hairweb.net" class="btn" onclick="if(this.getAttribute('href')==='#') alert('請在程式碼中填入資料庫連結');">
+            <div class="icon-box">👥</div>
+            <div class="text-content">
+                <span class="btn-title">客戶管理</span>
+                <span class="btn-desc">學員名單與成長進度</span>
+            </div>
+        </a>
+
+<div class="btn" onclick="alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
+    <div class="icon-box">🛠️</div>
+    <div class="text-content">
+        <span class="btn-title">實戰工具</span>
+        <span class="btn-desc">電腦端專業拍攝工具組</span>
+    </div>
+    <span class="remote-tag">PC ONLY</span>
+</div>
+
+        <a href="https://line.me/ti/p/您的ID" class="btn" style="border-color: rgba(255, 215, 0, 0.7); animation: border-glow 3s infinite;">
+            <div class="icon-box" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); color: black;">💬</div>
+            <div class="text-content">
+                <span class="btn-title" style="color: var(--gold-light);">導師諮詢</span>
+                <span class="btn-desc">一對一尊榮私密對話</span>
+            </div>
+        </a>
+    </div>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+
+    <footer>© 2025 MENTOR EXCLUSIVE ALL RIGHTS RESERVED</footer>
+
+</body>
+</html>

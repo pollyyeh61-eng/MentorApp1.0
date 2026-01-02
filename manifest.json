@@ -1,0 +1,15 @@
+{
+  "short_name": "活力美髮線上學堂",
+  "name": "沙龍經營學線上課程",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#D4AF37"
+}
