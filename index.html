@@ -112,7 +112,7 @@
 <body>
 
     <header>
-        <h1>導師專屬</h1>
+        <h1>會員專屬</h1>
         <div class="subtitle">Personal Mentor Station</div>
     </header>
 
@@ -210,7 +210,7 @@
         // 切換模式按鈕
         document.getElementById('switchBtn').addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerText = isLoginMode ? "會員登入" : "導師註冊";
+            document.getElementById('authTitle').innerText = isLoginMode ? "會員登入" : "會員註冊";
             document.getElementById('switchBtn').innerText = isLoginMode ? "尚未擁有帳號？立即註冊" : "已有帳號？返回登入";
             document.getElementById('submitBtn').innerText = isLoginMode ? "進入系統" : "完成註冊";
         });
@@ -222,3 +222,4 @@
     </script>
 </body>
 </html>
+
