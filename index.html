@@ -55,9 +55,9 @@
     <h1 id="mainTitle">導師專屬平台</h1>
 
     <div id="authBox" class="card">
-        <h2 id="authTitle" style="color:var(--gold-light);">成員進入</h2>
+        <h2 id="authTitle" style="color:var(--gold-light);">會員登入</h2>
         <div class="input-group">
-            <label>成員郵箱 (已掛載即時暫存)</label>
+            <label>會員郵箱 (已掛載即時暫存)</label>
             <input type="email" id="email" placeholder="輸入 Email" oninput="saveToLocal()">
         </div>
         <div class="input-group">
@@ -66,20 +66,48 @@
         </div>
 
         <div id="regExtra" style="display: none;">
-            <div class="terms-container">同意條款：本辦公室資源僅供成員學習使用，禁止非法傳遞。</div>
+            <div class="terms-container">同意條款：本平台資源僅供成員學習使用，禁止非法傳遞。</div>
             <div style="font-size:0.8rem; margin-bottom:10px;">
                 <input type="checkbox" id="agreeCheck" onchange="updateBtnState()"> 我已閱讀並同意條款
             </div>
         </div>
 
         <button class="action-btn" id="submitBtn">立即進入</button>
-        <div id="forgotPwd" class="toggle-link" style="margin-top:10px; color:#888;">忘記密碼？</div>
-        <div id="toggleMode" class="toggle-link">申請入駐辦公室</div>
+        <div id="forgotPwd" class="toggle-link" style="margin-top:10px; color:#888;">忘記密碼？</div>申請進入平台 <div id="toggleMode" class="toggle-link">divd
     </div>
 
     <div id="mainMenu" class="menu-grid">
-        <a href="http://www.webcoursestest.hairweb.net" class="btn"><div class="icon-box">🗺️</div><div><b>經營地圖</b></div></a>
-        <a href="https://www.client.hairweb.net" class="btn"><div class="icon-box">👥</div><div><b>客戶管理</b></div></a>
+<a href="http://www.webcoursestest.hairweb.net" class="btn">
+            <div class="icon-box">🗺️</div>
+            <div class="text-content">
+                <span class="btn-title">經營地圖</span>
+                <span class="btn-desc">戰略佈局與核心思維</span>
+            </div>
+        </a>
+
+        <a href="https://www.client.hairweb.net" class="btn" onclick="if(this.getAttribute('href')==='#') alert('請在程式碼中填入資料庫連結');">
+            <div class="icon-box">👥</div>
+            <div class="text-content">
+                <span class="btn-title">客戶管理</span>
+                <span class="btn-desc">學員名單與成長進度</span>
+            </div>
+        </a>
+
+<div class="btn" onclick="alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
+    <div class="icon-box">🛠️</div>
+    <div class="text-content">
+        <span class="btn-title">實戰工具</span>
+        <span class="btn-desc">電腦端專業拍攝工具組</span>
+    </div>
+    <span class="remote-tag">PC ONLY</span>
+</div>
+
+        <a href="https://line.me/ti/p/您的ID" class="btn" style="border-color: rgba(255, 215, 0, 0.7); animation: border-glow 3s infinite;">
+            <div class="icon-box" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); color: black;">💬</div>
+            <div class="text-content">
+                <span class="btn-title" style="color: var(--gold-light);">導師諮詢</span>
+                <span class="btn-desc">一對一尊榮私密對話</span>
+            </div>
         <div class="btn" style="cursor:pointer;" id="memberInfoBtn"><div class="icon-box">👤</div><div><b>成員資訊</b><br><small>修正與管理帳號</small></div></div>
         <button id="logoutBtn" style="background:none; border:none; color:#555; text-decoration:underline; cursor:pointer; margin-top:20px;">離開辦公室</button>
     </div>
@@ -211,4 +239,5 @@
     </script>
 </body>
 </html>
+
 
