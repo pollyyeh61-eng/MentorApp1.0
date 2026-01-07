@@ -26,110 +26,105 @@
             box-sizing: border-box;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
+        header { text-align: center; margin-bottom: 60px; }
         h1 {
             background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2rem;
+            font-size: 2.2rem;
             letter-spacing: 6px;
             font-weight: 800;
             margin: 0;
             filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.4));
         }
+        .subtitle { font-size: 0.75rem; color: var(--gold-main); letter-spacing: 4px; margin-top: 12px; opacity: 0.8; }
 
-        .subtitle {
-            font-size: 0.75rem;
-            color: var(--gold-main);
-            letter-spacing: 4px;
-            margin-top: 12px;
-            opacity: 0.8;
-            text-transform: uppercase;
-        }
-
-        /* 認證容器 */
+        /* Google 登入按鈕 */
         .auth-container {
             width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 40px 30px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            box-sizing: border-box;
-            display: none; 
+            max-width: 320px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
             animation: fadeIn 0.8s ease;
         }
 
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; color: var(--gold-main); font-size: 0.8rem; margin-bottom: 8px; }
-        .input-group input {
-            width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px; padding: 15px; color: white; font-size: 1rem; box-sizing: border-box;
+        .google-btn {
+            width: 100%;
+            background: white;
+            border-radius: 50px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            cursor: pointer;
+            border: 2px solid var(--gold-main);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s;
         }
 
-        .auth-submit {
-            width: 100%; background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
-            border: none; border-radius: 12px; padding: 15px; color: #000; font-weight: 800;
-            cursor: pointer; transition: transform 0.2s;
-        }
+        .google-btn:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(0,0,0,0.6); }
 
-        .auth-switch { text-align: center; margin-top: 20px; font-size: 0.85rem; color: #999; }
-        .auth-switch span { color: var(--gold-light); cursor: pointer; text-decoration: underline; }
+        .google-btn img { width: 24px; height: 24px; }
+        .google-btn span { color: #333; font-weight: 700; font-size: 1.1rem; }
 
         /* 選單網格 */
         .menu-grid {
-            width: 100%; max-width: 400px; display: none; flex-direction: column; gap: 25px; animation: fadeIn 0.8s ease;
+            width: 100%;
+            max-width: 400px;
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeIn 0.8s ease;
         }
 
         .btn {
-            position: relative; background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
-            border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 22px; padding: 26px 24px;
-            text-decoration: none; color: white; display: flex; align-items: center;
+            position: relative;
+            background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 22px;
+            padding: 26px 24px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
             box-shadow: 0 12px 25px rgba(0,0,0,0.6);
         }
 
         .icon-box {
-            width: 56px; height: 56px; background: linear-gradient(135deg, #333, #000);
-            border-radius: 16px; display: flex; justify-content: center; align-items: center;
-            font-size: 28px; margin-right: 22px; border: 1px solid rgba(212, 175, 55, 0.3);
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, #333, #000);
+            border-radius: 16px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 28px; margin-right: 22px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
         .text-content { display: flex; flex-direction: column; }
         .btn-title { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
         .btn-desc { font-size: 0.85rem; color: #999; margin-top: 6px; }
 
-        footer { margin-top: auto; padding: 50px 20px; font-size: 0.7rem; color: #444; text-align: center; }
+        .logout-link { margin-top: 40px; color: #666; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        footer { margin-top: auto; padding: 40px; font-size: 0.7rem; color: #444; text-align: center; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>會員專屬</h1>
+        <h1>導師專屬</h1>
         <div class="subtitle">Personal Mentor Station</div>
     </header>
 
     <div id="authSection" class="auth-container">
-        <h2 id="authTitle" style="text-align: center; color: var(--gold-light);">會員登入</h2>
-        <div class="input-group">
-            <label>電子郵件</label>
-            <input type="email" id="email" placeholder="example@mail.com">
+        <div class="google-btn" id="googleLoginBtn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            <span>使用 Google 帳號登入</span>
         </div>
-        <div class="input-group">
-            <label>密碼</label>
-            <input type="password" id="password" placeholder="請輸入密碼">
-        </div>
-        <button class="auth-submit" id="submitBtn">進入系統</button>
-        <div class="auth-switch">
-            <span id="switchBtn">尚未擁有帳號？立即註冊</span>
-        </div>
+        <p style="margin-top: 20px; color: #888; font-size: 0.8rem;">點擊上方按鈕以驗證導師身份</p>
     </div>
 
     <div id="mainMenu" class="menu-grid">
@@ -154,72 +149,58 @@
                 <span class="btn-desc">電腦端專業拍攝工具組</span>
             </div>
         </div>
-        <button id="logoutBtn" style="background:none; border:none; color:#444; cursor:pointer; text-decoration:underline; margin-top:20px;">安全登出</button>
+        
+        <div id="logoutBtn" class="logout-link">切換使用者 / 登出系統</div>
     </div>
 
     <footer>© 2025 MENTOR EXCLUSIVE ALL RIGHTS RESERVED</footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // 您的 Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
             authDomain: "mentor-app-b76e3.firebaseapp.com",
             projectId: "mentor-app-b76e3",
             storageBucket: "mentor-app-b76e3.firebasestorage.app",
             messagingSenderId: "757249551762",
-            appId: "1:757249551762:web:1c5bfff8b1ee222047654b",
-            measurementId: "G-HFM63QPV8V"
+            appId: "1:757249551762:web:1c5bfff8b1ee222047654b"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
 
-        let isLoginMode = true;
-
-        // 監聽登入狀態切換 UI
+        // 自動監測狀態：已登入就顯功能，未登入就顯按鈕
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('mainMenu').style.display = 'flex';
+                console.log("導師已登入:", user.displayName);
             } else {
-                document.getElementById('authSection').style.display = 'block';
+                document.getElementById('authSection').style.display = 'flex';
                 document.getElementById('mainMenu').style.display = 'none';
             }
         });
 
-        // 處理 登入/註冊 邏輯
-        document.getElementById('submitBtn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
+        // Google 彈窗登入
+        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
             try {
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    alert("登入成功，歡迎導師");
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("帳號創建成功！");
-                }
+                await signInWithPopup(auth, provider);
             } catch (error) {
-                alert("錯誤: " + error.message);
+                console.error("登入失敗:", error);
+                alert("登入失敗，請確認您的 Google 帳號狀態");
             }
         });
 
-        // 切換模式按鈕
-        document.getElementById('switchBtn').addEventListener('click', () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerText = isLoginMode ? "會員登入" : "會員註冊";
-            document.getElementById('switchBtn').innerText = isLoginMode ? "尚未擁有帳號？立即註冊" : "已有帳號？返回登入";
-            document.getElementById('submitBtn').innerText = isLoginMode ? "進入系統" : "完成註冊";
-        });
-
-        // 登出邏輯
+        // 登出
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            signOut(auth);
+            if(confirm("確定要登出系統嗎？")) {
+                signOut(auth);
+            }
         });
     </script>
 </body>
 </html>
-
