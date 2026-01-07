@@ -2,67 +2,194 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>導師辦公室</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>導師專屬平台</title>
     <style>
-        :root { --gold: #D4AF37; --bg: #0A0A0A; }
+        :root {
+            --gold-light: #FFD700;
+            --gold-main: #D4AF37;
+            --gold-dark: #B8860B;
+            --bg-gradient: radial-gradient(circle at top, #2C2C2C 0%, #0A0A0A 100%);
+        }
+
         body {
-            background: radial-gradient(circle at top, #2C2C2C 0%, var(--bg) 100%);
-            color: #E0E0E0; font-family: "PingFang TC", sans-serif;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; margin: 0; padding: 40px 20px;
+            background: var(--bg-gradient);
+            color: #E0E0E0;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
         }
+
+        header { text-align: center; margin-bottom: 30px; }
+        h1 {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem; letter-spacing: 4px; font-weight: 800; margin: 0;
+        }
+        .subtitle { font-size: 0.8rem; color: var(--gold-main); letter-spacing: 2px; margin-top: 5px; opacity: 0.8; }
+
+        /* 認證盒 */
         .auth-box {
-            width: 100%; max-width: 350px; padding: 30px;
-            background: rgba(255, 255, 255, 0.03); border-radius: 24px;
-            border: 1px solid rgba(212, 175, 55, 0.2); text-align: center;
-            display: none; /* 初始隱藏，待 JS 檢查狀態 */
+            width: 100%; max-width: 360px;
+            background: rgba(255,255,255,0.05);
+            padding: 30px; border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            text-align: center; display: none; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 0.75rem; color: var(--gold); margin-bottom: 8px; }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 0.75rem; color: var(--gold-main); margin-bottom: 5px; margin-left: 5px; }
         input {
-            width: 100%; padding: 14px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px;
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px;
             color: white; box-sizing: border-box; outline: none;
         }
-        .action-btn {
-            width: 100%; padding: 15px; background: linear-gradient(135deg, #FFD700, #B8860B);
-            border: none; border-radius: 12px; color: #000; font-weight: 800; cursor: pointer;
+
+        /* 條款捲軸區塊 */
+        .terms-container {
+            margin: 15px 0; padding: 12px; height: 100px; overflow-y: scroll;
+            background: rgba(0,0,0,0.4); border: 1px solid #333;
+            border-radius: 8px; text-align: left; font-size: 0.75rem; color: #bbb; line-height: 1.6;
         }
-        .toggle-link { margin-top: 25px; font-size: 0.85rem; color: #888; }
-        .toggle-link span { color: var(--gold); text-decoration: underline; cursor: pointer; }
+        .terms-container::-webkit-scrollbar { width: 4px; }
+        .terms-container::-webkit-scrollbar-thumb { background: var(--gold-main); border-radius: 10px; }
+
+        .checkbox-group {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; margin-bottom: 15px; font-size: 0.85rem; color: #ccc;
+        }
+
+        .action-btn {
+            width: 100%; padding: 14px; 
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            border: none; border-radius: 12px; color: #000; font-weight: 800;
+            font-size: 1rem; cursor: pointer; transition: 0.3s;
+        }
+        .action-btn:disabled { background: #333; color: #777; cursor: not-allowed; }
+
+        .toggle-link { margin-top: 20px; font-size: 0.85rem; color: #888; }
+        .toggle-link span { color: var(--gold-main); text-decoration: underline; cursor: pointer; }
+
+        /* 選單網格 */
         .menu-grid { width: 100%; max-width: 400px; display: none; flex-direction: column; gap: 15px; }
-        .loading { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; justify-content: center; align-items: center; color: var(--gold); }
+        
+        .btn {
+            background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 18px; padding: 18px;
+            text-decoration: none; color: white; display: flex; align-items: center;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+
+        .icon-box {
+            width: 45px; height: 45px; font-size: 22px; margin-right: 15px;
+            display: flex; align-items: center; justify-content: center;
+            background: #000; border-radius: 12px; border: 1px solid var(--gold-main);
+        }
+
+        .text-content { display: flex; flex-direction: column; }
+        .btn-title { font-weight: 800; font-size: 1.1rem; color: #fff; }
+        .btn-desc { font-size: 0.75rem; color: #aaa; margin-top: 2px; }
+        .remote-tag {
+            position: absolute; right: 15px; top: 15px;
+            background: var(--gold-dark); color: black; font-size: 0.6rem;
+            padding: 2px 6px; border-radius: 4px; font-weight: bold;
+        }
+
+        @keyframes border-glow {
+            0%, 100% { border-color: rgba(255, 215, 0, 0.4); }
+            50% { border-color: rgba(255, 215, 0, 1); }
+        }
+
+        .loading-screen {
+            position: fixed; inset: 0; background: #000; z-index: 2000;
+            display: flex; justify-content: center; align-items: center; color: var(--gold-main);
+        }
     </style>
 </head>
 <body>
 
-    <div id="loader" class="loading">正在進入辦公室...</div>
+    <div id="loader" class="loading-screen">核對身分中...</div>
 
-    <header style="text-align:center; margin-bottom:30px;">
-        <h1 style="color:var(--gold); letter-spacing:4px;">導師辦公室</h1>
+    <header>
+        <h1>導師辦公室</h1>
+        <div class="subtitle">Private Digital Workspace</div>
     </header>
 
     <div id="authBox" class="auth-box">
-        <h2 id="authTitle" style="margin-top:0;">成員登入</h2>
+        <h2 id="authTitle" style="margin-top:0; color:var(--gold-light);">成員進入</h2>
+        
         <div class="input-group">
             <label>成員郵箱 (Email)</label>
-            <input type="email" id="email" placeholder="輸入 Email">
+            <input type="email" id="email" placeholder="輸入電子郵箱">
         </div>
         <div class="input-group">
             <label>通行密碼 (Password)</label>
             <input type="password" id="password" placeholder="輸入密碼">
         </div>
+
+        <div id="regExtra" style="display: none;">
+            <div class="terms-container">
+                <strong>成員服務與個資保護條款</strong><br><br>
+                1. 服務說明：本辦公室提供之資源僅供入駐成員內部學習與實戰使用。<br>
+                2. 個資蒐集：我們僅蒐集 Email 用於登入驗證，並保證不外洩給第三方。<br>
+                3. 成員義務：請妥善保管通行密碼。禁止將本平台內容用於非法或未授權商業行為。<br>
+                4. 條款同意：按下註冊即代表您同意本辦公室之所有規範與隱私政策。
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="agreeCheck">
+                <label for="agreeCheck">我已閱讀並同意以上條款</label>
+            </div>
+        </div>
+
         <button class="action-btn" id="submitBtn">立即進入</button>
+
         <div class="toggle-link">
-            <span id="toggleMode">尚未擁有身分？申請入駐</span>
+            <span id="toggleMode">第一次來？申請入駐辦公室</span>
         </div>
     </div>
 
     <div id="mainMenu" class="menu-grid">
-        <button onclick="window.location.href='http://www.webcoursestest.hairweb.net'" style="padding:20px; background:#1A1A1A; color:white; border:1px solid var(--gold); border-radius:15px; cursor:pointer;">🗺️ 經營地圖</button>
-        <button onclick="window.location.href='https://www.client.hairweb.net'" style="padding:20px; background:#1A1A1A; color:white; border:1px solid var(--gold); border-radius:15px; cursor:pointer;">👥 客戶管理</button>
-        <button id="logoutBtn" style="background:none; border:none; color:#555; text-decoration:underline; cursor:pointer; margin-top:20px;">離開辦公室</button>
+        <a href="http://www.webcoursestest.hairweb.net" class="btn">
+            <div class="icon-box">🗺️</div>
+            <div class="text-content">
+                <span class="btn-title">經營地圖</span>
+                <span class="btn-desc">戰略佈局與核心思維</span>
+            </div>
+        </a>
+
+        <a href="https://www.client.hairweb.net" class="btn">
+            <div class="icon-box">👥</div>
+            <div class="text-content">
+                <span class="btn-title">客戶管理</span>
+                <span class="btn-desc">學員名單與成長進度</span>
+            </div>
+        </a>
+
+        <div class="btn" style="cursor:pointer;" onclick="alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
+            <div class="icon-box">🛠️</div>
+            <div class="text-content">
+                <span class="btn-title">實戰工具</span>
+                <span class="btn-desc">電腦端專業拍攝工具組</span>
+            </div>
+            <span class="remote-tag">PC ONLY</span>
+        </div>
+
+        <a href="https://line.me/ti/p/您的ID" class="btn" style="border-color: rgba(255, 215, 0, 0.7); animation: border-glow 3s infinite;">
+            <div class="icon-box" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); color: black;">💬</div>
+            <div class="text-content">
+                <span class="btn-title" style="color: var(--gold-light);">導師諮詢</span>
+                <span class="btn-desc">一對一尊榮私密對話</span>
+            </div>
+        </a>
+
+        <button id="logoutBtn" style="background:none; border:none; color:#666; text-decoration:underline; cursor:pointer; margin-top:20px;">離開辦公室</button>
     </div>
 
     <script type="module">
@@ -83,35 +210,50 @@
 
         let isLoginMode = true;
 
-        // 切換 註冊/登入 模式
-        document.getElementById('toggleMode').addEventListener('click', () => {
+        const toggleBtn = document.getElementById('toggleMode');
+        const submitBtn = document.getElementById('submitBtn');
+        const agreeCheck = document.getElementById('agreeCheck');
+
+        // 切換模式
+        toggleBtn.addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerText = isLoginMode ? "成員登入" : "成員註冊";
-            document.getElementById('submitBtn').innerText = isLoginMode ? "立即進入" : "完成註冊並入駐";
-            document.getElementById('toggleMode').innerText = isLoginMode ? "尚未擁有身分？申請入駐" : "已有身分？返回登入";
+            document.getElementById('authTitle').innerText = isLoginMode ? "成員進入" : "成員註冊";
+            submitBtn.innerText = isLoginMode ? "立即進入" : "同意條款並完成註冊";
+            toggleBtn.innerText = isLoginMode ? "第一次來？申請入駐辦公室" : "已有身分？返回進入頁面";
+            document.getElementById('regExtra').style.display = isLoginMode ? 'none' : 'block';
+            updateBtnState();
         });
 
-        // 執行 註冊或登入
-        document.getElementById('submitBtn').addEventListener('click', async () => {
+        // 檢查勾選狀態
+        agreeCheck.addEventListener('change', updateBtnState);
+        function updateBtnState() {
+            if (isLoginMode) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = !agreeCheck.checked;
+            }
+        }
+
+        // 提交
+        submitBtn.addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            if(!email || !password) return alert("請完整填寫資訊");
+            if(!email || !password) return alert("請完整輸入郵箱與密碼");
 
             try {
                 if (isLoginMode) {
                     await signInWithEmailAndPassword(auth, email, password);
                 } else {
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    // 註冊成功後發送您在後台設定的驗證信
                     await sendEmailVerification(userCredential.user);
-                    alert("註冊成功！已寄送驗證信，請至信箱查收並驗證。");
+                    alert("註冊申請已送出！請至信箱點擊驗證連結，以正式開通入駐權限。");
                 }
             } catch (error) {
-                alert("錯誤：" + error.message);
+                alert("系統提示：" + error.message);
             }
         });
 
-        // 監控狀態
+        // 狀態顯示
         onAuthStateChanged(auth, (user) => {
             document.getElementById('loader').style.display = 'none';
             if (user) {
