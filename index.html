@@ -101,50 +101,52 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
-            authDomain: "mentor-app-b76e3.firebaseapp.com",
-            projectId: "mentor-app-b76e3",
-            storageBucket: "mentor-app-b76e3.firebasestorage.app",
-            messagingSenderId: "757249551762",
-            appId: "1:757249551762:web:1c5bfff8b1ee222047654b"
-        };
+    const firebaseConfig = { /* 保持您的配置不變 */ };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+    // 強制開啟本地持久化（關掉瀏覽器再開也不用重新驗證）
+    setPersistence(auth, browserLocalPersistence);
 
-        let isLoginMode = true;
+    // 【加速關鍵】預判檢查：如果本地已經有登入紀錄，直接先開門
+    if (localStorage.getItem('fast_access') === 'true') {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('mainMenu').style.display = 'flex';
+        document.getElementById('authBox').style.display = 'none';
+    }
 
-        document.getElementById('toggleAuth').addEventListener('click', () => {
-            isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerText = isLoginMode ? "歡迎入駐" : "申請入駐";
-            document.getElementById('btnText').innerText = isLoginMode ? "進入辦公室" : "同意並申請入駐";
-            document.getElementById('toggleAuth').innerText = isLoginMode ? "第一次來？點此申請入駐" : "已有成員身分？點此進入";
-        });
+    onAuthStateChanged(auth, (user) => {
+        document.getElementById('loader').style.display = 'none';
+        if (user) {
+            localStorage.setItem('fast_access', 'true'); // 標記為已知成員
+            document.getElementById('authBox').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'flex';
+        } else {
+            localStorage.removeItem('fast_access');
+            document.getElementById('authBox').style.display = 'block';
+            document.getElementById('mainMenu').style.display = 'none';
+        }
+    });
 
-        onAuthStateChanged(auth, (user) => {
-            document.getElementById('loader').style.display = 'none';
-            if (user) {
-                document.getElementById('authBox').style.display = 'none';
-                document.getElementById('mainMenu').style.display = 'flex';
-            } else {
-                document.getElementById('authBox').style.display = 'block';
-                document.getElementById('mainMenu').style.display = 'none';
-            }
-        });
+    document.getElementById('googleActionBtn').addEventListener('click', () => {
+        document.getElementById('loader').innerText = "正在前往 Google 安全驗證...";
+        document.getElementById('loader').style.display = 'flex';
+        signInWithRedirect(auth, provider);
+    });
 
-        document.getElementById('googleActionBtn').addEventListener('click', () => {
-            document.getElementById('loader').style.display = 'flex';
-            signInWithRedirect(auth, provider);
-        });
+    // 登出時清除快取
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('fast_access');
+        auth.signOut();
+    });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
-        getRedirectResult(auth).catch(() => document.getElementById('loader').style.display = 'none');
-    </script>
+    getRedirectResult(auth);
+</script>
 </body>
 </html>
+
