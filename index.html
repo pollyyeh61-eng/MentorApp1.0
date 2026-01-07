@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>導師專屬工作台</title>
-    <link rel="manifest" href="manifest.json">
+    <title>導師數位辦公室</title>
     <style>
         :root {
             --gold-light: #FFD700;
@@ -26,140 +25,86 @@
             box-sizing: border-box;
         }
 
-        header { text-align: center; margin-bottom: 60px; }
+        header { text-align: center; margin-bottom: 50px; }
         h1 {
             background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2.2rem;
-            letter-spacing: 6px;
-            font-weight: 800;
-            margin: 0;
-            filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.4));
+            font-size: 2rem; letter-spacing: 4px; font-weight: 800;
         }
-        .subtitle { font-size: 0.75rem; color: var(--gold-main); letter-spacing: 4px; margin-top: 12px; opacity: 0.8; }
+        .subtitle { font-size: 0.8rem; color: var(--gold-main); letter-spacing: 2px; margin-top: 5px; opacity: 0.8; }
 
-        /* Google 登入按鈕 */
-        .auth-container {
-            width: 100%;
-            max-width: 320px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            animation: fadeIn 0.8s ease;
+        .auth-box {
+            width: 100%; max-width: 350px;
+            background: rgba(255,255,255,0.05);
+            padding: 40px 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            text-align: center;
+            display: none; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .google-btn {
-            width: 100%;
-            background: white;
-            border-radius: 50px;
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            cursor: pointer;
-            border: 2px solid var(--gold-main);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-            transition: all 0.3s;
+            width: 100%; background: white; border-radius: 12px;
+            padding: 14px; display: flex; align-items: center; justify-content: center;
+            gap: 12px; cursor: pointer; border: none; margin: 25px 0;
+            font-weight: bold; font-size: 1rem; color: #333;
+            transition: transform 0.2s;
         }
+        .google-btn:active { transform: scale(0.98); }
 
-        .google-btn:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(0,0,0,0.6); }
+        .toggle-link { color: var(--gold-main); text-decoration: underline; cursor: pointer; font-size: 0.85rem; }
 
-        .google-btn img { width: 24px; height: 24px; }
-        .google-btn span { color: #333; font-weight: 700; font-size: 1.1rem; }
-
-        /* 選單網格 */
-        .menu-grid {
-            width: 100%;
-            max-width: 400px;
-            display: none;
-            flex-direction: column;
-            gap: 25px;
-            animation: fadeIn 0.8s ease;
-        }
+        .menu-grid { width: 100%; max-width: 400px; display: none; flex-direction: column; gap: 20px; }
 
         .btn {
-            position: relative;
             background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 22px;
-            padding: 26px 24px;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.6);
-        }
-
-        .icon-box {
-            width: 56px; height: 56px;
-            background: linear-gradient(135deg, #333, #000);
-            border-radius: 16px;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 28px; margin-right: 22px;
             border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px; padding: 22px;
+            text-decoration: none; color: white; display: flex; align-items: center;
         }
 
-        .text-content { display: flex; flex-direction: column; }
-        .btn-title { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
-        .btn-desc { font-size: 0.85rem; color: #999; margin-top: 6px; }
-
-        .logout-link { margin-top: 40px; color: #666; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
-
-        footer { margin-top: auto; padding: 40px; font-size: 0.7rem; color: #444; text-align: center; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .icon-box { width: 45px; height: 45px; font-size: 22px; margin-right: 15px; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 12px; border: 1px solid var(--gold-dark); }
+        
+        .loading-screen { position: fixed; inset: 0; background: #000; display: flex; justify-content: center; align-items: center; z-index: 1000; color: var(--gold-main); }
     </style>
 </head>
 <body>
 
+    <div id="loader" class="loading-screen">身分驗證中...</div>
+
     <header>
-        <h1>導師專屬</h1>
-        <div class="subtitle">Personal Mentor Station</div>
+        <h1>導師辦公室</h1>
+        <div class="subtitle">Private Digital Workspace</div>
     </header>
 
-    <div id="authSection" class="auth-container">
-        <div class="google-btn" id="googleLoginBtn">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-            <span>使用 Google 帳號登入</span>
-        </div>
-        <p style="margin-top: 20px; color: #888; font-size: 0.8rem;">點擊上方按鈕以驗證導師身份</p>
+    <div id="authBox" class="auth-box">
+        <h2 id="authTitle" style="color: var(--gold-light); margin-top:0;">歡迎入駐</h2>
+        <p id="authDesc" style="font-size: 0.9rem; color: #aaa; line-height: 1.6;">請使用 Google 帳號驗證<br>開啟您的專屬資源</p>
+        
+        <button class="google-btn" id="googleActionBtn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            <span id="btnText">進入辦公室</span>
+        </button>
+
+        <div class="toggle-link" id="toggleAuth">第一次來？點此申請入駐</div>
     </div>
 
     <div id="mainMenu" class="menu-grid">
         <a href="http://www.webcoursestest.hairweb.net" class="btn">
             <div class="icon-box">🗺️</div>
-            <div class="text-content">
-                <span class="btn-title">經營地圖</span>
-                <span class="btn-desc">戰略佈局與核心思維</span>
-            </div>
+            <div><b>經營地圖</b><br><small>戰略佈局與核心思維</small></div>
         </a>
-        <a href="https://www.client.hairweb.net" class="btn">
-            <div class="icon-box">👥</div>
-            <div class="text-content">
-                <span class="btn-title">客戶管理</span>
-                <span class="btn-desc">學員名單與成長進度</span>
-            </div>
-        </a>
-        <div class="btn" onclick="window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
-            <div class="icon-box">🛠️</div>
-            <div class="text-content">
-                <span class="btn-title">實戰工具</span>
-                <span class="btn-desc">電腦端專業拍攝工具組</span>
-            </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button id="logoutBtn" style="background:none; border:none; color: #555; text-decoration: underline; cursor:pointer;">離開辦公室</button>
         </div>
-        
-        <div id="logoutBtn" class="logout-link">切換使用者 / 登出系統</div>
     </div>
-
-    <footer>© 2025 MENTOR EXCLUSIVE ALL RIGHTS RESERVED</footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // 您的 Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
             authDomain: "mentor-app-b76e3.firebaseapp.com",
@@ -173,34 +118,33 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // 自動監測狀態：已登入就顯功能，未登入就顯按鈕
+        let isLoginMode = true;
+
+        document.getElementById('toggleAuth').addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            document.getElementById('authTitle').innerText = isLoginMode ? "歡迎入駐" : "申請入駐";
+            document.getElementById('btnText').innerText = isLoginMode ? "進入辦公室" : "同意並申請入駐";
+            document.getElementById('toggleAuth').innerText = isLoginMode ? "第一次來？點此申請入駐" : "已有成員身分？點此進入";
+        });
+
         onAuthStateChanged(auth, (user) => {
+            document.getElementById('loader').style.display = 'none';
             if (user) {
-                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('authBox').style.display = 'none';
                 document.getElementById('mainMenu').style.display = 'flex';
-                console.log("導師已登入:", user.displayName);
             } else {
-                document.getElementById('authSection').style.display = 'flex';
+                document.getElementById('authBox').style.display = 'block';
                 document.getElementById('mainMenu').style.display = 'none';
             }
         });
 
-        // Google 彈窗登入
-        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, provider);
-            } catch (error) {
-                console.error("登入失敗:", error);
-                alert("登入失敗，請確認您的 Google 帳號狀態");
-            }
+        document.getElementById('googleActionBtn').addEventListener('click', () => {
+            document.getElementById('loader').style.display = 'flex';
+            signInWithRedirect(auth, provider);
         });
 
-        // 登出
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if(confirm("確定要登出系統嗎？")) {
-                signOut(auth);
-            }
-        });
+        document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+        getRedirectResult(auth).catch(() => document.getElementById('loader').style.display = 'none');
     </script>
 </body>
 </html>
