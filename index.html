@@ -51,15 +51,88 @@
             text-transform: uppercase;
         }
 
+        /* 登入/註冊區塊樣式 */
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px 30px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            display: none; /* 由 JS 決定是否顯示 */
+            animation: fadeIn 0.8s ease;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--gold-main);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .auth-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            color: #000;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .auth-switch span {
+            color: var(--gold-light);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* 選單網格樣式 */
         .menu-grid {
             width: 100%;
             max-width: 400px;
-            display: flex;
+            display: none; /* 初始隱藏 */
             flex-direction: column;
-            gap: 25px; /* 調整間距讓四個按鈕視覺更平衡 */
+            gap: 25px;
+            animation: fadeIn 0.8s ease;
         }
 
-        /* 精緻按鈕主體 */
         .btn {
             position: relative;
             background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
@@ -71,23 +144,23 @@
             display: flex;
             align-items: center;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.6), 
-                        inset 0 1px 2px rgba(255,255,255,0.05);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.05);
             overflow: hidden;
         }
 
-        /* 呼吸發光邊框效果 */
         @keyframes border-glow {
             0% { border-color: rgba(212, 175, 55, 0.4); }
             50% { border-color: rgba(255, 215, 0, 0.8); }
             100% { border-color: rgba(212, 175, 55, 0.4); }
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .btn:active {
             transform: scale(0.95);
-            border-color: var(--gold-light);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8), 
-                        inset 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
         .icon-box {
@@ -102,7 +175,6 @@
             font-size: 28px;
             margin-right: 22px;
             border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         .text-content {
@@ -115,7 +187,6 @@
             font-weight: 700;
             letter-spacing: 1px;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .btn-desc {
@@ -133,7 +204,6 @@
             padding: 4px 10px;
             border-radius: 8px;
             border: 1px solid var(--gold-dark);
-            letter-spacing: 1px;
         }
 
         footer {
@@ -153,7 +223,34 @@
         <div class="subtitle">Personal Mentor Station</div>
     </header>
 
-    <div class="menu-grid">
+    <div id="authSection" class="auth-container">
+        <h2 id="authTitle" style="text-align: center; color: var(--gold-light); margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">會員登入</h2>
+        
+        <div class="input-group">
+            <label>電子郵件</label>
+            <input type="email" id="email" placeholder="example@mail.com">
+        </div>
+
+        <div class="input-group">
+            <label>登入密碼</label>
+            <input type="password" id="password" placeholder="請輸入密碼">
+        </div>
+
+        <div id="registerFields" style="display: none;">
+            <div class="input-group">
+                <label>確認密碼</label>
+                <input type="password" id="confirmPassword" placeholder="再次確認密碼">
+            </div>
+        </div>
+
+        <button class="auth-submit" onclick="handleAuth()">進入系統</button>
+
+        <div class="auth-switch">
+            <span id="switchText" onclick="toggleAuthMode()">尚未擁有帳號？立即註冊</span>
+        </div>
+    </div>
+
+    <div id="mainMenu" class="menu-grid">
         <a href="http://www.webcoursestest.hairweb.net" class="btn">
             <div class="icon-box">🗺️</div>
             <div class="text-content">
@@ -162,7 +259,7 @@
             </div>
         </a>
 
-        <a href="https://www.client.hairweb.net" class="btn" onclick="if(this.getAttribute('href')==='#') alert('請在程式碼中填入資料庫連結');">
+        <a href="https://www.client.hairweb.net" class="btn">
             <div class="icon-box">👥</div>
             <div class="text-content">
                 <span class="btn-title">客戶管理</span>
@@ -170,14 +267,14 @@
             </div>
         </a>
 
-<div class="btn" onclick="alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
-    <div class="icon-box">🛠️</div>
-    <div class="text-content">
-        <span class="btn-title">實戰工具</span>
-        <span class="btn-desc">電腦端專業拍攝工具組</span>
-    </div>
-    <span class="remote-tag">PC ONLY</span>
-</div>
+        <div class="btn" onclick="alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
+            <div class="icon-box">🛠️</div>
+            <div class="text-content">
+                <span class="btn-title">實戰工具</span>
+                <span class="btn-desc">電腦端專業拍攝工具組</span>
+            </div>
+            <span class="remote-tag">PC ONLY</span>
+        </div>
 
         <a href="https://line.me/ti/p/您的ID" class="btn" style="border-color: rgba(255, 215, 0, 0.7); animation: border-glow 3s infinite;">
             <div class="icon-box" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); color: black;">💬</div>
@@ -186,14 +283,79 @@
                 <span class="btn-desc">一對一尊榮私密對話</span>
             </div>
         </a>
+
+        <button onclick="logout()" style="background: none; border: none; color: #444; margin-top: 20px; cursor: pointer; text-decoration: underline;">登出系統</button>
     </div>
-    <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
 
     <footer>© 2025 MENTOR EXCLUSIVE ALL RIGHTS RESERVED</footer>
 
+    <script>
+        let isLoginMode = true;
+
+        // 頁面加載時檢查登入狀態
+        window.onload = function() {
+            const userToken = localStorage.getItem('mentor_session');
+            if (userToken) {
+                showMenu();
+            } else {
+                document.getElementById('authSection').style.display = 'block';
+            }
+        };
+
+        // 切換 登入/註冊 模式
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const authTitle = document.getElementById('authTitle');
+            const registerFields = document.getElementById('registerFields');
+            const switchText = document.getElementById('switchText');
+
+            if (isLoginMode) {
+                authTitle.innerText = '會員登入';
+                registerFields.style.display = 'none';
+                switchText.innerText = '尚未擁有帳號？立即註冊';
+            } else {
+                authTitle.innerText = '導師註冊';
+                registerFields.style.display = 'block';
+                switchText.innerText = '已有帳號？前往登入';
+            }
+        }
+
+        // 處理驗證邏輯
+        function handleAuth() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            if (!email || !pass) {
+                alert('請完整填寫資訊');
+                return;
+            }
+
+            // 此處未來可介接資料庫 API
+            // 目前先以模擬成功為主
+            localStorage.setItem('mentor_session', 'active_user_' + Date.now());
+            
+            const msg = isLoginMode ? '歡迎回來，尊貴的導師' : '註冊成功，歡迎加入';
+            alert(msg);
+            
+            showMenu();
+        }
+
+        function showMenu() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'flex';
+        }
+
+        function logout() {
+            if(confirm('確定要登出嗎？')) {
+                localStorage.removeItem('mentor_session');
+                location.reload();
+            }
+        }
+
+        // Service Worker 註冊
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </body>
 </html>
