@@ -135,7 +135,7 @@
             <button onclick="openAuth('register')" style="background:var(--gold-main); color:black;">會員註冊</button>
         </div>
         <div id="navUserInfo" class="nav-user-info">
-            <span id="userNameDisplay" style="color:var(--gold-main); font-weight:bold;">成員</span>
+            <span id="userNameDisplay" style="color:var(--gold-main); font-weight:bold;">會員</span>
             <button onclick="openMemberInfo()" style="color:#aaa; background:none; border:none; text-decoration:underline; cursor:pointer;">會員中心</button>
             <button onclick="handleLogout()" style="color:red; background:none; border:1px solid red; padding:5px 12px; border-radius:15px; cursor:pointer; font-size:0.8rem;">登出</button>
         </div>
@@ -174,8 +174,8 @@
             
             <div id="registerOnly" style="display:none;">
                 <div class="terms-box">
-                    <strong>成員服務與個資保護條款</strong><br>
-                    1. 本系統資源僅供入駐成員個人學習使用。<br>
+                    <strong>會員服務與個資保護條款</strong><br>
+                    1. 本系統資源僅供入駐會員個人學習使用。<br>
                     2. 嚴禁未經授權之轉載、側錄或商業行為。<br>
                     3. 系統將使用 Cookie 保持您的登入狀態。
                 </div>
@@ -228,7 +228,7 @@
         window.openAuth = (mode) => {
             currentMode = mode;
             document.getElementById('authModal').style.display = 'flex';
-            document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
+            document.getElementById('modalTitle').innerText = mode === 'login' ? '會員進入' : '申請入駐';
             document.getElementById('registerOnly').style.display = mode === 'login' ? 'none' : 'block';
             checkReg();
         };
@@ -261,7 +261,7 @@
             const isAuth = !!user;
             document.getElementById('navAuth').style.display = isAuth ? 'none' : 'block';
             document.getElementById('navUserInfo').style.display = isAuth ? 'flex' : 'none';
-            document.getElementById('userNameDisplay').innerText = user?.displayName || user?.email.split('@')[0] || "成員";
+            document.getElementById('userNameDisplay').innerText = user?.displayName || user?.email.split('@')[0] || "會員";
             
             if(isAuth) {
                 document.querySelectorAll('.btn-card').forEach(btn => btn.classList.remove('locked'));
@@ -318,7 +318,7 @@
             window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';
         };
 
-        window.handleLogout = () => { if(confirm("確定登出並鎖定辦公室權限嗎？")) signOut(auth); };
+        window.handleLogout = () => { if(confirm("確定登出並鎖定平台權限嗎？")) signOut(auth); };
         window.handleDelete = async () => {
             if(confirm("警告：此操作將刪除所有雲端憑證，確定註銷帳號嗎？")) {
                 try { await deleteUser(auth.currentUser); alert("帳號已註銷。"); }
