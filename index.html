@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>導師專屬平台</title>
+    <title>導師辦公室 | 奢華管理系統</title>
     <style>
         :root {
             --gold-bright: #FFD700;
@@ -21,7 +21,7 @@
             align-items: center; min-height: 100vh;
         }
 
-        /* 1. 奢華標題金屬漆質感 */
+        /* 奢華金屬標題 */
         h1, h2 {
             background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -29,7 +29,6 @@
             font-weight: 900; letter-spacing: 4px; margin: 0;
         }
 
-        /* 2. 導覽列 */
         nav {
             position: fixed; top: 0; width: 100%; height: 75px;
             background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
@@ -39,23 +38,15 @@
         }
 
         .nav-logo { font-weight: 800; color: var(--gold-main); letter-spacing: 2px; font-size: 1.2rem; }
-
         .nav-auth-btns button {
             background: none; border: 1px solid var(--gold-main); color: var(--gold-main);
-            padding: 8px 20px; border-radius: 20px; cursor: pointer; margin-left: 10px;
-            transition: 0.3s;
+            padding: 8px 20px; border-radius: 20px; cursor: pointer; margin-left: 10px; transition: 0.3s;
         }
         .nav-auth-btns button:hover { background: var(--gold-main); color: #000; }
-
         .nav-user-info { display: none; align-items: center; gap: 15px; }
 
-        /* 3. 磨砂玻璃卡片與強化邊框 */
         .container { width: 90%; max-width: 900px; text-align: center; }
-
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; margin-top: 50px;
-        }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
 
         .btn-card {
             background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -64,17 +55,9 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 10px var(--gold-glow);
         }
-        
-        .btn-card:hover:not(.locked) {
-            transform: translateY(-8px); box-shadow: 0 0 25px var(--gold-glow);
-            border-color: var(--gold-bright);
-        }
-
+        .btn-card:hover:not(.locked) { transform: translateY(-8px); box-shadow: 0 0 25px var(--gold-glow); border-color: var(--gold-bright); }
         .btn-card.locked { filter: grayscale(1) opacity(0.4); cursor: not-allowed; }
-        .btn-card.locked::after {
-            content: "🔒 需先入駐"; position: absolute; top: 10px; right: 15px;
-            font-size: 0.7rem; color: var(--gold-bright);
-        }
+        .btn-card.locked::after { content: "🔒 需先入駐"; position: absolute; top: 10px; right: 15px; font-size: 0.7rem; color: var(--gold-bright); }
 
         .icon-box {
             width: 55px; height: 55px; background: #000; border: 1px solid var(--gold-main);
@@ -87,32 +70,28 @@
         .btn-desc { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
         .remote-tag { position: absolute; bottom: 12px; right: 18px; font-size: 0.65rem; color: var(--gold-bright); font-weight: bold; }
 
-        /* 4. 彈出式視窗與智能感應 */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             display: none; justify-content: center; align-items: center; z-index: 2000;
         }
-        
         .auth-card {
-            background: #111; width: 90%; max-width: 400px; padding: 35px;
+            background: #111; width: 95%; max-width: 420px; padding: 30px;
             border-radius: 30px; border: 2px solid var(--gold-main); text-align: center;
-            box-shadow: 0 0 30px var(--gold-glow);
+            box-shadow: 0 0 30px var(--gold-glow); max-height: 90vh; overflow-y: auto;
         }
 
-        input {
-            width: 100%; padding: 14px; margin: 12px 0; background: #000;
-            border: 1px solid rgba(212, 175, 55, 0.5); color: white; border-radius: 12px;
-            box-sizing: border-box; font-size: 1rem;
+        label { display: block; text-align: left; font-size: 0.75rem; color: var(--gold-main); margin-bottom: 5px; margin-top: 10px; }
+        input, textarea {
+            width: 100%; padding: 12px; background: #000; border: 1px solid rgba(212, 175, 55, 0.5);
+            color: white; border-radius: 10px; box-sizing: border-box; font-size: 0.95rem;
         }
-        input:focus { border-color: var(--gold-bright); outline: none; box-shadow: 0 0 10px var(--gold-glow); }
+        textarea { height: 80px; resize: none; }
 
         .submit-btn {
             width: 100%; padding: 16px; background: var(--gold-main); border: none;
-            border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1rem;
-            transition: 0.3s;
+            border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1rem; margin-top: 20px; transition: 0.3s;
         }
 
-        /* 金光呼吸效果 */
         @keyframes gold-breathing {
             0% { box-shadow: 0 0 5px var(--gold-main); transform: scale(1); }
             50% { box-shadow: 0 0 25px var(--gold-bright); transform: scale(1.02); }
@@ -120,22 +99,19 @@
         }
         .needs-save { animation: gold-breathing 2s infinite ease-in-out; background: var(--gold-bright) !important; color: #000; }
 
-        .terms-box {
-            height: 90px; overflow-y: auto; background: #050505; font-size: 0.75rem;
-            margin: 15px 0; padding: 12px; text-align: left; color: #777; border-radius: 8px; line-height: 1.6;
-        }
+        .terms-box { height: 80px; overflow-y: auto; background: #050505; font-size: 0.75rem; margin: 15px 0; padding: 12px; text-align: left; color: #777; border-radius: 8px; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="nav-logo">導師專屬平台</div>
+        <div class="nav-logo">導師辦公室</div>
         <div id="navAuth" class="nav-auth-btns">
             <button onclick="openAuth('login')">登入</button>
-            <button onclick="openAuth('register')" style="background:var(--gold-main); color:black;">會員註冊</button>
+            <button onclick="openAuth('register')" style="background:var(--gold-main); color:black;">註冊入駐</button>
         </div>
         <div id="navUserInfo" class="nav-user-info">
-            <span id="userNameDisplay" style="color:var(--gold-main); font-weight:bold;">會員</span>
+            <span id="userNameDisplay" style="color:var(--gold-main); font-weight:bold;">成員</span>
             <button onclick="openMemberInfo()" style="color:#aaa; background:none; border:none; text-decoration:underline; cursor:pointer;">會員中心</button>
             <button onclick="handleLogout()" style="color:red; background:none; border:1px solid red; padding:5px 12px; border-radius:15px; cursor:pointer; font-size:0.8rem;">登出</button>
         </div>
@@ -143,23 +119,21 @@
 
     <div class="container">
         <h1>PRIVATE WORKSPACE</h1>
-        <p id="welcomeSub" style="color:#888; letter-spacing: 2px; margin-top:10px;">戰略佈局與核心思維的私人空間</p>
-
         <div class="menu-grid">
-            <div class="btn-card locked" id="btn1" onclick="appJump('http://www.webcoursestest.hairweb.net')">
+            <div class="btn-card locked" onclick="appJump('http://www.webcoursestest.hairweb.net')">
                 <div class="icon-box">🗺️</div>
                 <div class="text-content"><span class="btn-title">經營地圖</span><span class="btn-desc">戰略佈局與核心思維</span></div>
             </div>
-            <div class="btn-card locked" id="btn2" onclick="appJump('http://booking.hairweb.net/)">
+            <div class="btn-card locked" onclick="appJump('http://booking.hairweb.net')">
                 <div class="icon-box">👥</div>
-                <div class="text-content"><span class="btn-title">客戶預約</span><span class="btn-desc">客戶預約雙向管理</span></div>
+                <div class="text-content"><span class="btn-title">客戶預約</span><span class="btn-desc">線上排程與預約管理</span></div>
             </div>
-            <div class="btn-card locked" id="btn3" onclick="toolTip()">
+            <div class="btn-card locked" onclick="toolTip()">
                 <div class="icon-box">🛠️</div>
                 <div class="text-content"><span class="btn-title">實戰工具</span><span class="btn-desc">電腦端專業拍攝工具組</span></div>
                 <span class="remote-tag">PC ONLY</span>
             </div>
-            <div class="btn-card locked" id="btn4" onclick="appJump('https://line.me/ti/p/您的ID')">
+            <div class="btn-card locked" onclick="appJump('https://line.me/ti/p/您的ID')">
                 <div class="icon-box">💬</div>
                 <div class="text-content"><span class="btn-title">導師諮詢</span><span class="btn-desc">一對一尊榮私密對話</span></div>
             </div>
@@ -168,20 +142,13 @@
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-card">
-            <h2 id="modalTitle">會員進入</h2>
+            <h2 id="modalTitle">成員進入</h2>
             <input type="email" id="email" placeholder="Email (自動暫存)" oninput="saveLocal()">
             <input type="password" id="password" placeholder="通行密碼" oninput="saveLocal()">
-            
             <div id="registerOnly" style="display:none;">
-                <div class="terms-box">
-                    <strong>會員服務與個資保護條款</strong><br>
-                    1. 本系統資源僅供入駐會員個人學習使用。<br>
-                    2. 嚴禁未經授權之轉載、側錄或商業行為。<br>
-                    3. 系統將使用 Cookie 保持您的登入狀態。
-                </div>
-                <label style="font-size:0.85rem;"><input type="checkbox" id="agreeCheck" onchange="checkReg()"> 我已閱讀並同意以上條款</label>
+                <div class="terms-box">條款：本系統資源僅供成員學習使用，嚴禁轉載。</div>
+                <label style="font-size:0.85rem;"><input type="checkbox" id="agreeCheck" onchange="checkReg()"> 我已閱讀並同意條款</label>
             </div>
-
             <button class="submit-btn" id="mainSubmitBtn">立即進入</button>
             <p id="forgotBtn" style="font-size:0.8rem; cursor:pointer; color:#888; margin-top:15px;">忘記密碼？點此重設</p>
             <p onclick="closeAuth()" style="text-decoration:underline; cursor:pointer; font-size:0.8rem; margin-top:10px; color:#555;">取消返回</p>
@@ -191,13 +158,21 @@
     <div class="modal-overlay" id="infoModal">
         <div class="auth-card">
             <h2>會員中心</h2>
-            <div style="text-align:left; margin-bottom:20px;">
-                <label style="font-size:0.75rem; color:var(--gold-main);">修改會員顯示名稱 / 備註</label>
-                <input type="text" id="editName" placeholder="輸入您的稱呼" oninput="triggerBreathe()">
-            </div>
+            <label>成員頭像 URL</label>
+            <input type="text" id="editPhoto" placeholder="https://..." oninput="triggerBreathe()">
+            
+            <label>顯示名稱 / 暱稱</label>
+            <input type="text" id="editName" placeholder="輸入您的稱呼" oninput="triggerBreathe()">
+            
+            <label>聯絡電話</label>
+            <input type="tel" id="editPhone" placeholder="輸入電話號碼" oninput="triggerBreathe()">
+            
+            <label>自我介紹 / 備註</label>
+            <textarea id="editBio" placeholder="介紹一下您自己..." oninput="triggerBreathe()"></textarea>
+
             <button class="submit-btn" id="updateInfoBtn" onclick="updateInfo()">儲存雲端修正</button>
-            <button class="submit-btn" style="background:none; border:1px solid #444; color:#888; margin-top:10px;" onclick="closeInfo()">關閉視窗</button>
-            <hr style="border:0; border-top:1px solid #222; margin:25px 0;">
+            <button class="submit-btn" style="background:none; border:1px solid #444; color:#888;" onclick="closeInfo()">關閉</button>
+            <hr style="border:0; border-top:1px solid #222; margin:20px 0;">
             <button style="background:none; border:none; color:#555; cursor:pointer; font-size:0.7rem;" onclick="handleDelete()">註銷帳號(永久刪除)</button>
         </div>
     </div>
@@ -217,52 +192,42 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-
-        // 啟動持久化
         setPersistence(auth, browserLocalPersistence);
 
-        let currentMode = 'login';
         let currentUser = null;
+        let currentMode = 'login';
 
-        // 彈窗控制
         window.openAuth = (mode) => {
             currentMode = mode;
             document.getElementById('authModal').style.display = 'flex';
-            document.getElementById('modalTitle').innerText = mode === 'login' ? '會員進入' : '申請入駐';
+            document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
             document.getElementById('registerOnly').style.display = mode === 'login' ? 'none' : 'block';
             checkReg();
         };
         window.closeAuth = () => document.getElementById('authModal').style.display = 'none';
+
         window.openMemberInfo = () => {
             document.getElementById('infoModal').style.display = 'flex';
             document.getElementById('editName').value = currentUser?.displayName || "";
+            document.getElementById('editPhoto').value = currentUser?.photoURL || "";
+            // 電話與簡介建議儲存於 Firestore，目前先以本地模擬或簡單屬性示意
             document.getElementById('updateInfoBtn').classList.remove('needs-save');
         };
         window.closeInfo = () => document.getElementById('infoModal').style.display = 'none';
 
-        // 智能感應呼吸燈
         window.triggerBreathe = () => {
-            const btn = document.getElementById('updateInfoBtn');
-            const input = document.getElementById('editName');
-            if(input.value.trim() !== (currentUser?.displayName || "")) {
-                btn.classList.add('needs-save');
-            } else {
-                btn.classList.remove('needs-save');
-            }
+            document.getElementById('updateInfoBtn').classList.add('needs-save');
         };
 
-        // 自動暫存 Email
         window.saveLocal = () => localStorage.setItem('cached_email', document.getElementById('email').value);
         document.getElementById('email').value = localStorage.getItem('cached_email') || '';
 
-        // 狀態核心
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const isAuth = !!user;
             document.getElementById('navAuth').style.display = isAuth ? 'none' : 'block';
             document.getElementById('navUserInfo').style.display = isAuth ? 'flex' : 'none';
-            document.getElementById('userNameDisplay').innerText = user?.displayName || user?.email.split('@')[0] || "會員";
-            
+            document.getElementById('userNameDisplay').innerText = user?.displayName || user?.email.split('@')[0] || "成員";
             if(isAuth) {
                 document.querySelectorAll('.btn-card').forEach(btn => btn.classList.remove('locked'));
                 closeAuth();
@@ -271,66 +236,31 @@
             }
         });
 
-        // 執行登入註冊
         document.getElementById('mainSubmitBtn').onclick = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             try {
-                if(currentMode === 'login') {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("申請成功，歡迎入駐！");
-                }
-            } catch(e) { alert("系統提示：" + e.message); }
-        };
-
-        // 忘記密碼
-        document.getElementById('forgotBtn').onclick = async () => {
-            const email = document.getElementById('email').value;
-            if(!email) return alert("請先輸入您的 Email 郵箱");
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert("已寄送密碼重設郵件。");
+                if(currentMode === 'login') await signInWithEmailAndPassword(auth, email, password);
+                else await createUserWithEmailAndPassword(auth, email, password);
             } catch(e) { alert(e.message); }
         };
 
-        // 更新資料
         window.updateInfo = async () => {
-            const newName = document.getElementById('editName').value;
             try {
-                await updateProfile(auth.currentUser, { displayName: newName });
-                document.getElementById('updateInfoBtn').classList.remove('needs-save');
-                alert("雲端資料更新完成！");
+                await updateProfile(auth.currentUser, { 
+                    displayName: document.getElementById('editName').value,
+                    photoURL: document.getElementById('editPhoto').value
+                });
+                alert("雲端資料已儲存！");
                 location.reload();
             } catch(e) { alert(e.message); }
         };
 
-        // 按鍵邏輯
-        window.appJump = (url) => {
-            if(!currentUser) return openAuth('login');
-            window.location.href = url;
-        };
-
-        window.toolTip = () => {
-            if(!currentUser) return openAuth('login');
-            alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。');
-            window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';
-        };
-
-        window.handleLogout = () => { if(confirm("確定登出並鎖定平台權限嗎？")) signOut(auth); };
-        window.handleDelete = async () => {
-            if(confirm("警告：此操作將刪除所有雲端憑證，確定註銷帳號嗎？")) {
-                try { await deleteUser(auth.currentUser); alert("帳號已註銷。"); }
-                catch(e) { alert("安全因素，請登出重登後再執行刪除。"); }
-            }
-        };
-
-        window.checkReg = () => {
-            if(currentMode === 'register') {
-                document.getElementById('mainSubmitBtn').disabled = !document.getElementById('agreeCheck').checked;
-            } else { document.getElementById('mainSubmitBtn').disabled = false; }
-        };
+        window.appJump = (url) => { if(!currentUser) return openAuth('login'); window.location.href = url; };
+        window.toolTip = () => { if(!currentUser) return openAuth('login'); alert('提示：下載 PC 工具組中...'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; };
+        window.handleLogout = () => { if(confirm("確定登出？")) signOut(auth); };
+        window.handleDelete = async () => { if(confirm("確定刪除帳號？")) { try { await deleteUser(auth.currentUser); } catch(e) { alert("請重登後操作"); } } };
+        window.checkReg = () => { if(currentMode === 'register') document.getElementById('mainSubmitBtn').disabled = !document.getElementById('agreeCheck').checked; };
     </script>
 </body>
 </html>
