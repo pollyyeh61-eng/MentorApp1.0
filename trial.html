@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -25,6 +24,34 @@
             margin: 0;
             background-color: var(--dark-bg);
             color: #fff;
+        }
+
+        /* --- 1. 新增：回到首頁浮動鍵樣式 (右上角) --- */
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(17, 17, 17, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid var(--gold-dim);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            z-index: 9999;
+            animation: gold-breath 4s infinite ease-in-out;
+            transition: all 0.3s ease;
+        }
+        .home-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--gold-bright);
+        }
+        .home-btn span {
+            font-size: 24px;
         }
 
         /* 呼吸動畫：4秒循環 */
@@ -102,15 +129,10 @@
         }
 
         /* 滑鼠滑過 - 獨立光譜色設定 */
-        /* 左：翡翠光 */
         .block-side[data-link-id="left-external"]:hover { border-color: #00ff88 !important; box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); transform: translateY(-3px); }
-        /* 右：寶石藍 */
         .block-side[data-link-id="right-external"]:hover { border-color: #00ccff !important; box-shadow: 0 0 20px rgba(0, 204, 255, 0.5); transform: translateY(-3px); }
-        /* 上：金黃光 */
         .block-top:hover { border-color: #ffe600 !important; box-shadow: 0 0 20px rgba(255, 230, 0, 0.5); transform: translateY(-3px); }
-        /* 中：琥珀橘 */
         .block-middle:hover { border-color: #ff9900 !important; box-shadow: 0 0 20px rgba(255, 153, 0, 0.5); transform: translateY(-3px); }
-        /* 下：玫瑰紫 */
         .block-bottom:hover { border-color: #ff0077 !important; box-shadow: 0 0 20px rgba(255, 0, 119, 0.5); transform: translateY(-3px); }
 
         .main-title {
@@ -140,6 +162,10 @@
     </style>
 </head>
 <body>
+
+    <a href="index.html" class="home-btn" title="回到首頁">
+        <span>🏠</span>
+    </a>
 
     <div class="container">
         <div class="external-link-text text-preface" data-link-id="total-preface">前言</div>
@@ -192,7 +218,6 @@
     </div>
 
     <script>
-        // 完全保留原始連結與跳轉邏輯
         const linkUrls = {
             'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
@@ -206,7 +231,7 @@
             'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link',
             'customer-mgt': 'https://www.webcoursestest.hairweb.net/顧客管理',
             'sentiment-mgt': 'https://www.webcoursestest.hairweb.net/客情管理',
-            'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理', // 保持原始預約連結
+            'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理',
             'financial-mgt': 'https://www.webcoursestest.hairweb.net/財務管理',
             'talent-mgt': 'https://www.webcoursestest.hairweb.net/人才管理',
             'inventory-mgt': 'https://www.webcoursestest.hairweb.net/庫存管理',
@@ -237,5 +262,4 @@
         });
     </script>
 </body>
-
 </html>
