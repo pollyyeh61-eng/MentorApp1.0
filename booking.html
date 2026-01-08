@@ -20,6 +20,29 @@
             min-height: 100vh; padding-bottom: 120px;
         }
 
+        /* --- 回到首頁浮動鍵樣式 --- */
+        .home-floating-btn {
+            position: fixed;
+            bottom: 100px; /* 避開底部的切換標籤列 */
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid var(--gold-bright);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            z-index: 1000;
+            box-shadow: 0 0 15px var(--gold-glow);
+            transition: 0.3s;
+        }
+        .home-floating-btn:active { transform: scale(0.9); }
+        .home-floating-btn span { font-size: 24px; }
+
         .panel { display: none; width: 92%; max-width: 420px; padding-top: 30px; }
         .panel.active { display: block; }
 
@@ -64,7 +87,7 @@
         .calendar-table td.has-event { background: var(--gold-bright) !important; color: #000 !important; font-weight: bold; }
         .calendar-table td.selected-date { outline: 2px solid #fff; }
 
-        .tab-switcher { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; background: #111; border-radius: 50px; padding: 5px; width: 240px; border: 1px solid #333; z-index: 100; }
+        .tab-switcher { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; background: #111; border-radius: 50px; padding: 5px; width: 260px; border: 1px solid #333; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .tab-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; background: transparent; color: #666; font-size: 14px; cursor: pointer; }
         .tab-btn.active { background: var(--gold-bright); color: #000; font-weight: bold; }
 
@@ -81,6 +104,10 @@
     </style>
 </head>
 <body>
+
+    <a href="index.html" class="home-floating-btn">
+        <span>🏠</span>
+    </a>
 
     <div id="client" class="panel active">
         <h1 style="color:var(--gold-bright); text-align:center; letter-spacing:10px; margin: 20px 0 5px;">VOGUE</h1>
@@ -149,7 +176,6 @@
         import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
-        // 您的 Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyCOhBN9TH3UJSOSx5XVyQ08f_2RUckvXYU",
             authDomain: "holyhairsalon-f73bf.firebaseapp.com",
@@ -161,13 +187,10 @@
             measurementId: "G-F2H0P4KF4L"
         };
 
-        // 初始化 Firebase (僅需一次)
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const analytics = getAnalytics(app);
         const bookingRef = ref(db, 'vogue_bookings');
 
-        // 狀態變數
         let photoList = JSON.parse(localStorage.getItem('vogue_local_photos') || '[]');
         let myBookingIDs = JSON.parse(localStorage.getItem('vogue_my_bookings') || '[]');
         let currentIdx = 0;
@@ -175,14 +198,12 @@
         let selectedDateFilter = null;
         let currentAuthUser = "";
 
-        // 初始化
         window.onload = () => { 
             if(document.getElementById('appDate')) document.getElementById('appDate').valueAsDate = new Date(); 
             renderGallery(); 
             initCalendar(); 
         };
 
-        // 監聽 Firebase 資料庫變化
         onValue(bookingRef, (snap) => {
             allBookings = snap.val() || {};
             updateCalendarHighlights();
@@ -190,7 +211,6 @@
             renderPhotoWall();
         });
 
-        // 權限檢查
         function checkPermission(itemDesigner) {
             if(currentAuthUser === "Admin") return true;
             if(itemDesigner === currentAuthUser) return true;
@@ -198,7 +218,6 @@
             return false;
         }
 
-        // 月曆標記
         function updateCalendarHighlights() {
             const cells = document.querySelectorAll('.calendar-table td[data-date]');
             const datesWithBookings = new Set(Object.values(allBookings)
@@ -211,7 +230,6 @@
             });
         }
 
-        // 渲染清單
         function renderLists() {
             const clientDiv = document.getElementById('my-list');
             const designDiv = document.getElementById('designer-content');
@@ -259,7 +277,6 @@
             });
         }
 
-        // 預約功能
         window.addBooking = () => {
             const designer = document.getElementById('selDesigner').value;
             const name = document.getElementById('custName').value;
@@ -282,12 +299,11 @@
                 document.getElementById('custName').value = '';
                 document.querySelectorAll('.service-item').forEach(e => e.classList.remove('selected'));
             }).catch(err => {
-                alert("發送失敗，請確認資料庫權限已開啟！");
+                alert("發送失敗，請確認資料庫權限！");
                 console.error(err);
             });
         };
 
-        // 頁籤切換
         window.switchTab = (t) => {
             if(t === 'designer') {
                 const code = prompt("請輸入管理碼");
