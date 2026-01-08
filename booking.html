@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VOGUE 美業預約系統 (安全版)</title>
+    <title>VOGUE 美業預約系統 (整合版)</title>
     <style>
-        /* ... 這裡保留你原本所有的 CSS ... */
         :root { --dark-bg: #0a0a0a; --gold-dim: rgba(212, 175, 55, 0.15); --gold-bright: #d4af37; --gold-glow: rgba(212, 175, 55, 0.5); }
         body { background-color: var(--dark-bg); color: #fff; font-family: 'PingFang TC', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 120px; }
-        /* (為了節省篇幅，CSS 略過，請直接使用你原本的 CSS) */
         .home-floating-btn { position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1.5px solid var(--gold-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; z-index: 9999; box-shadow: 0 0 15px var(--gold-glow); transition: 0.3s; }
         .panel { display: none; width: 92%; max-width: 420px; padding-top: 30px; }
         .panel.active { display: block; }
@@ -81,7 +79,7 @@
                 <div class="service-item" onclick="toggleService(this)">髮質護理</div>
             </div>
             <div style="display: flex; gap: 10px;"><input type="date" id="appDate"><input type="time" id="appTime"></div>
-            <button class="btn" onclick="addBooking()">送出預約並回傳照片</button>
+            <button class="btn" id="submitBtn" onclick="addBooking()">送出預約並回傳照片</button>
         </div>
         <div id="history-section"><div id="my-list"></div></div>
     </div>
@@ -107,29 +105,23 @@
         <button class="tab-btn" id="btn-designer" onclick="switchTab('designer')">設計師後台</button>
     </div>
 
-    <script>
-        // 1. 你的 GAS 網址
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxlSBjzeBwKxwls3hviHkNUF3eo3nU4GBeBX8eKFghQnS8x5bZDJ9kAxHNKH7SzppfD/exec";
-        
-        // 為了讓這份 HTML 依然能讀取資料（因 Firebase Rules 設為 false），
-        // 建議讀取部分也改走 GAS，但我們先把最危險的「寫入/刪除」改掉。
-        // 目前為了讓你快速測試，先保留 Firebase SDK 的「讀取」功能，但寫入全走 GAS。
-    </script>
-
     <script type="module">
-        // 這裡保留 Firebase 核心與讀取功能 (僅用於 onValue 監聽)
+        // 1. 初始化 Firebase (修正為 mentor-app 專案)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCOhBN9TH3UJSOSx5XVyQ08f_2RUckvXYU",
-            databaseURL: "https://holyhairsalon-f73bf-default-rtdb.firebaseio.com",
-            projectId: "holyhairsalon-f73bf",
+            databaseURL: "https://mentor-app-b76e3-default-rtdb.firebaseio.com",
+            projectId: "mentor-app-b76e3",
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const bookingRef = ref(db, 'vogue_bookings');
+        const bookingRef = ref(db, 'vogue_bookings'); // 資料路徑
+
+        // 2. Google Apps Script 網址 (請填入你的最新 /exec 網址)
+        const GAS_URL = "https://script.google.com/macros/s/你的ID/exec"; 
 
         // 全域變數
         let photoList = JSON.parse(localStorage.getItem('vogue_local_photos') || '[]');
@@ -139,12 +131,13 @@
         let selectedDateFilter = null;
         let currentAuthUser = "";
 
-        // --- 核心：統一呼叫 GAS 的函數 ---
+        // --- 核心：GAS 傳送邏輯 ---
         async function callGAS(path, payload) {
             const body = { path: path, payload: payload };
+            // 注意：正式環境建議拿掉 no-cors 以獲得後端回傳訊息，
+            // 但若有 CORS 報錯，可暫時保留或確保 GAS 有正確回傳 Header
             return fetch(GAS_URL, {
                 method: 'POST',
-                mode: 'no-cors', // 避開跨網域問題
                 body: JSON.stringify(body)
             });
         }
@@ -155,8 +148,7 @@
             initCalendar(); 
         };
 
-        // 讀取依然可以用原本的方式 (如果 Rules 有開讀取)
-        // 但如果 Rules 全關，這段也要改寫，目前先維持現狀
+        // 即時監聽資料庫
         onValue(bookingRef, (snap) => {
             allBookings = snap.val() || {};
             updateCalendarHighlights();
@@ -164,8 +156,9 @@
             renderPhotoWall();
         });
 
-        // --- 修改後的寫入功能 ---
+        // --- 送出預約 ---
         window.addBooking = async () => {
+            const btn = document.getElementById('submitBtn');
             const designer = document.getElementById('selDesigner').value;
             const name = document.getElementById('custName').value;
             const phone = document.getElementById('custPhone').value;
@@ -176,7 +169,9 @@
 
             if(!name || !date || !time || !svcs.length) return alert("請填寫完整資訊");
 
-            // 產生一個唯一 ID (因為現在不用 Firebase push 了)
+            btn.disabled = true;
+            btn.innerText = "傳送中...";
+
             const newId = 'book_' + Date.now();
             const newBooking = {
                 designer, name, phone, service: svcs.join(', '),
@@ -185,43 +180,50 @@
             };
 
             try {
-                // 呼叫 GAS 進行寫入
+                // 寫入到新專案的 vogue_bookings/ID 路徑
                 await callGAS(`vogue_bookings/${newId}`, newBooking);
                 
                 myBookingIDs.push(newId);
                 localStorage.setItem('vogue_my_bookings', JSON.stringify(myBookingIDs));
-                alert("中文提醒：預約已成功送出！"); 
+                alert("中文提醒：預約成功！"); 
                 
+                // 清空表格
                 document.getElementById('custName').value = '';
                 document.querySelectorAll('.service-item').forEach(e => e.classList.remove('selected'));
+                window.location.reload(); // 重新整理以載入最新狀態
             } catch (err) {
-                alert("中文提醒：發送失敗，請稍後再試。");
+                alert("中文提醒：發送失敗，請確認 GAS 網址是否正確。");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "送出預約並回傳照片";
             }
         };
 
-        // --- 修改後的狀態更新功能 ---
+        // --- 後台：更新狀態 ---
         window.updateStatus = async (id) => {
             await callGAS(`vogue_bookings/${id}`, { status: '已接單' });
-            alert("中文提醒：狀態已更新！");
+            alert("中文提醒：狀態更新指令已發送！");
         };
 
-        // --- 修改後的刪除功能 ---
+        // --- 後台：刪除 ---
         window.delBooking = async (id) => {
-            if(confirm("確定刪除？")) {
-                // 在 GAS REST API 中，將資料設為 null 等於刪除
-                await callGAS(`vogue_bookings/${id}`, null);
-                alert("中文提醒：資料已刪除！");
+            if(confirm("確定刪除此筆預約？")) {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ path: `vogue_bookings/${id}`, payload: null })
+                });
+                alert("中文提醒：已刪除。");
             }
         };
 
-        // --- 以下輔助函數保持原樣 ---
+        // --- UI 渲染功能 ---
         window.switchTab = (t) => {
             if(t === 'designer') {
-                const code = prompt("請輸入管理碼");
+                const code = prompt("請輸入管理碼 (A:1111, B:2222, Admin:0000)");
                 if(code === '1111') currentAuthUser = "設計師 A";
                 else if(code === '2222') currentAuthUser = "設計師 B";
                 else if(code === '0000') currentAuthUser = "Admin";
-                else { alert("碼錯囉！"); return; }
+                else { alert("密碼錯誤！"); return; }
                 document.getElementById('designer-title').innerText = currentAuthUser + " 後台";
                 updateCalendarHighlights(); renderLists(); renderPhotoWall();
             }
@@ -236,17 +238,31 @@
             const designDiv = document.getElementById('designer-content');
             clientDiv.innerHTML = ''; 
             designDiv.innerHTML = `<h3>${selectedDateFilter ? selectedDateFilter + ' 名單' : '預約管理'}</h3>`;
-            Object.keys(allBookings).reverse().forEach(id => {
+            
+            Object.keys(allBookings).sort().reverse().forEach(id => {
                 const item = allBookings[id];
                 const isAccepted = item.status === '已接單';
                 const photoHtml = item.refPhoto ? `<br><img src="${item.refPhoto}" class="ref-photo-thumb" onclick="window.open(this.src)">` : '';
                 const desBadge = `<small class="badge ${item.designer === '不指定' ? 'none' : ''}">${item.designer}</small>`;
+                
+                // 客戶端顯示
                 if (myBookingIDs.includes(id)) {
                     clientDiv.innerHTML += `<div class="history-item"><b>${item.name}</b> ${desBadge}<br><small>${item.fullTime} | ${item.status}</small>${photoHtml}</div>`;
                 }
-                const itemDate = item.fullTime.split(' ')[0];
+                
+                // 設計師後台顯示
+                const itemDate = item.fullTime ? item.fullTime.split(' ')[0] : "";
                 if(checkPermission(item.designer) && (!selectedDateFilter || selectedDateFilter === itemDate)) {
-                    designDiv.innerHTML += `<div class="history-item"><strong>${item.name}</strong> (${item.phone}) ${desBadge}<br><span>${item.service}</span><br><small>${item.fullTime}</small>${photoHtml}<div style="margin-top:10px;"><button class="btn" style="width:auto; padding:5px 12px; font-size:12px;" onclick="updateStatus('${id}')">${isAccepted ? '✓ 已接單' : '接單'}</button><button class="btn" style="width:auto; padding:5px 12px; font-size:12px; border-color:red; color:red;" onclick="delBooking('${id}')">刪除</button></div></div>`;
+                    designDiv.innerHTML += `
+                        <div class="history-item">
+                            <strong>${item.name}</strong> (${item.phone}) ${desBadge}<br>
+                            <span>${item.service}</span><br>
+                            <small>${item.fullTime}</small>${photoHtml}
+                            <div style="margin-top:10px;">
+                                <button class="btn" style="width:auto; padding:5px 12px; font-size:12px;" onclick="updateStatus('${id}')">${isAccepted ? '✓ 已接單' : '接單'}</button>
+                                <button class="btn" style="width:auto; padding:5px 12px; font-size:12px; border-color:red; color:red;" onclick="delBooking('${id}')">刪除</button>
+                            </div>
+                        </div>`;
                 }
             });
         }
@@ -260,7 +276,7 @@
 
         function updateCalendarHighlights() {
             const cells = document.querySelectorAll('.calendar-table td[data-date]');
-            const datesWithBookings = new Set(Object.values(allBookings).filter(b => checkPermission(b.designer)).map(b => b.fullTime.split(' ')[0]));
+            const datesWithBookings = new Set(Object.values(allBookings).filter(b => checkPermission(b.designer)).map(b => b.fullTime ? b.fullTime.split(' ')[0] : ""));
             cells.forEach(cell => {
                 if(datesWithBookings.has(cell.dataset.date)) cell.classList.add('has-event');
                 else cell.classList.remove('has-event');
@@ -294,7 +310,7 @@
                 for (let j = 0; j < 7; j++) {
                     let cell = document.createElement('td');
                     if (i === 0 && j < firstDay) cell.innerText = '';
-                    else if (date > daysInMonth) break;
+                    else if (date > daysInMonth) { row.appendChild(cell); }
                     else {
                         const fullDate = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
                         cell.innerText = date; cell.dataset.date = fullDate; cell.onclick = () => filterByDate(fullDate); date++;
