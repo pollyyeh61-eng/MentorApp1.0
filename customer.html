@@ -1,1 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>美業私藏手帳</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #8A6D3B;
+            --bright-gold: #FFD700;
+            --bg-black: #050505;
+            --card-bg: #111111;
+        }
+
+        /* --- 新增：黑金呼吸動畫定義 --- */
+        @keyframes gold-breathe {
+            0% { border-color: var(--dark-gold); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
+            50% { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+            100% { border-color: var(--dark-gold); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
+        }
+
+        /* 奢華黑金返回按鈕樣式 */
+        .luxury-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(8, 8, 8, 0.8);
+            border: 1px solid var(--gold);
+            border-radius: 30px;
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .luxury-back-btn:hover {
+            background: var(--gold);
+            color: #080808;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+
+        body { 
+            background-color: #000; 
+            color: var(--gold); 
+            font-family: -apple-system, "PingFang TC", sans-serif; 
+            margin: 0; 
+            padding: 80px 15px 80px 15px;
+        }
+
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { color: var(--gold); text-align: center; font-size: 20px; margin: 10px 0; letter-spacing: 2px; }
+
+        .form-group { margin-bottom: 8px; }
+        label { display: block; color: var(--gold); font-size: 14px; margin-bottom: 3px; font-weight: bold; }
+        
+        /* --- 修正：輸入框加入呼吸效果 --- */
+        input, select, textarea {
+            width: 100%; padding: 10px; background-color: #000;
+            border: 1px solid var(--dark-gold); border-radius: 10px; color: #fff; 
+            font-size: 16px; box-sizing: border-box; transition: all 0.3s ease;
+            outline: none;
+            animation: gold-breathe 4s infinite ease-in-out; /* 加入呼吸 */
+        }
+
+        input:focus { border-color: var(--bright-gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); animation: none; }
+
+        .row { display: flex; gap: 8px; }
+
+        .price-input { color: #00FF00; font-weight: bold; border-color: #006400; animation: none; }
+
+        .btn-save {
+            width: 100%; padding: 14px; 
+            background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+            color: #000; border: none; border-radius: 25px; 
+            font-size: 18px; font-weight: bold; margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            cursor: pointer;
+        }
+        .btn-save:active { transform: scale(0.96); }
+
+        /* --- 修正：檔案抽屜也加入呼吸效果 --- */
+        .drawer { 
+            background: var(--card-bg); 
+            border: 1px solid var(--dark-gold); 
+            margin-bottom: 12px; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            animation: gold-breathe 5s infinite ease-in-out; /* 抽屜稍慢一點的呼吸 */
+        }
+        
+        .drawer-header { padding: 12px; cursor: pointer; position: relative; background: #1a1a1a; }
+        .drawer-header h3 { margin: 0 0 5px 0; font-size: 19px; color: var(--bright-gold); }
+        .cover-summary { font-size: 13px; color: #aaa; border-left: 2px solid var(--gold); padding-left: 8px; }
+        
+        .drawer-content { display: none; padding: 12px; background: #080808; border-top: 1px solid #333; }
+        .drawer.open { animation: none; border-color: var(--gold); } /* 打開時停止呼吸，保持亮色 */
+        .drawer.open .drawer-content { display: block; }
+
+        .record-item { padding: 10px; margin-bottom: 10px; background: #151515; border-radius: 8px; border: 1px solid #222; }
+        .history-tag { font-size: 12px; color: var(--dark-gold); margin-bottom: 8px; font-weight: bold; }
+
+        .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; display: flex; height: 65px; border-top: 1px solid var(--dark-gold); z-index: 1000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; cursor: pointer; }
+        .nav-item.active-nav { color: var(--bright-gold); }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="luxury-back-btn">
+        <span>🏠</span> 返回首頁
+    </a>
+
+    <div id="page1" class="page active">
+        <h1>美業客戶管理</h1>
+        <div id="search-tip" style="font-size:12px; text-align:center; color: var(--bright-gold); height:15px; margin-bottom:5px;"></div>
+        
+        <div class="row">
+            <div class="form-group" style="flex:1;"><label>貴賓姓名</label><input type="text" id="name" oninput="autoSearch()"></div>
+            <div class="form-group" style="flex:1.5;"><label>聯繫電話</label><input type="tel" id="phone" oninput="autoSearch()"></div>
+        </div>
+
+        <div class="form-group"><label>本次消費項目</label><input type="text" id="thisItem" placeholder="如：霧眉、深層洗髮"></div>
+        <div class="form-group"><label>操作紀錄</label><textarea id="thisLog" rows="2" placeholder="使用的色號、藥水、捲度等..."></textarea></div>
+        <div class="form-group"><label>消費金額 ($)</label><input type="number" id="price" class="price-input" placeholder="0"></div>
+
+        <div class="form-group"><label>提醒下次預約項目</label><input type="text" id="bookItem"></div>
+        <div class="form-group"><label>提醒下次預約時間</label><input type="datetime-local" id="bookTime"></div>
+
+        <div style="display: flex; gap: 8px;">
+            <div class="form-group" style="flex:1;"><label>血型</label><select id="blood"><option value="">選擇</option><option>A型</option><option>B型</option><option>O型</option><option>AB型</option></select></div>
+            <div class="form-group" style="flex:1;"><label>星座</label><select id="constellation"><option value="">選擇</option><option>牡羊座</option><option>金牛座</option><option>雙子座</option><option>巨蟹座</option><option>獅子座</option><option>處女座</option><option>天秤座</option><option>天蠍座</option><option>射手座</option><option>摩羯座</option><option>水瓶座</option><option>雙魚座</option></select></div>
+        </div>
+        
+        <div class="form-group"><label>心得備註</label><textarea id="note" rows="2"></textarea></div>
+        
+        <button class="btn-save" onclick="handleSave()">確認儲存入庫</button>
+    </div>
+
+    <div id="page2" class="page">
+        <h1>檔案總覽</h1>
+        <input type="text" id="keyword" placeholder="🔍 即時搜尋姓名或電話..." oninput="renderList()" style="margin-bottom:15px;">
+        <div id="list-container"></div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-item active-nav" id="nav1" onclick="showPage(1)"><span style="font-size:22px;">💎</span><span>資料登記</span></div>
+        <div class="nav-item" id="nav2" onclick="showPage(2)"><span style="font-size:22px;">📜</span><span>名單總覽</span></div>
+    </div>
+
+    <script>
+        // 腳本內容完全依照您的原始代碼
+        const DB_KEY = 'BeautyPro_V6';
+
+        function autoSearch() {
+            const name = document.getElementById('name').value.trim();
+            const tip = document.getElementById('search-tip');
+            if(!name) { tip.innerText = ""; return; }
+
+            const archive = JSON.parse(localStorage.getItem(DB_KEY) || '{}');
+            const matches = Object.keys(archive).filter(k => k.split('_')[0] === name);
+
+            if(matches.length === 1) {
+                const lastRec = archive[matches[0]][archive[matches[0]].length - 1];
+                document.getElementById('phone').value = lastRec.phone || "";
+                document.getElementById('blood').value = lastRec.blood || "";
+                document.getElementById('constellation').value = lastRec.constellation || "";
+                tip.innerText = "⭐ 已自動帶入舊客基本資料";
+            } else if (matches.length > 1) {
+                tip.innerText = "❓ 有同名客，請輸入電話區分";
+            } else {
+                tip.innerText = "🆕 新客登記";
+            }
+        }
+
+        function handleSave() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            if(!name) { alert('請填寫姓名'); return; }
+
+            const storageKey = `${name}_${phone}`;
+            const newRecord = {
+                phone,
+                blood: document.getElementById('blood').value,
+                constellation: document.getElementById('constellation').value,
+                thisItem: document.getElementById('thisItem').value,
+                thisLog: document.getElementById('thisLog').value,
+                price: document.getElementById('price').value,
+                bookItem: document.getElementById('bookItem').value,
+                bookTime: document.getElementById('bookTime').value,
+                note: document.getElementById('note').value,
+                saveTime: new Date().toLocaleString()
+            };
+
+            const archive = JSON.parse(localStorage.getItem(DB_KEY) || '{}');
+            if(!archive[storageKey]) archive[storageKey] = [];
+            archive[storageKey].push(newRecord);
+            localStorage.setItem(DB_KEY, JSON.stringify(archive));
+            
+            alert('歸檔成功！');
+            document.querySelectorAll('input, textarea, select').forEach(i => i.value = '');
+            showPage(2);
+        }
+
+        function showPage(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+            document.getElementById('nav1').classList.toggle('active-nav', num === 1);
+            document.getElementById('nav2').classList.toggle('active-nav', num === 2);
+            if(num === 2) renderList();
+            window.scrollTo(0,0);
+        }
+
+        function renderList() {
+            const container = document.getElementById('list-container');
+            const keyword = document.getElementById('keyword').value.toLowerCase();
+            const archive = JSON.parse(localStorage.getItem(DB_KEY) || '{}');
+            const keys = Object.keys(archive).reverse();
+            const filteredKeys = keys.filter(k => k.toLowerCase().includes(keyword));
+
+            container.innerHTML = filteredKeys.map(key => {
+                const records = archive[key];
+                const latest = records[records.length - 1];
+                return `
+                <div class="drawer">
+                    <div class="drawer-header" onclick="this.parentElement.classList.toggle('open')">
+                        <h3>👤 ${key.split('_')[0]}</h3>
+                        <div class="cover-summary">
+                            下次：${latest.bookItem || '未設'} | ${latest.bookTime ? latest.bookTime.replace('T', ' ') : '時間未設'}
+                        </div>
+                    </div>
+                    <div class="drawer-content">
+                        <div class="history-tag">💎 歷史消費紀錄 (${records.length})</div>
+                        ${records.slice().reverse().map(rec => `
+                            <div class="record-item">
+                                <div style="font-size:11px; color:#666;">🕒 ${rec.saveTime}</div>
+                                <div style="color:var(--gold); margin:4px 0;">🛍️ 項目：${rec.thisItem || '未填'}</div>
+                                <div style="color:#ddd; font-size:14px;">📝 記錄：${rec.thisLog || '無'}</div>
+                                <div style="color:#00FF00; font-weight:bold; margin-top:4px;">💰 金額：$${rec.price || 0}</div>
+                                <hr style="border:0; border-top:1px dashed #333; margin:8px 0;">
+                                <div style="color:var(--bright-gold); font-size:13px;">🔔 下次預約：${rec.bookItem}</div>
+                                <div style="font-size:12px; color:#999;">💬 備註：${rec.note}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
 </html>
