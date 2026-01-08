@@ -21,7 +21,7 @@
             align-items: center; min-height: 100vh;
         }
 
-        /* 奢華金屬標題 */
+        /* 標題特效 */
         h1, h2 {
             background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -83,7 +83,7 @@
         label { display: block; text-align: left; font-size: 0.75rem; color: var(--gold-main); margin-bottom: 5px; margin-top: 10px; }
         input, textarea {
             width: 100%; padding: 12px; background: #000; border: 1px solid rgba(212, 175, 55, 0.5);
-            color: white; border-radius: 10px; box-sizing: border-box; font-size: 0.95rem;
+            color: white; border-radius: 10px; box-sizing: border-box; font-size: 0.95rem; margin-bottom: 10px;
         }
         textarea { height: 80px; resize: none; }
 
@@ -98,7 +98,6 @@
             100% { box-shadow: 0 0 5px var(--gold-main); transform: scale(1); }
         }
         .needs-save { animation: gold-breathing 2s infinite ease-in-out; background: var(--gold-bright) !important; color: #000; }
-
         .terms-box { height: 80px; overflow-y: auto; background: #050505; font-size: 0.75rem; margin: 15px 0; padding: 12px; text-align: left; color: #777; border-radius: 8px; }
     </style>
 </head>
@@ -117,10 +116,9 @@
         </div>
     </nav>
 
-<div class="container">
+    <div class="container">
         <h1>PRIVATE WORKSPACE</h1>
         <div class="menu-grid" style="margin-top: 130px;">
-            
             <div class="btn-card locked" onclick="appJump('trial.html')">
                 <div class="icon-box">🗺️</div>
                 <div class="text-content">
@@ -146,7 +144,7 @@
                 <span class="remote-tag">PC ONLY</span>
             </div>
 
-            <div class="btn-card locked" onclick="appJump('https://line.me/ti/g2/wcdR4eoN89tQEtA_kywtgf6ILX_BMO7-foFjzw')">
+            <div class="btn-card locked" onclick="appJump('https://line.me/ti/g2/wcdR4eoN89tQEtA_kywtgf6ILX_BMO7-foFjzw', true)">
                 <div class="icon-box">💬</div>
                 <div class="text-content">
                     <span class="btn-title">導師諮詢</span>
@@ -155,20 +153,18 @@
             </div>
         </div>
     </div>
-        </div>
-    </div>
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-card">
             <h2 id="modalTitle">成員進入</h2>
             <input type="email" id="email" placeholder="Email (自動暫存)" oninput="saveLocal()">
-            <input type="password" id="password" placeholder="通行密碼" oninput="saveLocal()">
+            <input type="password" id="password" placeholder="通行密碼">
             <div id="registerOnly" style="display:none;">
                 <div class="terms-box">條款：本系統資源僅供成員學習使用，嚴禁轉載。</div>
                 <label style="font-size:0.85rem;"><input type="checkbox" id="agreeCheck" onchange="checkReg()"> 我已閱讀並同意條款</label>
             </div>
             <button class="submit-btn" id="mainSubmitBtn">立即進入</button>
-            <p id="forgotBtn" style="font-size:0.8rem; cursor:pointer; color:#888; margin-top:15px;">忘記密碼？點此重設</p>
+            <p id="forgotBtn" onclick="handleReset()" style="font-size:0.8rem; cursor:pointer; color:#888; margin-top:15px;">忘記密碼？點此重設</p>
             <p onclick="closeAuth()" style="text-decoration:underline; cursor:pointer; font-size:0.8rem; margin-top:10px; color:#555;">取消返回</p>
         </div>
     </div>
@@ -176,29 +172,28 @@
     <div class="modal-overlay" id="infoModal">
         <div class="auth-card">
             <h2>會員中心</h2>
-            <label>成員頭像 URL</label>
-            <input type="text" id="editPhoto" placeholder="https://..." oninput="triggerBreathe()">
-            
             <label>顯示名稱 / 暱稱</label>
             <input type="text" id="editName" placeholder="輸入您的稱呼" oninput="triggerBreathe()">
-            
-            <label>聯絡電話</label>
-            <input type="tel" id="editPhone" placeholder="輸入電話號碼" oninput="triggerBreathe()">
-            
-            <label>自我介紹 / 備註</label>
-            <textarea id="editBio" placeholder="介紹一下您自己..." oninput="triggerBreathe()"></textarea>
-
+            <label>成員頭像 URL</label>
+            <input type="text" id="editPhoto" placeholder="https://..." oninput="triggerBreathe()">
             <button class="submit-btn" id="updateInfoBtn" onclick="updateInfo()">儲存雲端修正</button>
             <button class="submit-btn" style="background:none; border:1px solid #444; color:#888;" onclick="closeInfo()">關閉</button>
-            <hr style="border:0; border-top:1px solid #222; margin:20px 0;">
-            <button style="background:none; border:none; color:#555; cursor:pointer; font-size:0.7rem;" onclick="handleDelete()">註銷帳號(永久刪除)</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signOut, 
+            sendPasswordResetEmail, 
+            updateProfile 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // 前端一律使用此 Config，嚴禁放置 Service Account 私鑰
         const firebaseConfig = {
             apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
             authDomain: "mentor-app-b76e3.firebaseapp.com",
@@ -210,11 +205,11 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        setPersistence(auth, browserLocalPersistence);
 
         let currentUser = null;
         let currentMode = 'login';
 
+        // 介面管理
         window.openAuth = (mode) => {
             currentMode = mode;
             document.getElementById('authModal').style.display = 'flex';
@@ -226,40 +221,52 @@
 
         window.openMemberInfo = () => {
             document.getElementById('infoModal').style.display = 'flex';
-            document.getElementById('editName').value = currentUser?.displayName || "";
-            document.getElementById('editPhoto').value = currentUser?.photoURL || "";
-            // 電話與簡介建議儲存於 Firestore，目前先以本地模擬或簡單屬性示意
+            document.getElementById('editName').value = auth.currentUser?.displayName || "";
+            document.getElementById('editPhoto').value = auth.currentUser?.photoURL || "";
             document.getElementById('updateInfoBtn').classList.remove('needs-save');
         };
         window.closeInfo = () => document.getElementById('infoModal').style.display = 'none';
 
-        window.triggerBreathe = () => {
-            document.getElementById('updateInfoBtn').classList.add('needs-save');
-        };
-
+        window.triggerBreathe = () => document.getElementById('updateInfoBtn').classList.add('needs-save');
         window.saveLocal = () => localStorage.setItem('cached_email', document.getElementById('email').value);
         document.getElementById('email').value = localStorage.getItem('cached_email') || '';
 
+        // 核心狀態監控
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const isAuth = !!user;
             document.getElementById('navAuth').style.display = isAuth ? 'none' : 'block';
             document.getElementById('navUserInfo').style.display = isAuth ? 'flex' : 'none';
             document.getElementById('userNameDisplay').innerText = user?.displayName || user?.email.split('@')[0] || "成員";
-            if(isAuth) {
-                document.querySelectorAll('.btn-card').forEach(btn => btn.classList.remove('locked'));
-                closeAuth();
-            } else {
-                document.querySelectorAll('.btn-card').forEach(btn => btn.classList.add('locked'));
-            }
+            
+            document.querySelectorAll('.btn-card').forEach(btn => {
+                isAuth ? btn.classList.remove('locked') : btn.classList.add('locked');
+            });
+            if(isAuth) closeAuth();
         });
 
+        // 登入與註冊邏輯
         document.getElementById('mainSubmitBtn').onclick = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            if(!email || !password) return alert("請輸入完整帳密");
+
             try {
-                if(currentMode === 'login') await signInWithEmailAndPassword(auth, email, password);
-                else await createUserWithEmailAndPassword(auth, email, password);
+                if(currentMode === 'login') {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("入駐成功！");
+                }
+            } catch(e) { alert("驗證失敗: " + e.message); }
+        };
+
+        window.handleReset = async () => {
+            const email = document.getElementById('email').value;
+            if(!email) return alert("請先輸入 Email 再重設密碼");
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert("重設信件已寄出");
             } catch(e) { alert(e.message); }
         };
 
@@ -269,22 +276,27 @@
                     displayName: document.getElementById('editName').value,
                     photoURL: document.getElementById('editPhoto').value
                 });
-                alert("雲端資料已儲存！");
+                alert("雲端同步成功！");
                 location.reload();
             } catch(e) { alert(e.message); }
         };
 
-        window.appJump = (url) => { if(!currentUser) return openAuth('login'); window.location.href = url; };
-        window.toolTip = () => { if(!currentUser) return openAuth('login'); alert('提示：下載 PC 工具組中...'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; };
+        window.appJump = (url, isExternal = false) => {
+            if(!currentUser) return openAuth('login');
+            isExternal ? window.open(url, '_blank') : window.location.href = url;
+        };
+
+        window.toolTip = () => {
+            if(!currentUser) return openAuth('login');
+            alert('準備開始下載 PC 工具組...');
+            window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';
+        };
+
         window.handleLogout = () => { if(confirm("確定登出？")) signOut(auth); };
-        window.handleDelete = async () => { if(confirm("確定刪除帳號？")) { try { await deleteUser(auth.currentUser); } catch(e) { alert("請重登後操作"); } } };
-        window.checkReg = () => { if(currentMode === 'register') document.getElementById('mainSubmitBtn').disabled = !document.getElementById('agreeCheck').checked; };
+        window.checkReg = () => {
+            if(currentMode === 'register') 
+                document.getElementById('mainSubmitBtn').disabled = !document.getElementById('agreeCheck').checked;
+        };
     </script>
 </body>
 </html>
-
-
-
-
-
-
