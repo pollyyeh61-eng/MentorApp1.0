@@ -42,9 +42,10 @@
         .btn-save {
             width: 100%; padding: 14px; background: linear-gradient(135deg, var(--gold), var(--dark-gold));
             color: #000; border: none; border-radius: 25px; font-size: 18px; font-weight: bold; margin-top: 10px;
+            cursor: pointer;
         }
+        .btn-save:disabled { background: #444; color: #888; cursor: not-allowed; }
 
-        /* 檔案抽屜設計 */
         .drawer { background: var(--card-bg); border: 1px solid #222; margin-bottom: 12px; border-radius: 12px; overflow: hidden; }
         .drawer-header { padding: 12px; cursor: pointer; background: #1a1a1a; }
         .drawer-header h3 { margin: 0; font-size: 18px; color: var(--bright-gold); }
@@ -53,7 +54,6 @@
 
         .record-item { padding: 10px; margin-bottom: 10px; background: #151515; border-radius: 8px; border: 1px solid #222; }
 
-        /* 底部導覽 */
         .nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; display: flex; height: 65px; border-top: 1px solid var(--dark-gold); z-index: 1000; }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; cursor: pointer; }
         .nav-item.active-nav { color: var(--bright-gold); }
@@ -90,7 +90,7 @@
 
     <div id="page2" class="page">
         <h1>雲端檔案總覽</h1>
-        <input type="text" id="keyword" placeholder="🔍 搜尋姓名或電話..." style="margin-bottom:15px;">
+        <input type="text" id="keyword" placeholder="🔍 搜尋姓名或電話..." style="margin-bottom:15px; width:100%;">
         <div id="list-container">載入中...</div>
     </div>
 
@@ -104,6 +104,7 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // 您的 Firebase 設定
         const firebaseConfig = {
             apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
             authDomain: "mentor-app-b76e3.firebaseapp.com",
@@ -126,10 +127,9 @@
             }
         });
 
-        // 1. 自動搜尋舊客基本資料
-        const nameInput = document.getElementById('name');
-        nameInput.onblur = async () => {
-            const name = nameInput.value.trim();
+        // 1. 自動搜尋舊客
+        document.getElementById('name').onblur = async () => {
+            const name = document.getElementById('name').value.trim();
             if (!name) return;
             
             const q = query(collection(db, "customer_logs"), where("name", "==", name));
@@ -140,24 +140,24 @@
                 document.getElementById('phone').value = lastData.phone || '';
                 document.getElementById('blood').value = lastData.blood || '';
                 document.getElementById('constellation').value = lastData.constellation || '';
-                document.getElementById('search-tip').innerText = "⭐ 已自動抓取雲端舊客資料";
+                document.getElementById('search-tip').innerText = "⭐ 已自動抓取舊客資料";
             } else {
                 document.getElementById('search-tip').innerText = "🆕 新客戶登記";
             }
         };
 
-        // 2. 儲存至雲端
-        window.handleSave = async function() {
+        // 2. 儲存邏輯 (修正後)
+        const btnSave = document.getElementById('btnSave');
+        btnSave.addEventListener('click', async () => {
             const name = document.getElementById('name').value.trim();
             if (!name) return alert("請填寫姓名");
 
-            const btn = document.getElementById('btnSave');
-            btn.disabled = true;
-            btn.innerText = "同步中...";
+            btnSave.disabled = true;
+            btnSave.innerText = "同步中...";
 
             try {
                 await addDoc(collection(db, "customer_logs"), {
-                    name,
+                    name: name,
                     phone: document.getElementById('phone').value,
                     thisItem: document.getElementById('thisItem').value,
                     thisLog: document.getElementById('thisLog').value,
@@ -167,25 +167,25 @@
                     bookItem: document.getElementById('bookItem').value,
                     bookTime: document.getElementById('bookTime').value,
                     note: document.getElementById('note').value,
-                    saveTime: new Date().toISOString()
+                    saveTime: new Date().getTime() // 使用 timestamp 排序更精準
                 });
                 alert("歸檔成功！");
                 location.reload(); 
             } catch (e) {
-                alert("儲存失敗");
-                btn.disabled = false;
+                console.error("Error adding document: ", e);
+                alert("儲存失敗：" + e.message);
+                btnSave.disabled = false;
+                btnSave.innerText = "確認儲存至雲端";
             }
-        };
-        document.getElementById('btnSave').onclick = handleSave;
+        });
 
-        // 3. 渲染名單 (實時)
+        // 3. 實時渲染名單
         function renderList() {
             const q = query(collection(db, "customer_logs"), orderBy("saveTime", "desc"));
             onSnapshot(q, (snapshot) => {
                 const container = document.getElementById('list-container');
                 container.innerHTML = "";
                 
-                // 按姓名群組化
                 const groups = {};
                 snapshot.forEach(doc => {
                     const data = doc.data();
@@ -199,7 +199,7 @@
                     const drawer = document.createElement('div');
                     drawer.className = 'drawer';
                     drawer.innerHTML = `
-                        <div class="drawer-header" onclick="this.parentElement.classList.toggle('open')">
+                        <div class="drawer-header">
                             <h3>👤 ${name}</h3>
                             <div style="font-size:12px; color:#888;">最新：${latest.thisItem} | $${latest.price}</div>
                         </div>
@@ -214,6 +214,8 @@
                             `).join('')}
                         </div>
                     `;
+                    // 綁定點擊事件展開抽屜
+                    drawer.querySelector('.drawer-header').onclick = () => drawer.classList.toggle('open');
                     container.appendChild(drawer);
                 }
             });
@@ -221,7 +223,7 @@
     </script>
 
     <script>
-        // UI 分頁邏輯
+        // UI 分頁邏輯 (放在一般 script 確保全域可用)
         function showPage(num) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page' + num).classList.add('active');
