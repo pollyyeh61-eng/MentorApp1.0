@@ -23,9 +23,10 @@
             margin: 0;
             background-color: var(--dark-bg);
             color: #fff;
+            overflow-x: hidden;
         }
 
-        /* --- 按鈕已改至左上角 (left: 20px) --- */
+        /* 左上角圓形回首頁按鈕 */
         .home-btn {
             position: fixed;
             top: 20px;
@@ -49,10 +50,9 @@
             transform: scale(1.1);
             border-color: var(--gold-bright);
         }
-        .home-btn span {
-            font-size: 24px;
-        }
+        .home-btn span { font-size: 24px; }
 
+        /* 呼吸動畫 */
         @keyframes gold-breath {
             0%, 100% { border-color: var(--gold-dim); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
             50% { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-glow); }
@@ -60,37 +60,42 @@
 
         .container {
             width: 900px;
-            max-width: 95%;
-            padding: 30px 20px; 
+            max-width: 90%;
+            padding: 50px 40px; 
             box-sizing: border-box;
             background: var(--panel-bg);
             border: 2px solid var(--gold-dim); 
             position: relative;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
+            margin: 40px 0;
         }
 
+        /* 側邊垂直文字定位優化 */
         .external-link-text {
             position: absolute;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: var(--gold-dim);
             writing-mode: vertical-rl; 
             text-orientation: upright;
             cursor: pointer; 
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
         .external-link-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
         
-        .text-management { top: 50%; left: -35px; transform: translateY(-50%) !important; }
-        .text-preface { top: 50%; left: -65px; transform: translateY(-50%) !important; }
-        .text-holding-label { top: 50%; right: -35px; transform: translateY(-50%) !important; }
-        .text-holding { top: 50%; right: -65px; transform: translateY(-50%) !important; } 
+        /* 調整左側與右側標籤位置，防止重疊 */
+        .text-preface { top: 35%; left: -30px; }
+        .text-management { top: 60%; left: -30px; }
+        .text-holding-label { top: 35%; right: -30px; }
+        .text-holding { top: 60%; right: -30px; } 
 
+        /* 上下標題文字 */
         .top-bottom-mgt-text {
             position: absolute; 
             left: 50%; 
             transform: translateX(-50%); 
-            font-size: 20px; 
+            font-size: 18px; 
             font-weight: bold;
             color: var(--gold-dim); 
             cursor: pointer;
@@ -100,59 +105,74 @@
             z-index: 10; 
         }
         .top-bottom-mgt-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        .text-top-mgt { top: 5px; } 
-        .text-cost-mgt { bottom: 5px; } 
+        .text-top-mgt { top: 15px; } 
+        .text-cost-mgt { bottom: 15px; } 
 
+        /* 網格系統優化 */
         .management-grid {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr; 
-            gap: 15px;
-            padding: 35px 0; 
+            gap: 20px;
+            padding: 20px 0; 
             position: relative;
-            border: 1px solid #222;
         }
 
         .block {
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--gold-dim);
-            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.4s ease;
             cursor: pointer; 
             animation: gold-breath 4s infinite ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .block-side[data-link-id="left-external"]:hover { border-color: #00ff88 !important; box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); transform: translateY(-3px); }
-        .block-side[data-link-id="right-external"]:hover { border-color: #00ccff !important; box-shadow: 0 0 20px rgba(0, 204, 255, 0.5); transform: translateY(-3px); }
-        .block-top:hover { border-color: #ffe600 !important; box-shadow: 0 0 20px rgba(255, 230, 0, 0.5); transform: translateY(-3px); }
-        .block-middle:hover { border-color: #ff9900 !important; box-shadow: 0 0 20px rgba(255, 153, 0, 0.5); transform: translateY(-3px); }
-        .block-bottom:hover { border-color: #ff0077 !important; box-shadow: 0 0 20px rgba(255, 0, 119, 0.5); transform: translateY(-3px); }
+        /* 不同區塊的懸停發光色 */
+        .block-side:hover { border-color: #00ff88 !important; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); transform: translateY(-5px); }
+        .block-top:hover { border-color: #ffe600 !important; box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); transform: translateY(-5px); }
+        .block-middle:hover { border-color: #ff9900 !important; box-shadow: 0 0 20px rgba(255, 153, 0, 0.3); transform: translateY(-5px); }
+        .block-bottom:hover { border-color: #ff0077 !important; box-shadow: 0 0 20px rgba(255, 0, 119, 0.3); transform: translateY(-5px); }
 
         .main-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
             margin-bottom: 10px;
             color: var(--gold-bright);
-            border-bottom: 1px dashed #333;
-            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 8px;
         }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; margin-top: 10px; }
-        .sub-items li { margin-bottom: 5px; font-size: 15px; cursor: pointer; color: var(--text-silver); transition: 0.3s; }
-        .sub-items li:hover { color: #fff; text-shadow: 0 0 5px #fff; text-decoration: underline; }
+        .sub-items { list-style: none; padding: 0; text-align: left; margin: 0; }
+        .sub-items li { 
+            padding: 4px 0;
+            font-size: 14px; 
+            cursor: pointer; 
+            color: var(--text-silver); 
+            transition: 0.2s; 
+        }
+        .sub-items li:hover { color: #fff; transform: translateX(5px); }
 
         .side-link-text {
             font-size: 16px; 
             font-weight: bold; 
-            cursor: pointer;
+            color: var(--text-silver);
             transition: 0.3s;
-            color: var(--gold-dim);
         }
-        .side-link-text:hover { color: #fff; text-decoration: underline; }
 
-        .side-block { height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .middle-content { display: flex; flex-direction: column; justify-content: space-around; gap: 15px; grid-column: 2 / 3; }
+        .middle-content { display: flex; flex-direction: column; gap: 20px; }
+
+        /* 行動裝置適配 */
+        @media (max-width: 768px) {
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+            .external-link-text { display: none; } /* 手機版隱藏側邊文字避免擠壓 */
+            .container { padding: 40px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -164,13 +184,13 @@
     <div class="container">
         <div class="external-link-text text-preface" data-link-id="total-preface">前言</div>
         <div class="external-link-text text-management" data-link-id="total-management">管理層</div>
-        <div class="external-link-text text-holding" data-link-id="total-holding-label">控股層</div>
+        <div class="external-link-text text-holding-label" data-link-id="total-holding-label">控股層</div>
         
         <div class="top-bottom-mgt-text text-top-mgt" data-link-id="top-price-mgt">價格管理</div>
         <div class="top-bottom-mgt-text text-cost-mgt" data-link-id="bottom-cost-mgt">成本管理</div>
         
         <div class="management-grid">
-            <div class="side-block block block-side" data-link-id="left-external">
+            <div class="block block-side" data-link-id="left-external">
                 <div class="main-title">左外部管理</div>
                 <div class="side-link-text" data-link-id="supplier-mgt">供應商管理</div> 
             </div>
@@ -204,7 +224,7 @@
                 </div>
             </div>
 
-            <div class="side-block block block-side" data-link-id="right-external">
+            <div class="block block-side" data-link-id="right-external">
                 <div class="main-title">右外部管理</div>
                 <div class="side-link-text" data-link-id="brand-mgt">品牌管理</div>
             </div>
@@ -212,7 +232,6 @@
     </div>
 
     <script>
-        // 腳本邏輯保持不變...
         const linkUrls = {
             'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
@@ -244,12 +263,8 @@
                 const url = linkUrls[linkId];
                 if (url && url !== '#') {
                     element.addEventListener('click', (event) => {
-                        const isSubItem = element.tagName === 'LI';
-                        if (element.classList.contains('block') && !isSubItem) {
-                            if (event.target.closest('li') || event.target.classList.contains('side-link-text')) {
-                                return; 
-                            }
-                        }
+                        // 阻止冒泡：點擊子項目時不要觸發父層區塊的點擊
+                        event.stopPropagation();
                         window.open(url, '_blank');
                     });
                 }
