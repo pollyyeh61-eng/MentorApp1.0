@@ -20,63 +20,45 @@
             min-height: 100vh; padding-bottom: 120px;
         }
 
-        /* --- 返回首頁按鈕 (黑金奢華版) --- */
         .home-btn {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 10000; /* 極高層級確保不被遮擋 */
-            background: #000;
-            border: 2px solid var(--gold-bright);
-            color: var(--gold-bright);
-            padding: 10px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
+            position: fixed; top: 15px; left: 15px; z-index: 10000;
+            background: #000; border: 2px solid var(--gold-bright); color: var(--gold-bright);
+            padding: 10px 18px; border-radius: 12px; font-size: 14px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
         }
-        .home-btn:active { transform: scale(0.9); background: var(--gold-bright); color: #000; }
 
         .panel { display: none; width: 92%; max-width: 420px; padding-top: 65px; }
         .panel.active { display: block; }
 
-        /* 輪播與 UI 樣式保留 */
         .carousel-section { width: 100%; position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; }
         .main-display-area { position: relative; width: 100%; height: 300px; display: flex; justify-content: center; align-items: center; margin-top: 15px; }
-        #main-photo {
-            width: 230px; height: 290px; object-fit: cover; border-radius: 18px;
-            border: 2px solid var(--gold-bright); box-shadow: 0 0 20px var(--gold-glow);
-            z-index: 5;
-        }
-        .nav-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 40px; border: 1px solid var(--gold-bright);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.8); color: var(--gold-bright); font-size: 20px;
-            cursor: pointer; z-index: 10;
-        }
+        #main-photo { width: 230px; height: 290px; object-fit: cover; border-radius: 18px; border: 2px solid var(--gold-bright); box-shadow: 0 0 20px var(--gold-glow); z-index: 5; }
+        
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 1px solid var(--gold-bright); border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.8); color: var(--gold-bright); z-index: 10; cursor: pointer; }
         .prev-btn { left: 10px; } .next-btn { right: 10px; }
 
         .glass-card { background: linear-gradient(145deg, #111, #000); border: 1px solid var(--gold-dim); border-radius: 24px; padding: 22px; margin-bottom: 20px; width: 100%; box-sizing: border-box; }
-        select, input { width: 100%; padding: 15px; margin-bottom: 12px; background: #080808; border: 1.5px solid #222; border-radius: 12px; color: #fff; box-sizing: border-box; font-size: 15px; outline: none; }
-        select { color: var(--gold-bright); border-color: var(--gold-dim); -webkit-appearance: none; }
-
-        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .service-item {
-            background: #111; border: 1px solid #333; border-radius: 10px; padding: 12px 5px;
-            font-size: 13px; text-align: center; cursor: pointer; transition: 0.3s; color: #888;
+        
+        /* --- 修正處：優化輸入框寬度與間距 --- */
+        select, input { 
+            width: 100%; padding: 12px; margin-bottom: 12px; 
+            background: #080808; border: 1.5px solid #222; border-radius: 12px; 
+            color: #fff; box-sizing: border-box; font-size: 15px; outline: none; 
         }
-        .service-item.selected {
-            border-color: var(--gold-bright); color: var(--gold-bright);
-            background: rgba(212, 175, 55, 0.15); box-shadow: 0 0 10px var(--gold-glow);
-        }
+        .date-time-group { display: flex; gap: 8px; width: 100%; margin-bottom: 12px; }
+        .date-time-group input { margin-bottom: 0; flex: 1; min-width: 0; padding: 10px; font-size: 13px; }
 
-        .btn { width: 100%; padding: 16px; margin-top: 5px; border-radius: 15px; border: 1.8px solid var(--gold-bright); background: transparent; color: var(--gold-bright); font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 3px; }
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .service-item { background: #111; border: 1px solid #333; border-radius: 10px; padding: 12px 5px; font-size: 13px; text-align: center; cursor: pointer; color: #888; }
+        .service-item.selected { border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(212, 175, 55, 0.15); }
+
+        .btn { width: 100%; padding: 16px; border-radius: 15px; border: 1.8px solid var(--gold-bright); background: transparent; color: var(--gold-bright); font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 3px; }
+
+        /* --- 預約結果顯示樣式 --- */
+        .history-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 15px; border-left: 4px solid var(--gold-bright); }
+        .history-item h4 { margin: 0 0 5px 0; color: var(--gold-bright); }
+        .history-item p { margin: 3px 0; font-size: 13px; color: #ccc; }
+        .thumb { width: 50px; height: 60px; object-fit: cover; border-radius: 5px; margin-top: 5px; }
 
         .tab-switcher { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; background: #111; border-radius: 50px; padding: 5px; width: 240px; border: 1px solid #333; z-index: 100; }
         .tab-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; background: transparent; color: #666; font-size: 14px; cursor: pointer; }
@@ -85,52 +67,49 @@
 </head>
 <body>
 
-    <button class="home-btn" onclick="window.location.reload()">
-        🏠 返回首頁
-    </button>
+    <button class="home-btn" onclick="window.location.reload()">🏠 返回首頁</button>
 
     <div id="client" class="panel active">
-        <h1 style="color:var(--gold-bright); text-align:center; letter-spacing:10px; margin: 10px 0 5px;">VOGUE</h1>
+        <h1 style="color:var(--gold-bright); text-align:center; letter-spacing:10px; margin: 0 0 5px;">VOGUE</h1>
         <div class="carousel-section">
-            <h4 style="color:var(--gold-bright); font-weight:300; margin:0; font-size:14px;">✨ 髮型溝通 (點選欲回傳照片)</h4>
             <div class="main-display-area">
                 <div class="nav-arrow prev-btn" onclick="prevImg()">&#10094;</div>
-                <img id="main-photo" src="https://via.placeholder.com/230x290/111/d4af37?text=VOGUE" alt="髮型展示">
+                <img id="main-photo" src="https://via.placeholder.com/230x290/111/d4af37?text=VOGUE" alt="展示">
                 <div class="nav-arrow next-btn" onclick="nextImg()">&#10095;</div>
             </div>
             <p id="photo-counter" style="color:#666; font-size:12px; margin-top:10px;">0 / 0</p>
-            <button class="btn" style="width:80%; margin-top:10px; font-size:14px;" onclick="document.getElementById('photo-input').click()">📷 上傳我的參考照</button>
+            <button class="btn" style="width:80%; margin-top:10px; font-size:14px;" onclick="document.getElementById('photo-input').click()">📷 上傳參考照</button>
             <input type="file" id="photo-input" style="display:none" accept="image/*" onchange="handleFileUpload(event)">
         </div>
         
         <div class="glass-card">
             <select id="selDesigner">
-                <option value="不指定">不指定 (由現場安排)</option>
-                <option value="設計師 A">預約 設計師 A</option>
-                <option value="設計師 B">預約 設計師 B</option>
+                <option value="不指定">不指定 (現場安排)</option>
+                <option value="設計師 A">設計師 A</option>
+                <option value="設計師 B">設計師 B</option>
             </select>
             <input type="text" id="custName" placeholder="顧客姓名">
             <input type="tel" id="custPhone" placeholder="聯繫電話">
             <div class="service-grid">
                 <div class="service-item" onclick="toggleService(this)">洗髮</div>
                 <div class="service-item" onclick="toggleService(this)">剪髮</div>
-                <div class="service-item" onclick="toggleService(this)">洗加剪</div>
-                <div class="service-item" onclick="toggleService(this)">單色染髮</div>
-                <div class="service-item" onclick="toggleService(this)">雙色染髮</div>
-                <div class="service-item" onclick="toggleService(this)">漂髮設計</div>
-                <div class="service-item" onclick="toggleService(this)">熱塑燙髮</div>
-                <div class="service-item" onclick="toggleService(this)">冷塑燙髮</div>
-                <div class="service-item" onclick="toggleService(this)">頭皮護理</div>
-                <div class="service-item" onclick="toggleService(this)">髮質護理</div>
+                <div class="service-item" onclick="toggleService(this)">染髮</div>
+                <div class="service-item" onclick="toggleService(this)">燙髮</div>
             </div>
-            <div style="display: flex; gap: 10px;"><input type="date" id="appDate"><input type="time" id="appTime"></div>
-            <button class="btn" onclick="addBooking()">送出預約並回傳照片</button>
+            <div class="date-time-group">
+                <input type="date" id="appDate">
+                <input type="time" id="appTime">
+            </div>
+            <button class="btn" onclick="addBooking()">送出預約</button>
         </div>
+
+        <h3 style="color:var(--gold-bright); text-align:center;">我的預約紀錄</h3>
+        <div id="my-list"></div>
     </div>
 
     <div id="designer" class="panel">
-        <h1 style="text-align:center; color:var(--gold-bright);" id="designer-title">ATELIER</h1>
-        <div id="designer-content"></div>
+        <h1 style="text-align:center; color:var(--gold-bright);">管理後台</h1>
+        <div id="designer-list"></div>
     </div>
 
     <div class="tab-switcher">
@@ -140,9 +119,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         
-        // 已更新為您提供的新 Firebase 設定
         const firebaseConfig = {
           apiKey: "AIzaSyCOhBN9TH3UJSOSx5XVyQ08f_2RUckvXYU",
           authDomain: "holyhairsalon-f73bf.firebaseapp.com",
@@ -161,11 +139,36 @@
         let photoList = JSON.parse(localStorage.getItem('vogue_local_photos') || '[]');
         let currentIdx = 0;
 
-        // 將函數掛載到全域 window 物件
+        // --- Firebase 監聽呈現結果 ---
+        onValue(bookingRef, (snapshot) => {
+            const data = snapshot.val();
+            const myList = document.getElementById('my-list');
+            const designerList = document.getElementById('designer-list');
+            myList.innerHTML = "";
+            designerList.innerHTML = "";
+
+            if (data) {
+                Object.keys(data).reverse().forEach(key => {
+                    const b = data[key];
+                    const html = `
+                        <div class="history-item">
+                            <h4>${b.name} - ${b.designer}</h4>
+                            <p>📅 ${b.date} ${b.time}</p>
+                            <p>✂️ ${b.services.join(', ')}</p>
+                            ${b.photo ? `<img src="${b.photo}" class="thumb">` : ''}
+                        </div>
+                    `;
+                    // 這裡簡單處理：所有人都看得到，實務上可依手機號碼過濾
+                    myList.innerHTML += html;
+                    designerList.innerHTML += html;
+                });
+            }
+        });
+
         window.switchTab = (t) => {
             if(t === 'designer') {
                 const code = prompt("請輸入管理碼");
-                if(code !== '0000') { alert("管理碼錯誤！"); return; }
+                if(code !== '0000') return;
             }
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.getElementById(t).classList.add('active');
@@ -203,7 +206,6 @@
             const name = document.getElementById('custName').value;
             const phone = document.getElementById('custPhone').value;
             if(!name || !phone) { alert("請填寫姓名與電話"); return; }
-
             const services = Array.from(document.querySelectorAll('.service-item.selected')).map(el => el.innerText);
             
             push(bookingRef, {
@@ -215,8 +217,9 @@
                 photo: photoList[currentIdx] || null,
                 timestamp: Date.now()
             }).then(() => {
-                alert("預約已成功送出！");
-                location.reload();
+                alert("預約成功！");
+                // 成功後清空服務選擇，不一定要重新整理
+                document.querySelectorAll('.service-item').forEach(el => el.classList.remove('selected'));
             });
         };
 
