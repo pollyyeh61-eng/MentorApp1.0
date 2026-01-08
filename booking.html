@@ -20,14 +20,14 @@
             min-height: 100vh; padding-bottom: 120px;
         }
 
-        /* --- 回到首頁浮動鍵樣式 --- */
+        /* --- 修改後：回到首頁左上角按鈕 --- */
         .home-floating-btn {
             position: fixed;
-            bottom: 100px; /* 避開底部的切換標籤列 */
-            right: 20px;
-            width: 55px;
-            height: 55px;
-            background: rgba(212, 175, 55, 0.1);
+            top: 20px;     /* 距離頂部 */
+            left: 20px;    /* 距離左側 */
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.6); /* 加深背景確保可視度 */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1.5px solid var(--gold-bright);
@@ -36,12 +36,12 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            z-index: 1000;
+            z-index: 9999; /* 確保在最上層 */
             box-shadow: 0 0 15px var(--gold-glow);
             transition: 0.3s;
         }
         .home-floating-btn:active { transform: scale(0.9); }
-        .home-floating-btn span { font-size: 24px; }
+        .home-floating-btn span { font-size: 22px; }
 
         .panel { display: none; width: 92%; max-width: 420px; padding-top: 30px; }
         .panel.active { display: block; }
@@ -83,7 +83,7 @@
 
         .calendar-table { width: 100%; border-collapse: collapse; color: #ccc; }
         .calendar-table th { color: var(--gold-bright); font-size: 12px; padding: 10px 0; }
-        .calendar-table td { width: 14%; height: 40px; font-size: 14px; cursor: pointer; border-radius: 8px; position: relative; }
+        .calendar-table td { width: 14%; height: 40px; font-size: 14px; cursor: pointer; border-radius: 8px; position: relative; text-align: center;}
         .calendar-table td.has-event { background: var(--gold-bright) !important; color: #000 !important; font-weight: bold; }
         .calendar-table td.selected-date { outline: 2px solid #fff; }
 
@@ -174,7 +174,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCOhBN9TH3UJSOSx5XVyQ08f_2RUckvXYU",
@@ -299,7 +298,7 @@
                 document.getElementById('custName').value = '';
                 document.querySelectorAll('.service-item').forEach(e => e.classList.remove('selected'));
             }).catch(err => {
-                alert("發送失敗，請確認資料庫權限！");
+                alert("發送失敗！");
                 console.error(err);
             });
         };
