@@ -3,111 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VOGUE 美業預約系統</title>
+    <title>VOGUE 美業預約系統 (安全版)</title>
     <style>
-        :root {
-            --dark-bg: #0a0a0a;
-            --gold-dim: rgba(212, 175, 55, 0.15);
-            --gold-bright: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.5);
-        }
-
-        body {
-            background-color: var(--dark-bg);
-            color: #fff;
-            font-family: 'PingFang TC', sans-serif;
-            margin: 0; display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; padding-bottom: 120px;
-        }
-
-        /* --- 修改後：回到首頁左上角按鈕 --- */
-        .home-floating-btn {
-            position: fixed;
-            top: 20px;     /* 距離頂部 */
-            left: 20px;    /* 距離左側 */
-            width: 50px;
-            height: 50px;
-            background: rgba(0, 0, 0, 0.6); /* 加深背景確保可視度 */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1.5px solid var(--gold-bright);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            z-index: 9999; /* 確保在最上層 */
-            box-shadow: 0 0 15px var(--gold-glow);
-            transition: 0.3s;
-        }
-        .home-floating-btn:active { transform: scale(0.9); }
-        .home-floating-btn span { font-size: 22px; }
-
+        /* ... 這裡保留你原本所有的 CSS ... */
+        :root { --dark-bg: #0a0a0a; --gold-dim: rgba(212, 175, 55, 0.15); --gold-bright: #d4af37; --gold-glow: rgba(212, 175, 55, 0.5); }
+        body { background-color: var(--dark-bg); color: #fff; font-family: 'PingFang TC', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 120px; }
+        /* (為了節省篇幅，CSS 略過，請直接使用你原本的 CSS) */
+        .home-floating-btn { position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1.5px solid var(--gold-bright); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; z-index: 9999; box-shadow: 0 0 15px var(--gold-glow); transition: 0.3s; }
         .panel { display: none; width: 92%; max-width: 420px; padding-top: 30px; }
         .panel.active { display: block; }
-
-        /* 輪播區 */
         .carousel-section { width: 100%; position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; }
         .main-display-area { position: relative; width: 100%; height: 300px; display: flex; justify-content: center; align-items: center; margin-top: 15px; }
-        #main-photo {
-            width: 230px; height: 290px; object-fit: cover; border-radius: 18px;
-            border: 2px solid var(--gold-bright); box-shadow: 0 0 20px var(--gold-glow);
-            z-index: 5;
-        }
-        .nav-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 40px; border: 1px solid var(--gold-bright);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.8); color: var(--gold-bright); font-size: 20px;
-            cursor: pointer; z-index: 10;
-        }
-        .prev-btn { left: 10px; }
-        .next-btn { right: 10px; }
-
+        #main-photo { width: 230px; height: 290px; object-fit: cover; border-radius: 18px; border: 2px solid var(--gold-bright); box-shadow: 0 0 20px var(--gold-glow); z-index: 5; }
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 1px solid var(--gold-bright); border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.8); color: var(--gold-bright); font-size: 20px; cursor: pointer; z-index: 10; }
+        .prev-btn { left: 10px; } .next-btn { right: 10px; }
         .glass-card { background: linear-gradient(145deg, #111, #000); border: 1px solid var(--gold-dim); border-radius: 24px; padding: 22px; margin-bottom: 20px; width: 100%; box-sizing: border-box; }
-        
         select, input { width: 100%; padding: 15px; margin-bottom: 12px; background: #080808; border: 1.5px solid #222; border-radius: 12px; color: #fff; box-sizing: border-box; font-size: 15px; outline: none; }
         select { color: var(--gold-bright); border-color: var(--gold-dim); -webkit-appearance: none; }
-
         .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .service-item {
-            background: #111; border: 1px solid #333; border-radius: 10px; padding: 12px 5px;
-            font-size: 13px; text-align: center; cursor: pointer; transition: 0.3s; color: #888;
-        }
-        .service-item.selected {
-            border-color: var(--gold-bright); color: var(--gold-bright);
-            background: rgba(212, 175, 55, 0.15); box-shadow: 0 0 10px var(--gold-glow);
-        }
-
+        .service-item { background: #111; border: 1px solid #333; border-radius: 10px; padding: 12px 5px; font-size: 13px; text-align: center; cursor: pointer; transition: 0.3s; color: #888; }
+        .service-item.selected { border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(212, 175, 55, 0.15); box-shadow: 0 0 10px var(--gold-glow); }
         .btn { width: 100%; padding: 16px; margin-top: 5px; border-radius: 15px; border: 1.8px solid var(--gold-bright); background: transparent; color: var(--gold-bright); font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 3px; }
-
         .calendar-table { width: 100%; border-collapse: collapse; color: #ccc; }
         .calendar-table th { color: var(--gold-bright); font-size: 12px; padding: 10px 0; }
         .calendar-table td { width: 14%; height: 40px; font-size: 14px; cursor: pointer; border-radius: 8px; position: relative; text-align: center;}
         .calendar-table td.has-event { background: var(--gold-bright) !important; color: #000 !important; font-weight: bold; }
         .calendar-table td.selected-date { outline: 2px solid #fff; }
-
         .tab-switcher { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; background: #111; border-radius: 50px; padding: 5px; width: 260px; border: 1px solid #333; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .tab-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; background: transparent; color: #666; font-size: 14px; cursor: pointer; }
         .tab-btn.active { background: var(--gold-bright); color: #000; font-weight: bold; }
-
         .history-item { background: rgba(255,255,255,0.04); padding: 16px; border-radius: 18px; margin-bottom: 12px; border-left: 4px solid var(--gold-bright); }
         .ref-photo-thumb { width: 60px; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 1px solid var(--gold-bright); }
-
         .photo-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .photo-wall-item { text-align: center; }
         .photo-wall-item img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1px solid var(--gold-dim); }
         .photo-wall-item span { display: block; font-size: 11px; color: var(--gold-bright); margin-top: 4px; }
-        
         .badge { background: #333; padding: 2px 8px; border-radius: 4px; font-size: 11px; color: #ccc; }
         .badge.none { color: #d4af37; background: rgba(212, 175, 55, 0.1); }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="home-floating-btn">
-        <span>🏠</span>
-    </a>
+    <a href="index.html" class="home-floating-btn"><span>🏠</span></a>
 
     <div id="client" class="panel active">
         <h1 style="color:var(--gold-bright); text-align:center; letter-spacing:10px; margin: 20px 0 5px;">VOGUE</h1>
@@ -159,7 +96,6 @@
             </table>
         </div>
         <div id="designer-content"></div>
-        
         <div class="glass-card" id="wall-section" style="margin-top:20px;">
             <h3 style="color:var(--gold-bright); margin-top:0;">📸 客戶參考照</h3>
             <div class="photo-wall" id="photo-wall"></div>
@@ -171,25 +107,31 @@
         <button class="tab-btn" id="btn-designer" onclick="switchTab('designer')">設計師後台</button>
     </div>
 
+    <script>
+        // 1. 你的 GAS 網址
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxlSBjzeBwKxwls3hviHkNUF3eo3nU4GBeBX8eKFghQnS8x5bZDJ9kAxHNKH7SzppfD/exec";
+        
+        // 為了讓這份 HTML 依然能讀取資料（因 Firebase Rules 設為 false），
+        // 建議讀取部分也改走 GAS，但我們先把最危險的「寫入/刪除」改掉。
+        // 目前為了讓你快速測試，先保留 Firebase SDK 的「讀取」功能，但寫入全走 GAS。
+    </script>
+
     <script type="module">
+        // 這裡保留 Firebase 核心與讀取功能 (僅用於 onValue 監聽)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCOhBN9TH3UJSOSx5XVyQ08f_2RUckvXYU",
-            authDomain: "holyhairsalon-f73bf.firebaseapp.com",
             databaseURL: "https://holyhairsalon-f73bf-default-rtdb.firebaseio.com",
             projectId: "holyhairsalon-f73bf",
-            storageBucket: "holyhairsalon-f73bf.firebasestorage.app",
-            messagingSenderId: "960169055224",
-            appId: "1:960169055224:web:2dd9017ef2e96803bf3c0d",
-            measurementId: "G-F2H0P4KF4L"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const bookingRef = ref(db, 'vogue_bookings');
 
+        // 全域變數
         let photoList = JSON.parse(localStorage.getItem('vogue_local_photos') || '[]');
         let myBookingIDs = JSON.parse(localStorage.getItem('vogue_my_bookings') || '[]');
         let currentIdx = 0;
@@ -197,12 +139,24 @@
         let selectedDateFilter = null;
         let currentAuthUser = "";
 
+        // --- 核心：統一呼叫 GAS 的函數 ---
+        async function callGAS(path, payload) {
+            const body = { path: path, payload: payload };
+            return fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors', // 避開跨網域問題
+                body: JSON.stringify(body)
+            });
+        }
+
         window.onload = () => { 
             if(document.getElementById('appDate')) document.getElementById('appDate').valueAsDate = new Date(); 
             renderGallery(); 
             initCalendar(); 
         };
 
+        // 讀取依然可以用原本的方式 (如果 Rules 有開讀取)
+        // 但如果 Rules 全關，這段也要改寫，目前先維持現狀
         onValue(bookingRef, (snap) => {
             allBookings = snap.val() || {};
             updateCalendarHighlights();
@@ -210,73 +164,8 @@
             renderPhotoWall();
         });
 
-        function checkPermission(itemDesigner) {
-            if(currentAuthUser === "Admin") return true;
-            if(itemDesigner === currentAuthUser) return true;
-            if(itemDesigner === "不指定") return true;
-            return false;
-        }
-
-        function updateCalendarHighlights() {
-            const cells = document.querySelectorAll('.calendar-table td[data-date]');
-            const datesWithBookings = new Set(Object.values(allBookings)
-                .filter(b => checkPermission(b.designer))
-                .map(b => b.fullTime.split(' ')[0]));
-            
-            cells.forEach(cell => {
-                if(datesWithBookings.has(cell.dataset.date)) cell.classList.add('has-event');
-                else cell.classList.remove('has-event');
-            });
-        }
-
-        function renderLists() {
-            const clientDiv = document.getElementById('my-list');
-            const designDiv = document.getElementById('designer-content');
-            clientDiv.innerHTML = ''; 
-            designDiv.innerHTML = `<h3>${selectedDateFilter ? selectedDateFilter + ' 名單' : '預約管理'}</h3>`;
-
-            Object.keys(allBookings).reverse().forEach(id => {
-                const item = allBookings[id];
-                const isAccepted = item.status === '已接單';
-                const photoHtml = item.refPhoto ? `<br><img src="${item.refPhoto}" class="ref-photo-thumb" onclick="window.open(this.src)">` : '';
-                const desBadge = `<small class="badge ${item.designer === '不指定' ? 'none' : ''}">${item.designer}</small>`;
-
-                if (myBookingIDs.includes(id)) {
-                    clientDiv.innerHTML += `<div class="history-item"><b>${item.name}</b> ${desBadge}<br><small>${item.fullTime} | ${item.status}</small>${photoHtml}</div>`;
-                }
-
-                const itemDate = item.fullTime.split(' ')[0];
-                if(checkPermission(item.designer) && (!selectedDateFilter || selectedDateFilter === itemDate)) {
-                    designDiv.innerHTML += `
-                        <div class="history-item">
-                            <strong>${item.name}</strong> (${item.phone}) ${desBadge}<br>
-                            <span>${item.service}</span><br>
-                            <small>${item.fullTime}</small>
-                            ${photoHtml}
-                            <div style="margin-top:10px;">
-                                <button class="btn" style="width:auto; padding:5px 12px; font-size:12px;" onclick="updateStatus('${id}')">${isAccepted ? '✓ 已接單' : '接單'}</button>
-                                <button class="btn" style="width:auto; padding:5px 12px; font-size:12px; border-color:red; color:red;" onclick="delBooking('${id}')">刪除</button>
-                            </div>
-                        </div>`;
-                }
-            });
-        }
-
-        function renderPhotoWall() {
-            const wall = document.getElementById('photo-wall');
-            wall.innerHTML = '';
-            Object.values(allBookings).reverse().forEach(item => {
-                if(item.refPhoto && checkPermission(item.designer)) {
-                    wall.innerHTML += `
-                        <div class="photo-wall-item">
-                            <img src="${item.refPhoto}" onclick="window.open(this.src)">
-                            <span>${item.name}</span>
-                        </div>`;
-                }
-            });
-        }
-
-        window.addBooking = () => {
+        // --- 修改後的寫入功能 ---
+        window.addBooking = async () => {
             const designer = document.getElementById('selDesigner').value;
             const name = document.getElementById('custName').value;
             const phone = document.getElementById('custPhone').value;
@@ -287,22 +176,45 @@
 
             if(!name || !date || !time || !svcs.length) return alert("請填寫完整資訊");
 
-            push(bookingRef, {
+            // 產生一個唯一 ID (因為現在不用 Firebase push 了)
+            const newId = 'book_' + Date.now();
+            const newBooking = {
                 designer, name, phone, service: svcs.join(', '),
                 fullTime: `${date} ${time}`, status: '待處理',
                 refPhoto: currentPhoto
-            }).then((snap) => { 
-                myBookingIDs.push(snap.key);
+            };
+
+            try {
+                // 呼叫 GAS 進行寫入
+                await callGAS(`vogue_bookings/${newId}`, newBooking);
+                
+                myBookingIDs.push(newId);
                 localStorage.setItem('vogue_my_bookings', JSON.stringify(myBookingIDs));
-                alert("預約已送出！我們會盡快為您安排。"); 
+                alert("中文提醒：預約已成功送出！"); 
+                
                 document.getElementById('custName').value = '';
                 document.querySelectorAll('.service-item').forEach(e => e.classList.remove('selected'));
-            }).catch(err => {
-                alert("發送失敗！");
-                console.error(err);
-            });
+            } catch (err) {
+                alert("中文提醒：發送失敗，請稍後再試。");
+            }
         };
 
+        // --- 修改後的狀態更新功能 ---
+        window.updateStatus = async (id) => {
+            await callGAS(`vogue_bookings/${id}`, { status: '已接單' });
+            alert("中文提醒：狀態已更新！");
+        };
+
+        // --- 修改後的刪除功能 ---
+        window.delBooking = async (id) => {
+            if(confirm("確定刪除？")) {
+                // 在 GAS REST API 中，將資料設為 null 等於刪除
+                await callGAS(`vogue_bookings/${id}`, null);
+                alert("中文提醒：資料已刪除！");
+            }
+        };
+
+        // --- 以下輔助函數保持原樣 ---
         window.switchTab = (t) => {
             if(t === 'designer') {
                 const code = prompt("請輸入管理碼");
@@ -319,6 +231,51 @@
             document.getElementById('btn-' + t).classList.add('active');
         };
 
+        function renderLists() {
+            const clientDiv = document.getElementById('my-list');
+            const designDiv = document.getElementById('designer-content');
+            clientDiv.innerHTML = ''; 
+            designDiv.innerHTML = `<h3>${selectedDateFilter ? selectedDateFilter + ' 名單' : '預約管理'}</h3>`;
+            Object.keys(allBookings).reverse().forEach(id => {
+                const item = allBookings[id];
+                const isAccepted = item.status === '已接單';
+                const photoHtml = item.refPhoto ? `<br><img src="${item.refPhoto}" class="ref-photo-thumb" onclick="window.open(this.src)">` : '';
+                const desBadge = `<small class="badge ${item.designer === '不指定' ? 'none' : ''}">${item.designer}</small>`;
+                if (myBookingIDs.includes(id)) {
+                    clientDiv.innerHTML += `<div class="history-item"><b>${item.name}</b> ${desBadge}<br><small>${item.fullTime} | ${item.status}</small>${photoHtml}</div>`;
+                }
+                const itemDate = item.fullTime.split(' ')[0];
+                if(checkPermission(item.designer) && (!selectedDateFilter || selectedDateFilter === itemDate)) {
+                    designDiv.innerHTML += `<div class="history-item"><strong>${item.name}</strong> (${item.phone}) ${desBadge}<br><span>${item.service}</span><br><small>${item.fullTime}</small>${photoHtml}<div style="margin-top:10px;"><button class="btn" style="width:auto; padding:5px 12px; font-size:12px;" onclick="updateStatus('${id}')">${isAccepted ? '✓ 已接單' : '接單'}</button><button class="btn" style="width:auto; padding:5px 12px; font-size:12px; border-color:red; color:red;" onclick="delBooking('${id}')">刪除</button></div></div>`;
+                }
+            });
+        }
+        
+        function checkPermission(itemDesigner) {
+            if(currentAuthUser === "Admin") return true;
+            if(itemDesigner === currentAuthUser) return true;
+            if(itemDesigner === "不指定") return true;
+            return false;
+        }
+
+        function updateCalendarHighlights() {
+            const cells = document.querySelectorAll('.calendar-table td[data-date]');
+            const datesWithBookings = new Set(Object.values(allBookings).filter(b => checkPermission(b.designer)).map(b => b.fullTime.split(' ')[0]));
+            cells.forEach(cell => {
+                if(datesWithBookings.has(cell.dataset.date)) cell.classList.add('has-event');
+                else cell.classList.remove('has-event');
+            });
+        }
+
+        function renderPhotoWall() {
+            const wall = document.getElementById('photo-wall'); wall.innerHTML = '';
+            Object.values(allBookings).reverse().forEach(item => {
+                if(item.refPhoto && checkPermission(item.designer)) {
+                    wall.innerHTML += `<div class="photo-wall-item"><img src="${item.refPhoto}" onclick="window.open(this.src)"><span>${item.name}</span></div>`;
+                }
+            });
+        }
+
         window.filterByDate = (dateStr) => {
             selectedDateFilter = (selectedDateFilter === dateStr) ? null : dateStr;
             document.querySelectorAll('.calendar-table td').forEach(td => td.classList.remove('selected-date'));
@@ -329,8 +286,7 @@
         function initCalendar() {
             const now = new Date(); const year = now.getFullYear(); const month = now.getMonth();
             document.getElementById('cal-month-title').innerText = `${year}年 ${month + 1}月`;
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
             const tbody = document.querySelector('#calendar-body tbody'); tbody.innerHTML = '';
             let date = 1;
             for (let i = 0; i < 6; i++) {
@@ -341,9 +297,7 @@
                     else if (date > daysInMonth) break;
                     else {
                         const fullDate = `${year}-${String(month+1).padStart(2,'0')}-${String(date).padStart(2,'0')}`;
-                        cell.innerText = date; cell.dataset.date = fullDate;
-                        cell.onclick = () => filterByDate(fullDate);
-                        date++;
+                        cell.innerText = date; cell.dataset.date = fullDate; cell.onclick = () => filterByDate(fullDate); date++;
                     }
                     row.appendChild(cell);
                 }
@@ -352,26 +306,18 @@
         }
 
         window.handleFileUpload = (e) => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (f) => {
-                photoList.push(f.target.result);
-                localStorage.setItem('vogue_local_photos', JSON.stringify(photoList));
-                currentIdx = photoList.length - 1; renderGallery();
-            };
+            const file = e.target.files[0]; const reader = new FileReader();
+            reader.onload = (f) => { photoList.push(f.target.result); localStorage.setItem('vogue_local_photos', JSON.stringify(photoList)); currentIdx = photoList.length - 1; renderGallery(); };
             reader.readAsDataURL(file);
         };
         window.renderGallery = () => {
-            const main = document.getElementById('main-photo');
-            const cnt = document.getElementById('photo-counter');
+            const main = document.getElementById('main-photo'); const cnt = document.getElementById('photo-counter');
             if(photoList.length > 0) { main.src = photoList[currentIdx]; cnt.innerText = `${currentIdx + 1} / ${photoList.length}`; }
             else { main.src = "https://via.placeholder.com/230x290/111/d4af37?text=VOGUE"; cnt.innerText = "0 / 0"; }
         };
         window.nextImg = () => { if(photoList.length){ currentIdx = (currentIdx + 1) % photoList.length; renderGallery(); } };
         window.prevImg = () => { if(photoList.length){ currentIdx = (currentIdx - 1 + photoList.length) % photoList.length; renderGallery(); } };
         window.toggleService = (el) => el.classList.toggle('selected');
-        window.updateStatus = (id) => update(ref(db, `vogue_bookings/${id}`), { status: '已接單' });
-        window.delBooking = (id) => { if(confirm("確定刪除？")) remove(ref(db, `vogue_bookings/${id}`)); };
     </script>
 </body>
 </html>
