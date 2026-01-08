@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>美業私藏手帳 - SDK 雲端版</title>
+    <title>美業私藏手帳</title>
     <style>
         :root {
             --gold: #D4AF37; --dark-gold: #8A6D3B; --bright-gold: #FFD700;
@@ -71,15 +71,15 @@
             <div class="form-group" style="flex:1;"><label>貴賓姓名</label><input type="text" id="name"></div>
             <div class="form-group" style="flex:1.5;"><label>聯繫電話</label><input type="tel" id="phone"></div>
         </div>
-
-        <div class="form-group"><label>本次消費項目</label><input type="text" id="thisItem" placeholder="如：霧眉、深層洗髮"></div>
-        <div class="form-group"><label>操作紀錄</label><textarea id="thisLog" rows="2" placeholder="使用的色號、捲度等..."></textarea></div>
-        <div class="form-group"><label>消費金額 ($)</label><input type="number" id="price" class="price-input" placeholder="0"></div>
-
+        
         <div style="display: flex; gap: 8px;">
             <div class="form-group" style="flex:1;"><label>血型</label><select id="blood"><option value="">選擇</option><option>A型</option><option>B型</option><option>O型</option><option>AB型</option></select></div>
             <div class="form-group" style="flex:1;"><label>星座</label><select id="constellation"><option value="">選擇</option><option>牡羊座</option><option>金牛座</option><option>雙子座</option><option>巨蟹座</option><option>獅子座</option><option>處女座</option><option>天秤座</option><option>天蠍座</option><option>射手座</option><option>摩羯座</option><option>水瓶座</option><option>雙魚座</option></select></div>
         </div>
+
+        <div class="form-group"><label>本次消費項目</label><input type="text" id="thisItem" placeholder="如：霧眉、深層洗髮"></div>
+        <div class="form-group"><label>操作紀錄</label><textarea id="thisLog" rows="2" placeholder="使用的色號、捲度等..."></textarea></div>
+        <div class="form-group"><label>消費金額 ($)</label><input type="number" id="price" class="price-input" placeholder="0"></div>
         
         <div class="form-group"><label>提醒下次項目</label><input type="text" id="bookItem"></div>
         <div class="form-group"><label>下次預約時間</label><input type="datetime-local" id="bookTime"></div>
@@ -234,3 +234,4 @@
     </script>
 </body>
 </html>
+
