@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美髮經營學-經營地圖試看</title>
+    <title>美髮經營學-經營地圖</title>
     <style>
         :root {
             --dark-bg: #0a0a0a;
@@ -15,7 +15,7 @@
         }
 
         body {
-            font-family: '微軟正黑體', 'Microsoft JhengHei', sans-serif;
+            font-family: '微軟正黑體', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,7 +25,6 @@
             color: #fff;
         }
 
-        /* 左上角返回按鈕 */
         .home-btn {
             position: fixed;
             top: 20px;
@@ -33,7 +32,6 @@
             width: 50px;
             height: 50px;
             background: rgba(17, 17, 17, 0.8);
-            backdrop-filter: blur(10px);
             border: 2px solid var(--gold-dim);
             border-radius: 50%;
             display: flex;
@@ -41,23 +39,19 @@
             justify-content: center;
             text-decoration: none;
             z-index: 9999;
-            transition: all 0.3s ease;
         }
-        .home-btn:hover { transform: scale(1.1); border-color: var(--gold-bright); }
-        .home-btn span { font-size: 24px; }
 
         .container {
             width: 900px;
             max-width: 95%;
             padding: 40px 20px; 
-            box-sizing: border-box;
             background: var(--panel-bg);
             border: 2px solid var(--gold-dim); 
             position: relative;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 外部標籤樣式 */
+        /* 外部連結文字 */
         .external-link-text {
             position: absolute;
             font-size: 18px;
@@ -65,11 +59,8 @@
             color: var(--gold-dim);
             writing-mode: vertical-rl; 
             text-orientation: upright;
-            cursor: pointer; 
-            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        .external-link-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        
         .text-preface { top: 50%; left: -65px; transform: translateY(-50%); }
         .text-management { top: 50%; left: -35px; transform: translateY(-50%); }
         .text-holding { top: 50%; right: -65px; transform: translateY(-50%); } 
@@ -82,15 +73,11 @@
             font-weight: bold;
             color: var(--gold-dim); 
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 150px; 
             text-align: center;
         }
-        .top-bottom-mgt-text:hover { color: var(--gold-bright); }
         .text-top-mgt { top: 5px; } 
         .text-cost-mgt { bottom: 5px; } 
 
-        /* 九宮格佈局 */
         .management-grid {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr; 
@@ -102,14 +89,10 @@
         .block {
             padding: 15px;
             border-radius: 8px;
-            text-align: center;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--gold-dim);
-            transition: all 0.4s ease;
+            transition: 0.3s;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
         }
         .block:hover { border-color: var(--gold-bright); background: rgba(255, 255, 255, 0.08); }
 
@@ -120,40 +103,26 @@
             color: var(--gold-bright);
             border-bottom: 1px dashed #333;
             padding-bottom: 5px;
-            pointer-events: none; /* 讓點擊穿過標題直達方塊 */
         }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; margin: 10px 0 0 0; }
+        .sub-items { list-style: none; padding: 0; text-align: left; }
         .sub-items li { 
             margin-bottom: 8px; 
             font-size: 15px; 
-            cursor: pointer; 
             color: var(--text-silver); 
-            transition: 0.3s; 
             padding: 4px 8px;
             border-radius: 4px;
+            cursor: pointer;
         }
         .sub-items li:hover { color: #fff; background: rgba(212, 175, 55, 0.2); text-decoration: underline; }
 
-        .side-link-text {
-            margin-top: auto;
-            margin-bottom: auto;
-            font-size: 16px; 
-            font-weight: bold; 
-            color: var(--gold-dim);
-            transition: 0.3s;
-        }
-        .side-link-text:hover { color: #fff; text-decoration: underline; }
-
         .middle-content { display: flex; flex-direction: column; gap: 15px; }
-        .side-block { height: 100%; display: flex; flex-direction: column; }
+        .side-block { height: 100%; display: flex; flex-direction: column; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="home-btn" title="回到首頁">
-        <span>🏠</span>
-    </a>
+    <a href="index.html" class="home-btn"><span>🏠</span></a>
 
     <div class="container">
         <div class="external-link-text text-preface" data-link-id="total-preface">前言</div>
@@ -166,7 +135,7 @@
         <div class="management-grid">
             <div class="side-block block" data-link-id="left-external">
                 <div class="main-title">左外部管理</div>
-                <div class="side-link-text" data-link-id="supplier-mgt">供應商管理</div> 
+                <div data-link-id="supplier-mgt" style="color: var(--gold-dim);">供應商管理</div>
             </div>
 
             <div class="middle-content">
@@ -200,7 +169,7 @@
 
             <div class="side-block block" data-link-id="right-external">
                 <div class="main-title">右外部管理</div>
-                <div class="side-link-text" data-link-id="brand-mgt">品牌管理</div>
+                <div data-link-id="brand-mgt" style="color: var(--gold-dim);">品牌管理</div>
             </div>
         </div>
     </div>
@@ -231,23 +200,22 @@
             'brand-mgt': baseUrl + encodeURIComponent('品牌管理'),
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const clickables = document.querySelectorAll('[data-link-id]');
+        // 核心跳轉邏輯修正
+        document.addEventListener('click', (e) => {
+            // 尋找最近的帶有 data-link-id 的元素
+            const target = e.target.closest('[data-link-id]');
+            if (!target) return;
+
+            // 阻止預設與冒泡
+            e.stopPropagation();
             
-            clickables.forEach(el => {
-                el.addEventListener('click', (e) => {
-                    // 重要：阻止點擊事件向父元素傳遞
-                    // 這解決了「點擊小文字卻打開大方塊連結」的問題
-                    e.stopPropagation();
-                    
-                    const id = el.getAttribute('data-link-id');
-                    const url = linkUrls[id];
-                    
-                    if (url && url !== '#') {
-                        window.open(url, '_blank');
-                    }
-                });
-            });
+            const id = target.getAttribute('data-link-id');
+            const url = linkUrls[id];
+            
+            if (url) {
+                console.log("正在跳轉到：" + id);
+                window.open(url, '_blank');
+            }
         });
     </script>
 </body>
