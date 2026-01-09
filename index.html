@@ -3,228 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>導師專屬平台</title>
+    <title>經營地圖-線上課程試看</title>
     <style>
         :root {
-            --gold-bright: #FFD700;
-            --gold-main: #D4AF37;
-            --gold-dark: #B8860B;
-            --gold-glow: rgba(212, 175, 55, 0.4);
-            --bg: #0A0A0A;
-            --glass-bg: rgba(255, 255, 255, 0.03);
+            --dark-bg: #0a0a0a;
+            --panel-bg: #111111;
+            --gold-dim: #8a6d3b;
+            --gold-bright: #d4af37;
+            --text-silver: #c0c0c0;
+        }
+
+        /* 滿版基礎設定 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            overflow-x: hidden; /* 防止左右滾動 */
         }
 
         body {
-            background: radial-gradient(circle at top, #222, var(--bg));
-            color: #eee; font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-            margin: 0; padding-top: 100px; display: flex; flex-direction: column;
-            align-items: center; min-height: 100vh;
+            font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* 讓地圖始終居中 */
+            color: #fff;
         }
 
-        h1, h2 {
-            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5));
-            font-weight: 900; letter-spacing: 4px; margin: 0;
+        /* 調整容器為 100% 寬度，並設定最大寬度防止在大螢幕上過扁 */
+        .container {
+            width: 95%; /* 左右留一點緩衝 */
+            max-width: 1000px; /* 您也可以根據需要調大此數值，例如 1200px */
+            min-height: 80vh; 
+            padding: 60px 40px;
+            background: var(--panel-bg);
+            border: 2px solid var(--gold-dim);
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            box-sizing: border-box;
         }
 
-        nav {
-            position: fixed; top: 0; width: 100%; height: 75px;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; border-bottom: 2px solid var(--gold-main); z-index: 1000; box-sizing: border-box;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        /* 外部連結文字 - 保持原樣但調整邊距 */
+        .external-link {
+            position: absolute;
+            font-weight: bold;
+            color: var(--gold-dim);
+            text-decoration: none;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: clamp(14px, 2vw, 18px); /* 隨螢幕縮放字體 */
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .external-link:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
+
+        .pos-preface { top: 35%; left: 10px; }
+        .pos-mgt { top: 60%; left: 10px; }
+        .pos-holding { top: 45%; right: 10px; }
+
+        .top-bot-link {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gold-dim);
+            text-decoration: none;
+            font-size: clamp(16px, 3vw, 22px);
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .top-bot-link:hover { color: var(--gold-bright); }
+        .pos-price { top: 20px; }
+        .pos-cost { bottom: 20px; }
+
+        /* 九宮格佈局 - 使用響應式網格 */
+        .management-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            padding: 30px 0;
         }
 
-        .nav-logo { font-weight: 800; color: var(--gold-main); letter-spacing: 2px; font-size: 1.2rem; }
-        .nav-auth-btns button {
-            background: none; border: 1px solid var(--gold-main); color: var(--gold-main);
-            padding: 8px 20px; border-radius: 20px; cursor: pointer; margin-left: 10px; transition: 0.3s;
-        }
-        .nav-auth-btns button:hover { background: var(--gold-main); color: #000; }
-        .nav-user-info { display: none; align-items: center; gap: 15px; }
-
-        .container { width: 90%; max-width: 900px; text-align: center; }
-        
-        .menu-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; 
-            margin-top: 50px; /* 稍微縮小間距，適配五個按鈕 */
+        /* 手機模式自動切換為單欄，避免太擠 */
+        @media (max-width: 600px) {
+            .management-grid { grid-template-columns: 1fr; }
+            .pos-preface, .pos-mgt, .pos-holding { position: static; writing-mode: horizontal-tb; text-align: center; display: block; margin: 10px 0; }
+            .container { padding: 80px 20px; }
         }
 
-        .btn-card {
-            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 2px solid var(--gold-main); border-radius: 24px; padding: 25px;
-            display: flex; align-items: center; position: relative; cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 10px var(--gold-glow);
-            text-decoration: none; color: inherit; /* 確保連結文字顏色正確 */
-        }
-        .btn-card:hover:not(.locked) { transform: translateY(-8px); box-shadow: 0 0 25px var(--gold-glow); border-color: var(--gold-bright); }
-        
-        .btn-card.locked { filter: grayscale(1) opacity(0.4); cursor: not-allowed; }
-        .btn-card.locked::after { content: "🔒 需先入駐"; position: absolute; top: 10px; right: 15px; font-size: 0.7rem; color: var(--gold-bright); }
-
-        .icon-box {
-            width: 55px; height: 55px; background: #000; border: 1px solid var(--gold-main);
-            border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            font-size: 26px; margin-right: 20px; box-shadow: inset 0 0 10px var(--gold-glow);
+        .block {
+            padding: 25px 20px;
+            border: 1px solid var(--gold-dim);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .text-content { text-align: left; }
-        .btn-title { display: block; font-weight: bold; font-size: 1.2rem; color: var(--gold-bright); }
-        .btn-desc { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
-        .remote-tag { position: absolute; bottom: 12px; right: 18px; font-size: 0.65rem; color: var(--gold-bright); font-weight: bold; }
+        .main-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--gold-bright);
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 10px;
+            text-decoration: none;
+            display: block;
+        }
 
-        /* Modal 樣式保持不變 */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .auth-card { background: #111; width: 95%; max-width: 420px; padding: 30px; border-radius: 30px; border: 2px solid var(--gold-main); text-align: center; box-shadow: 0 0 30px var(--gold-glow); max-height: 90vh; overflow-y: auto; }
-        .submit-btn { width: 100%; padding: 16px; background: var(--gold-main); border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1rem; margin-top: 20px; transition: 0.3s; }
-        input, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid rgba(212, 175, 55, 0.5); color: white; border-radius: 10px; box-sizing: border-box; margin-top: 5px; }
+        .sub-items { list-style: none; padding: 0; text-align: left; margin: 0; }
+        .sub-items li a {
+            display: block;
+            padding: 8px 0;
+            font-size: 16px;
+            color: var(--text-silver);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .sub-items li a:hover { color: #fff; text-decoration: underline; padding-left: 8px; }
+
+        .side-link {
+            color: var(--text-silver);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .side-link:hover { color: #fff; text-decoration: underline; }
+
+        .middle-stack { display: flex; flex-direction: column; gap: 20px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-logo">導師平台</div>
-        <div id="navAuth" class="nav-auth-btns">
-            <button onclick="openAuth('login')">登入</button>
-            <button onclick="openAuth('register')" style="background:var(--gold-main); color:black;">註冊入駐</button>
+<div class="container">
+    <a href="https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/" target="_blank" class="external-link pos-preface">前言</a>
+    <a href="https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing" target="_blank" class="external-link pos-mgt">管理層</a>
+    <a href="https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing" target="_blank" class="external-link pos-holding">控股層</a>
+    
+    <a href="https://www.webcoursestest.hairweb.net/價格管理" target="_blank" class="top-bot-link pos-price">價格管理</a>
+    <a href="https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing" target="_blank" class="top-bot-link pos-cost">成本管理</a>
+
+    <div class="management-grid">
+        <div class="block">
+            <a href="https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view" target="_blank" class="main-title">左外部管理</a>
+            <a href="https://www.webcoursestest.hairweb.net/供應商管理" target="_blank" class="side-link">供應商管理</a>
         </div>
-        <div id="navUserInfo" class="nav-user-info">
-            <span id="userNameDisplay" style="color:var(--gold-main); font-weight:bold;">成員</span>
-            <button onclick="openMemberInfo()" style="color:#aaa; background:none; border:none; text-decoration:underline; cursor:pointer;">會員中心</button>
-            <button onclick="handleLogout()" style="color:red; background:none; border:1px solid red; padding:5px 12px; border-radius:15px; cursor:pointer; font-size:0.8rem;">登出</button>
+
+        <div class="middle-stack">
+            <div class="block">
+                <a href="https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view" target="_blank" class="main-title">上外部管理</a>
+                <ul class="sub-items">
+                    <li><a href="https://www.webcoursestest.hairweb.net/顧客管理" target="_blank">1. 顧客管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/客情管理" target="_blank">2. 客情管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/預約管理" target="_blank">3. 預約管理</a></li>
+                </ul>
+            </div>
+            <div class="block">
+                <a href="https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view" target="_blank" class="main-title">內部管理</a>
+                <ul class="sub-items">
+                    <li><a href="https://www.webcoursestest.hairweb.net/財務管理" target="_blank">1. 財務管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/人才管理" target="_blank">2. 人才管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/庫存管理" target="_blank">3. 庫存管理</a></li>
+                </ul>
+            </div>
+            <div class="block">
+                <a href="https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view" target="_blank" class="main-title">下外部管理</a>
+                <ul class="sub-items">
+                    <li><a href="https://www.webcoursestest.hairweb.net/行銷管理" target="_blank">1. 行銷管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/活動管理" target="_blank">2. 活動管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/社區管理" target="_blank">3. 社區管理</a></li>
+                </ul>
+            </div>
         </div>
-    </nav>
 
-    <div class="container">
-        <h1>美業數位計劃</h1>
-        <div class="menu-grid">
-            <div class="btn-card locked" onclick="appJump('trial.html')">
-                <div class="icon-box">🗺️</div>
-                <div class="text-content">
-                    <span class="btn-title">經營地圖</span>
-                    <span class="btn-desc">戰略佈局與核心思維</span>
-                </div>
-            </div>
-
-            <div class="btn-card locked" onclick="appJump('customer.html')">
-                <div class="icon-box">📊</div>
-                <div class="text-content">
-                    <span class="btn-title">客戶管理</span>
-                    <span class="btn-desc">客戶資料與消費紀錄</span>
-                </div>
-            </div>
-
-            <div class="btn-card locked" onclick="appJump('booking.html')">
-                <div class="icon-box">👥</div>
-                <div class="text-content">
-                    <span class="btn-title">客戶預約</span>
-                    <span class="btn-desc">線上排程與預約管理</span>
-                </div>
-            </div>
-
-            <div class="btn-card locked" onclick="toolTip()">
-                <div class="icon-box">🛠️</div>
-                <div class="text-content">
-                    <span class="btn-title">實戰工具</span>
-                    <span class="btn-desc">電腦端專業拍攝工具組</span>
-                </div>
-                <span class="remote-tag">PC ONLY</span>
-            </div>
-
-            <div class="btn-card locked" onclick="appJump('https://line.me/ti/g2/wcdR4eoN89tQEtA_kywtgf6ILX_BMO7-foFjzw')">
-                <div class="icon-box">💬</div>
-                <div class="text-content">
-                    <span class="btn-title">導師諮詢</span>
-                    <span class="btn-desc">點選連結加入私密社群</span>
-                </div>
-            </div>
+        <div class="block">
+            <a href="https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view" target="_blank" class="main-title">右外部管理</a>
+            <a href="https://www.webcoursestest.hairweb.net/品牌管理" target="_blank" class="side-link">品牌管理</a>
         </div>
     </div>
+</div>
 
-    <div class="modal-overlay" id="authModal">
-        <div class="auth-card">
-            <h2 id="modalTitle">成員進入</h2>
-            <input type="email" id="email" placeholder="Email (自動暫存)" oninput="saveLocal()">
-            <input type="password" id="password" placeholder="通行密碼" oninput="saveLocal()">
-            <div id="registerOnly" style="display:none;">
-                <p style="color:#777; font-size:0.8rem;">本系統資源僅供成員學習使用，嚴禁轉載。</p>
-                <label style="font-size:0.85rem;"><input type="checkbox" id="agreeCheck" onchange="checkReg()"> 我已閱讀並同意條款</label>
-            </div>
-            <button class="submit-btn" id="mainSubmitBtn">立即進入</button>
-            <p onclick="closeAuth()" style="text-decoration:underline; cursor:pointer; font-size:0.8rem; margin-top:10px; color:#555;">取消返回</p>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
-            authDomain: "mentor-app-b76e3.firebaseapp.com",
-            projectId: "mentor-app-b76e3",
-            storageBucket: "mentor-app-b76e3.firebasestorage.app",
-            messagingSenderId: "757249551762",
-            appId: "1:757249551762:web:1c5bfff8b1ee222047654b"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        setPersistence(auth, browserLocalPersistence);
-
-        let currentUser = null;
-        let currentMode = 'login';
-
-        window.openAuth = (mode) => {
-            currentMode = mode;
-            document.getElementById('authModal').style.display = 'flex';
-            document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
-            document.getElementById('registerOnly').style.display = mode === 'login' ? 'none' : 'block';
-        };
-        window.closeAuth = () => document.getElementById('authModal').style.display = 'none';
-
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            const isAuth = !!user;
-            document.getElementById('navAuth').style.display = isAuth ? 'none' : 'block';
-            document.getElementById('navUserInfo').style.display = isAuth ? 'flex' : 'none';
-            document.getElementById('userNameDisplay').innerText = user?.displayName || user?.email.split('@')[0] || "成員";
-            
-            const cards = document.querySelectorAll('.btn-card');
-            cards.forEach(card => {
-                if(isAuth) card.classList.remove('locked');
-                else card.classList.add('locked');
-            });
-            if(isAuth) closeAuth();
-        });
-
-        document.getElementById('mainSubmitBtn').onclick = async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            try {
-                if(currentMode === 'login') await signInWithEmailAndPassword(auth, email, password);
-                else await createUserWithEmailAndPassword(auth, email, password);
-            } catch(e) { alert("錯誤：" + e.message); }
-        };
-
-        window.appJump = (url) => { 
-            if(!currentUser) return openAuth('login'); 
-            window.location.href = url; 
-        };
-
-        window.toolTip = () => { 
-            if(!currentUser) return openAuth('login'); 
-            alert('提示：即將跳轉至工具組下載...'); 
-            window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; 
-        };
-
-        window.handleLogout = () => { if(confirm("確定登出？")) signOut(auth); };
-        window.saveLocal = () => localStorage.setItem('cached_email', document.getElementById('email').value);
-    </script>
 </body>
 </html>
-
