@@ -36,17 +36,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .nav-left { display: flex; align-items: center; gap: 20px; }
         .nav-logo { font-weight: 800; color: var(--gold-main); letter-spacing: 2px; font-size: 1.2rem; }
-        
-        /* 使用說明書專屬按鈕樣式 */
-        .btn-guide {
-            background: none; border: 1px solid var(--gold-main); color: var(--gold-main);
-            padding: 6px 15px; border-radius: 12px; cursor: pointer; font-size: 0.85rem;
-            transition: 0.3s; font-weight: bold;
-        }
-        .btn-guide:hover { background: var(--gold-glow); box-shadow: 0 0 10px var(--gold-glow); }
-
         .nav-auth-btns button {
             background: none; border: 1px solid var(--gold-main); color: var(--gold-main);
             padding: 8px 20px; border-radius: 20px; cursor: pointer; margin-left: 10px; transition: 0.3s;
@@ -113,10 +103,7 @@
 <body>
 
     <nav>
-        <div class="nav-left">
-            <div class="nav-logo">導師平台</div>
-            <button class="btn-guide" onclick="window.location.href='index.html'">使用說明書</button>
-        </div>
+        <div class="nav-logo">導師平台</div>
         <div id="navAuth" class="nav-auth-btns">
             <button onclick="openAuth('login')">登入</button>
             <button onclick="openAuth('register')" style="background:var(--gold-main); color:black;">註冊進入</button>
@@ -155,12 +142,171 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="authModal">...</div>
-    <div class="modal-overlay" id="infoModal">...</div>
+    <div class="modal-overlay" id="authModal">
+        <div class="auth-card">
+            <h2 id="modalTitle">成員進入</h2>
+            <input type="email" id="email" placeholder="Email" oninput="saveLocal()">
+            <input type="password" id="password" placeholder="通行密碼">
+            <div id="registerOnly" style="display:none;">
+                <div class="terms-box">條款：本系統資源僅供成員學習使用，嚴禁轉載。</div>
+                <label><input type="checkbox" id="agreeCheck"> 我已閱讀並同意條款</label>
+            </div>
+            <button class="submit-btn" id="mainSubmitBtn">立即進入</button>
+            <p onclick="closeAuth()" style="text-decoration:underline; cursor:pointer; font-size:0.8rem; margin-top:15px; color:#555;">取消返回</p>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="infoModal">
+        <div class="auth-card">
+            <h2>會員中心</h2>
+            <label>個人頭像 (點擊圓圈上傳)</label>
+            <div style="position: relative; width: 90px; height: 90px; margin: 15px auto;">
+                <img id="avatarPreview" src="https://via.placeholder.com/90" style="width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--gold-main); object-fit: cover;">
+                <input type="file" id="editPhotoFile" accept="image/*" style="position: absolute; inset: 0; opacity: 0; cursor: pointer;" onchange="handleImageUpload(this)">
+            </div>
+            <label>顯示名稱 / 暱稱</label>
+            <input type="text" id="editName" placeholder="輸入您的稱呼" oninput="triggerBreathe()">
+            <label>聯絡電話</label>
+            <input type="tel" id="editPhone" placeholder="輸入電話號碼" oninput="triggerBreathe()">
+            <button class="submit-btn" id="updateInfoBtn" onclick="dualSave()">雙向同步儲存</button>
+            <button class="submit-btn" style="background:none; border:1px solid #444; color:#888;" onclick="closeInfo()">關閉</button>
+        </div>
+    </div>
 
     <script type="module">
-        // Firebase 與 原有邏輯保持不變...
-        // 請確保您的 Firebase Config 正確
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAM4d9GqtSjNOlfguew8BktZ8ptrnBzvpc",
+            authDomain: "mentor-app-b76e3.firebaseapp.com",
+            projectId: "mentor-app-b76e3",
+            storageBucket: "mentor-app-b76e3.firebasestorage.app",
+            messagingSenderId: "757249551762",
+            appId: "1:757249551762:web:1c5bfff8b1ee222047654b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        setPersistence(auth, browserLocalPersistence);
+
+        let currentUser = null;
+
+        // --- 核心：圖片上傳與壓縮 ---
+        window.handleImageUpload = (input) => {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const max_size = 200;
+                        let w = img.width, h = img.height;
+                        if (w > h) { if (w > max_size) { h *= max_size / w; w = max_size; } }
+                        else { if (h > max_size) { w *= max_size / h; h = max_size; } }
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        document.getElementById('avatarPreview').src = canvas.toDataURL('image/jpeg', 0.7);
+                        window.triggerBreathe();
+                    };
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        // --- 核心：雙向同步儲存 ---
+        window.dualSave = async () => {
+            const btn = document.getElementById('updateInfoBtn');
+            const newName = document.getElementById('editName').value;
+            const avatarData = document.getElementById('avatarPreview').src;
+            try {
+                btn.innerText = "同步中..."; btn.disabled = true;
+                // A. 雲端同步
+                await updateProfile(auth.currentUser, { displayName: newName });
+                // B. 本地快取 (以 UID 為鍵避免多帳號衝突)
+                localStorage.setItem('local_name_' + currentUser.uid, newName);
+                localStorage.setItem('local_avatar_' + currentUser.uid, avatarData);
+                
+                document.getElementById('userNameDisplay').innerText = newName || "成員";
+                alert("雙向同步成功！資料已保存在此設備與雲端。");
+                closeInfo();
+            } catch(e) { alert("儲存失敗: " + e.message); } 
+            finally { btn.innerText = "雙向同步儲存"; btn.disabled = false; }
+        };
+
+        // --- 核心：實戰工具連結函數 ---
+        window.toolTip = () => { 
+            if(!currentUser) return openAuth('login'); 
+            // 點擊後跳轉 Google Drive
+            window.location.href = 'https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; 
+        };
+
+        // --- 登入狀態監聽 ---
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            const isAuth = !!user;
+            document.getElementById('navAuth').style.display = isAuth ? 'none' : 'block';
+            document.getElementById('navUserInfo').style.display = isAuth ? 'flex' : 'none';
+            
+            if(isAuth) {
+                // 優先載入本地快取的暱稱
+                const cachedName = localStorage.getItem('local_name_' + user.uid);
+                document.getElementById('userNameDisplay').innerText = cachedName || user.displayName || "成員";
+                // 解鎖所有按鈕
+                document.querySelectorAll('.btn-card').forEach(btn => btn.classList.remove('locked'));
+                closeAuth();
+            } else {
+                // 未登入則鎖定按鈕
+                document.querySelectorAll('.btn-card').forEach(btn => btn.classList.add('locked'));
+            }
+        });
+
+        // --- UI 控制 ---
+        window.openAuth = (mode) => {
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
+            document.getElementById('registerOnly').style.display = mode === 'login' ? 'none' : 'block';
+        };
+
+        window.openMemberInfo = () => {
+            document.getElementById('infoModal').style.display = 'flex';
+            document.getElementById('editName').value = localStorage.getItem('local_name_' + currentUser.uid) || currentUser?.displayName || "";
+            // 載入本地或雲端頭像
+            document.getElementById('avatarPreview').src = localStorage.getItem('local_avatar_' + currentUser.uid) || currentUser?.photoURL || "https://via.placeholder.com/90";
+            document.getElementById('updateInfoBtn').classList.remove('needs-save');
+        };
+
+        window.closeAuth = () => document.getElementById('authModal').style.display = 'none';
+        window.closeInfo = () => document.getElementById('infoModal').style.display = 'none';
+        window.triggerBreathe = () => document.getElementById('updateInfoBtn').classList.add('needs-save');
+        window.saveLocal = () => localStorage.setItem('cached_email', document.getElementById('email').value);
+        
+        // 頁面開啟時自動填入上次輸入的 Email
+        document.getElementById('email').value = localStorage.getItem('cached_email') || '';
+
+        // 登入與註冊按鈕邏輯
+        document.getElementById('mainSubmitBtn').onclick = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                if(document.getElementById('modalTitle').innerText === '成員進入') {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                }
+            } catch(e) { alert("進入失敗: " + e.message); }
+        };
+
+        // 通用按鈕跳轉 (檢查登入)
+        window.appJump = (url) => { 
+            if(!currentUser) return openAuth('login'); 
+            window.location.href = url; 
+        };
+
+        window.handleLogout = () => { 
+            if(confirm("確定登出？這將登出此設備的帳號連線。")) signOut(auth); 
+        };
     </script>
 </body>
 </html>
