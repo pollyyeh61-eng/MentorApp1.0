@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美髮經營學-經營地圖</title>
+    <title>活力美髮學堂 - 經營地圖試看</title>
     <style>
         :root {
             --dark-bg: #0a0a0a;
@@ -25,158 +25,173 @@
             color: #fff;
         }
 
-        /* 導航按鈕 */
-        .home-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 50px;
-            height: 50px;
-            background: rgba(17, 17, 17, 0.8);
-            border: 2px solid var(--gold-dim);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            z-index: 9999;
-            transition: 0.3s;
+        @keyframes gold-breath {
+            0%, 100% { border-color: var(--gold-dim); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
+            50% { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-glow); }
         }
-        .home-btn:hover { border-color: var(--gold-bright); transform: scale(1.1); }
-        .home-btn span { font-size: 24px; color: gold; }
 
-        /* 主容器 */
         .container {
             width: 900px;
             max-width: 95%;
-            padding: 60px 50px; 
+            padding: 30px 20px; 
+            box-sizing: border-box;
             background: var(--panel-bg);
             border: 2px solid var(--gold-dim); 
             position: relative;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 側邊與標題文字 */
-        .external-link-text, .top-bottom-mgt-text {
+        /* 外部文字連結 */
+        .external-link-text {
             position: absolute;
+            font-size: 18px;
             font-weight: bold;
             color: var(--gold-dim);
-            cursor: pointer;
-            transition: 0.3s;
+            writing-mode: vertical-rl; 
+            text-orientation: upright;
+            cursor: pointer; 
+            transition: all 0.3s ease;
         }
-        .external-link-text:hover, .top-bottom-mgt-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
+        .external-link-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
+        
+        .text-management { top: 50%; left: -35px; transform: translateY(-50%) !important; }
+        .text-preface { top: 50%; left: -65px; transform: translateY(-50%) !important; }
+        .text-holding { top: 50%; right: -65px; transform: translateY(-50%) !important; } 
 
-        .text-preface { top: 35%; left: -35px; writing-mode: vertical-rl; text-orientation: upright; }
-        .text-management { top: 60%; left: -35px; writing-mode: vertical-rl; text-orientation: upright; }
-        .text-holding-label { top: 35%; right: -35px; writing-mode: vertical-rl; text-orientation: upright; }
+        .top-bottom-mgt-text {
+            position: absolute; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            font-size: 20px; 
+            font-weight: bold;
+            color: var(--gold-dim); 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 150px; 
+            text-align: center;
+            z-index: 10; 
+        }
+        .top-bottom-mgt-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
+        .text-top-mgt { top: 5px; } 
+        .text-cost-mgt { bottom: 5px; } 
 
-        .text-top-mgt { top: 15px; left: 50%; transform: translateX(-50%); width: 100px; text-align: center; }
-        .text-cost-mgt { bottom: 15px; left: 50%; transform: translateX(-50%); width: 100px; text-align: center; }
-
-        /* 九宮格網格 */
         .management-grid {
             display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr 2fr 1fr; 
+            gap: 15px;
+            padding: 35px 0; 
+            position: relative;
         }
 
         .block {
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--gold-dim);
-            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 8px;
             text-align: center;
-            transition: 0.4s;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--gold-dim);
+            transition: all 0.5s ease;
+            animation: gold-breath 4s infinite ease-in-out;
         }
-        .block:hover { transform: translateY(-5px); border-color: var(--gold-bright); }
+
+        /* 懸停效果只改變邊框顏色，不觸發跳轉 */
+        .block:hover { transform: translateY(-3px); }
+        .block-side[data-link-id="left-external"]:hover { border-color: #00ff88 !important; }
+        .block-side[data-link-id="right-external"]:hover { border-color: #00ccff !important; }
+        .block-top:hover { border-color: #ffe600 !important; }
+        .block-middle:hover { border-color: #ff9900 !important; }
+        .block-bottom:hover { border-color: #ff0077 !important; }
 
         .main-title {
             font-size: 18px;
             font-weight: bold;
+            margin-bottom: 10px;
             color: var(--gold-bright);
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            border-bottom: 1px dashed #333;
             padding-bottom: 5px;
-        }
-
-        .sub-items { list-style: none; padding: 0; text-align: left; }
-        .sub-items li {
-            padding: 5px 0;
-            font-size: 15px;
-            color: var(--text-silver);
             cursor: pointer;
-            transition: 0.2s;
         }
-        .sub-items li:hover { color: #fff; padding-left: 5px; }
 
-        .side-link-text { font-size: 16px; color: var(--text-silver); cursor: pointer; }
+        .sub-items { list-style: none; padding: 0; text-align: left; margin-top: 10px; }
+        .sub-items li { margin-bottom: 5px; font-size: 15px; cursor: pointer; color: var(--text-silver); transition: 0.3s; }
+        .sub-items li:hover { color: #fff; text-shadow: 0 0 5px #fff; text-decoration: underline; }
 
-        @media (max-width: 768px) {
-            .management-grid { grid-template-columns: 1fr; }
-            .external-link-text { display: none; }
+        .side-link-text {
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--gold-dim);
         }
+        .side-link-text:hover { color: #fff; text-decoration: underline; }
+
+        .side-block { height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .middle-content { display: flex; flex-direction: column; justify-content: space-around; gap: 15px; grid-column: 2 / 3; }
     </style>
 </head>
 <body>
 
-    <a href="https://sites.google.com/view/webcourse001/" class="home-btn" id="nav-home">
-        <span>🏠</span>
-    </a>
-
     <div class="container">
-        <div class="external-link-text text-preface" data-id="total-preface">前言</div>
-        <div class="external-link-text text-management" data-id="total-management">管理層</div>
-        <div class="external-link-text text-holding-label" data-id="total-holding-label">控股層</div>
-        <div class="top-bottom-mgt-text text-top-mgt" data-id="top-price-mgt">價格管理</div>
-        <div class="top-bottom-mgt-text text-cost-mgt" data-id="bottom-cost-mgt">成本管理</div>
-
+        <div class="external-link-text text-preface" data-link-id="total-preface">前言</div>
+        <div class="external-link-text text-management" data-link-id="total-management">管理層</div>
+        <div class="external-link-text text-holding" data-link-id="total-holding-label">控股層</div>
+        
+        <div class="top-bottom-mgt-text text-top-mgt" data-link-id="top-price-mgt">價格管理</div>
+        <div class="top-bottom-mgt-text text-cost-mgt" data-link-id="bottom-cost-mgt">成本管理</div>
+        
         <div class="management-grid">
-            <div class="block">
-                <div class="main-title">左外部管理</div>
-                <div class="side-link-text" data-id="supplier-mgt">供應商管理</div>
+            <div class="side-block block block-side">
+                <div class="main-title" data-link-id="left-external">左外部管理</div>
+                <div class="side-link-text" data-link-id="supplier-mgt">供應商管理</div> 
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 20px;">
-                <div class="block">
-                    <div class="main-title">上外部管理</div>
+            <div class="middle-content">
+                <div class="block block-top">
+                    <div class="main-title" data-link-id="top-external-overview">上外部管理</div>
                     <ul class="sub-items">
-                        <li data-id="customer-mgt">1. 顧客管理</li>
-                        <li data-id="sentiment-mgt">2. 客情管理</li>
-                        <li data-id="booking-mgt">3. 預約管理</li>
+                        <li data-link-id="customer-mgt">1. 顧客管理</li>
+                        <li data-link-id="sentiment-mgt">2. 客情管理</li>
+                        <li data-link-id="booking-mgt">3. 預約管理</li>
                     </ul>
                 </div>
-                <div class="block">
-                    <div class="main-title">內部管理</div>
+
+                <div class="block block-middle">
+                    <div class="main-title" data-link-id="internal-operations-overview">內部管理</div>
                     <ul class="sub-items">
-                        <li data-id="financial-mgt">1. 財務管理</li>
-                        <li data-id="talent-mgt">2. 人才管理</li>
-                        <li data-id="inventory-mgt">3. 庫存管理</li>
+                        <li data-link-id="financial-mgt">1. 財務管理</li>
+                        <li data-link-id="talent-mgt">2. 人才管理</li>
+                        <li data-id="inventory-mgt" data-link-id="inventory-mgt">3. 庫存管理</li>
                     </ul>
                 </div>
-                <div class="block">
-                    <div class="main-title">下外部管理</div>
+
+                <div class="block block-bottom">
+                    <div class="main-title" data-link-id="bottom-external-overview">下外部管理</div>
                     <ul class="sub-items">
-                        <li data-id="marketing-mgt">1. 行銷管理</li>
-                        <li data-id="activity-mgt">2. 活動管理</li>
-                        <li data-id="community-mgt">3. 社區管理</li>
+                        <li data-link-id="marketing-mgt">1. 行銷管理</li>
+                        <li data-link-id="activity-mgt">2. 活動管理</li>
+                        <li data-link-id="community-mgt">3. 社區管理</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="block">
-                <div class="main-title">右外部管理</div>
-                <div class="side-link-text" data-id="brand-mgt">品牌管理</div>
+            <div class="side-block block block-side">
+                <div class="main-title" data-link-id="right-external">右外部管理</div>
+                <div class="side-link-text" data-link-id="brand-mgt">品牌管理</div>
             </div>
         </div>
     </div>
 
     <script>
-        const urls = {
+        const linkUrls = {
             'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
             'total-preface': 'https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/',
             'total-management': 'https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
             'total-holding-label': 'https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing',
+            'top-external-overview': 'https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing',
+            'internal-operations-overview': 'https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing',
+            'bottom-external-overview': 'https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing',
+            'left-external': 'https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view?usp=drive_link',
+            'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link',
             'customer-mgt': 'https://www.webcoursestest.hairweb.net/顧客管理',
             'sentiment-mgt': 'https://www.webcoursestest.hairweb.net/客情管理',
             'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理',
@@ -187,22 +202,23 @@
             'activity-mgt': 'https://www.webcoursestest.hairweb.net/活動管理',
             'community-mgt': 'https://www.webcoursestest.hairweb.net/社區管理',
             'supplier-mgt': 'https://www.webcoursestest.hairweb.net/供應商管理',
-            'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理'
+            'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理',
         };
 
-        // 核心修正：點擊事件處理
         document.addEventListener('DOMContentLoaded', () => {
-            const items = document.querySelectorAll('[data-id]');
-            items.forEach(item => {
-                item.onclick = function(e) {
-                    e.preventDefault(); // 絕對禁止預設跳轉
-                    e.stopPropagation(); // 絕對禁止冒泡
-                    const targetUrl = urls[this.getAttribute('data-id')];
-                    if (targetUrl) {
-                        window.open(targetUrl, '_blank');
+            const clickableElements = document.querySelectorAll('[data-link-id]');
+            clickableElements.forEach(element => {
+                element.addEventListener('click', (event) => {
+                    // 阻止事件冒泡：防止點擊文字時觸發容器的動作
+                    event.stopPropagation();
+                    
+                    const linkId = element.getAttribute('data-link-id');
+                    const url = linkUrls[linkId];
+                    
+                    if (url && url !== '#') {
+                        window.open(url, '_blank');
                     }
-                    return false;
-                };
+                });
             });
         });
     </script>
