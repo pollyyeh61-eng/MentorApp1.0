@@ -117,32 +117,54 @@
 
     <div class="container">
         <h1>數位生活/快意人生</h1>
-        <div class="menu-grid">        
-            </div>
+        <div class="menu-grid">
             <div class="btn-card locked" onclick="appJump('http://map.hairweb.net/')">
-                <div class="icon-box">💬</div>
-                <div class="text-content"><span class="btn-title">地圖說明</span><span class="btn-desc">經營地圖教材使用</span></div>
+                <div class="icon-box">💡</div>
+                <div class="text-content">
+                    <span class="btn-title">地圖說明</span>
+                    <span class="btn-desc">經營地圖教材使用指南</span>
+                </div>
             </div>
+
             <div class="btn-card locked" onclick="appJump('trial.html')">
                 <div class="icon-box">🗺️</div>
-                <div class="text-content"><span class="btn-title">經營地圖</span><span class="btn-desc">戰略佈局與核心思維</span></div>
+                <div class="text-content">
+                    <span class="btn-title">經營地圖</span>
+                    <span class="btn-desc">戰略佈局與核心思維</span>
+                </div>
             </div>
+
             <div class="btn-card locked" onclick="appJump('booking.html')">
                 <div class="icon-box">👥</div>
-                <div class="text-content"><span class="btn-title">客戶預約</span><span class="btn-desc">線上排程與預約管理</span></div>
+                <div class="text-content">
+                    <span class="btn-title">客戶預約</span>
+                    <span class="btn-desc">線上排程與預約管理</span>
+                </div>
             </div>
+
             <div class="btn-card locked" onclick="appJump('customer.html')">
                 <div class="icon-box">📊</div>
-                <div class="text-content"><span class="btn-title">客戶管理</span><span class="btn-desc">客情分析與數據資產管理</span></div>
+                <div class="text-content">
+                    <span class="btn-title">客戶管理</span>
+                    <span class="btn-desc">客情分析與數據資產管理</span>
+                </div>
             </div>
+
             <div class="btn-card locked" onclick="toolTip()">
                 <div class="icon-box">🛠️</div>
-                <div class="text-content"><span class="btn-title">實戰工具</span><span class="btn-desc">電腦端專業拍攝工具組</span></div>
+                <div class="text-content">
+                    <span class="btn-title">實戰工具</span>
+                    <span class="btn-desc">電腦端專業拍攝工具組</span>
+                </div>
                 <span class="remote-tag">PC ONLY</span>
             </div>
+
             <div class="btn-card locked" onclick="appJump('https://line.me/ti/g2/wcdR4eoN89tQEtA_kywtgf6ILX_BMO7-foFjzw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default')">
                 <div class="icon-box">💬</div>
-                <div class="text-content"><span class="btn-title">導師諮詢</span><span class="btn-desc">一對一尊榮私密對話</span></div>
+                <div class="text-content">
+                    <span class="btn-title">導師諮詢</span>
+                    <span class="btn-desc">一對一尊榮私密對話</span>
+                </div>
             </div>
         </div>
     </div>
@@ -197,7 +219,6 @@
 
         let currentUser = null;
 
-        // --- 核心：圖片上傳與壓縮 ---
         window.handleImageUpload = (input) => {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -220,54 +241,42 @@
             }
         };
 
-        // --- 核心：雙向同步儲存 ---
         window.dualSave = async () => {
             const btn = document.getElementById('updateInfoBtn');
             const newName = document.getElementById('editName').value;
             const avatarData = document.getElementById('avatarPreview').src;
             try {
                 btn.innerText = "同步中..."; btn.disabled = true;
-                // A. 雲端同步
                 await updateProfile(auth.currentUser, { displayName: newName });
-                // B. 本地快取 (以 UID 為鍵避免多帳號衝突)
                 localStorage.setItem('local_name_' + currentUser.uid, newName);
                 localStorage.setItem('local_avatar_' + currentUser.uid, avatarData);
-                
                 document.getElementById('userNameDisplay').innerText = newName || "成員";
-                alert("雙向同步成功！資料已保存在此設備與雲端。");
+                alert("雙向同步成功！");
                 closeInfo();
             } catch(e) { alert("儲存失敗: " + e.message); } 
             finally { btn.innerText = "雙向同步儲存"; btn.disabled = false; }
         };
 
-        // --- 核心：實戰工具連結函數 ---
         window.toolTip = () => { 
             if(!currentUser) return openAuth('login'); 
-            // 點擊後跳轉 Google Drive
             window.location.href = 'https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; 
         };
 
-        // --- 登入狀態監聽 ---
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const isAuth = !!user;
             document.getElementById('navAuth').style.display = isAuth ? 'none' : 'block';
             document.getElementById('navUserInfo').style.display = isAuth ? 'flex' : 'none';
-            
             if(isAuth) {
-                // 優先載入本地快取的暱稱
                 const cachedName = localStorage.getItem('local_name_' + user.uid);
                 document.getElementById('userNameDisplay').innerText = cachedName || user.displayName || "成員";
-                // 解鎖所有按鈕
                 document.querySelectorAll('.btn-card').forEach(btn => btn.classList.remove('locked'));
                 closeAuth();
             } else {
-                // 未登入則鎖定按鈕
                 document.querySelectorAll('.btn-card').forEach(btn => btn.classList.add('locked'));
             }
         });
 
-        // --- UI 控制 ---
         window.openAuth = (mode) => {
             document.getElementById('authModal').style.display = 'flex';
             document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
@@ -277,7 +286,6 @@
         window.openMemberInfo = () => {
             document.getElementById('infoModal').style.display = 'flex';
             document.getElementById('editName').value = localStorage.getItem('local_name_' + currentUser.uid) || currentUser?.displayName || "";
-            // 載入本地或雲端頭像
             document.getElementById('avatarPreview').src = localStorage.getItem('local_avatar_' + currentUser.uid) || currentUser?.photoURL || "https://via.placeholder.com/90";
             document.getElementById('updateInfoBtn').classList.remove('needs-save');
         };
@@ -286,11 +294,8 @@
         window.closeInfo = () => document.getElementById('infoModal').style.display = 'none';
         window.triggerBreathe = () => document.getElementById('updateInfoBtn').classList.add('needs-save');
         window.saveLocal = () => localStorage.setItem('cached_email', document.getElementById('email').value);
-        
-        // 頁面開啟時自動填入上次輸入的 Email
         document.getElementById('email').value = localStorage.getItem('cached_email') || '';
 
-        // 登入與註冊按鈕邏輯
         document.getElementById('mainSubmitBtn').onclick = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -303,17 +308,14 @@
             } catch(e) { alert("進入失敗: " + e.message); }
         };
 
-        // 通用按鈕跳轉 (檢查登入)
         window.appJump = (url) => { 
             if(!currentUser) return openAuth('login'); 
             window.location.href = url; 
         };
 
         window.handleLogout = () => { 
-            if(confirm("確定登出？這將登出此設備的帳號連線。")) signOut(auth); 
+            if(confirm("確定登出？")) signOut(auth); 
         };
     </script>
 </body>
 </html>
-
-
