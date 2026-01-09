@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美髮經營學-線上課程試看</title>
+    <title>美髮經營學-黑金版導師平台</title>
     <style>
         :root {
             --dark-bg: #0a0a0a;
@@ -52,7 +52,6 @@
         }
         .home-btn span { font-size: 24px; }
 
-        /* 呼吸動畫 */
         @keyframes gold-breath {
             0%, 100% { border-color: var(--gold-dim); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
             50% { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-glow); }
@@ -70,7 +69,6 @@
             margin: 40px 0;
         }
 
-        /* 側邊垂直文字定位優化 */
         .external-link-text {
             position: absolute;
             font-size: 16px;
@@ -84,13 +82,11 @@
         }
         .external-link-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
         
-        /* 調整左側與右側標籤位置，防止重疊 */
         .text-preface { top: 35%; left: -30px; }
         .text-management { top: 60%; left: -30px; }
         .text-holding-label { top: 35%; right: -30px; }
         .text-holding { top: 60%; right: -30px; } 
 
-        /* 上下標題文字 */
         .top-bottom-mgt-text {
             position: absolute; 
             left: 50%; 
@@ -108,7 +104,6 @@
         .text-top-mgt { top: 15px; } 
         .text-cost-mgt { bottom: 15px; } 
 
-        /* 網格系統優化 */
         .management-grid {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr; 
@@ -131,7 +126,6 @@
             justify-content: center;
         }
 
-        /* 不同區塊的懸停發光色 */
         .block-side:hover { border-color: #00ff88 !important; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); transform: translateY(-5px); }
         .block-top:hover { border-color: #ffe600 !important; box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); transform: translateY(-5px); }
         .block-middle:hover { border-color: #ff9900 !important; box-shadow: 0 0 20px rgba(255, 153, 0, 0.3); transform: translateY(-5px); }
@@ -165,19 +159,16 @@
 
         .middle-content { display: flex; flex-direction: column; gap: 20px; }
 
-        /* 行動裝置適配 */
         @media (max-width: 768px) {
-            .management-grid {
-                grid-template-columns: 1fr;
-            }
-            .external-link-text { display: none; } /* 手機版隱藏側邊文字避免擠壓 */
+            .management-grid { grid-template-columns: 1fr; }
+            .external-link-text { display: none; }
             .container { padding: 40px 15px; }
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="home-btn" title="回到首頁">
+    <a href="https://sites.google.com/view/webcourse001/" class="home-btn" title="回到首頁">
         <span>🏠</span>
     </a>
 
@@ -259,15 +250,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             const clickableElements = document.querySelectorAll('[data-link-id]');
             clickableElements.forEach(element => {
-                const linkId = element.getAttribute('data-link-id');
-                const url = linkUrls[linkId];
-                if (url && url !== '#') {
-                    element.addEventListener('click', (event) => {
-                        // 阻止冒泡：點擊子項目時不要觸發父層區塊的點擊
+                element.addEventListener('click', (event) => {
+                    const linkId = element.getAttribute('data-link-id');
+                    const url = linkUrls[linkId];
+                    if (url && url !== '#') {
+                        // 強化：阻止事件冒泡並強制在新視窗開啟，避免干擾目前頁面
+                        event.preventDefault();
                         event.stopPropagation();
                         window.open(url, '_blank');
-                    });
-                }
+                    }
+                });
             });
         });
     </script>
