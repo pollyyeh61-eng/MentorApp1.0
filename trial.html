@@ -51,7 +51,7 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 外部標籤 */
+        /* 外部標籤文字 */
         .external-link-text {
             position: absolute;
             font-size: 18px;
@@ -78,7 +78,6 @@
             text-align: center;
             transition: 0.3s;
         }
-        .top-bottom-mgt-text:hover { color: var(--gold-bright); }
         .text-top-mgt { top: 5px; } 
         .text-cost-mgt { bottom: 5px; } 
 
@@ -109,7 +108,7 @@
             color: var(--gold-bright);
             border-bottom: 1px dashed #333;
             padding-bottom: 5px;
-            pointer-events: none; /* 點擊穿透 */
+            pointer-events: none;
         }
 
         .sub-items { list-style: none; padding: 0; text-align: left; }
@@ -120,13 +119,12 @@
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
-            transition: 0.2s;
         }
         .sub-items li:hover { color: #fff; background: rgba(212, 175, 55, 0.2); }
 
         .middle-content { display: flex; flex-direction: column; gap: 15px; }
         .side-block { height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .side-link-text { color: var(--gold-dim); font-weight: bold; cursor: pointer; }
+        .side-link-text { color: var(--gold-dim); font-weight: bold; cursor: pointer; text-align: center; }
         .side-link-text:hover { color: #fff; text-decoration: underline; }
     </style>
 </head>
@@ -185,21 +183,11 @@
     </div>
 
     <script>
-        // 完全使用您提供的正確網址
         const linkUrls = {
-            'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
-            'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
-            'total-preface': 'https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/',
-            'total-management': 'https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
-            'total-holding-label': 'https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing',
-            'top-external-overview': 'https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing',
-            'internal-operations-overview': 'https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing',
-            'bottom-external-overview': 'https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing',
-            'left-external': 'https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view?usp=drive_link',
-            'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link',
+            'total-preface': 'https://www.webcoursestest.hairweb.net/前言',
             'customer-mgt': 'https://www.webcoursestest.hairweb.net/顧客管理',
             'sentiment-mgt': 'https://www.webcoursestest.hairweb.net/客情管理',
-            'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理', 
+            'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理',
             'financial-mgt': 'https://www.webcoursestest.hairweb.net/財務管理',
             'talent-mgt': 'https://www.webcoursestest.hairweb.net/人才管理',
             'inventory-mgt': 'https://www.webcoursestest.hairweb.net/庫存管理',
@@ -208,14 +196,24 @@
             'community-mgt': 'https://www.webcoursestest.hairweb.net/社區管理',
             'supplier-mgt': 'https://www.webcoursestest.hairweb.net/供應商管理',
             'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理',
+            'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
+            // 以下保留總覽用的 Google Drive 連結
+            'total-management': 'https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
+            'total-holding-label': 'https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing',
+            'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
+            'top-external-overview': 'https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing',
+            'internal-operations-overview': 'https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing',
+            'bottom-external-overview': 'https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing',
+            'left-external': 'https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view?usp=drive_link',
+            'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link'
         };
 
-        // 修改點擊監聽邏輯：確保優先點擊最內層
+        // 監聽所有點擊
         document.addEventListener('click', (e) => {
             const clickable = e.target.closest('[data-link-id]');
             if (!clickable) return;
 
-            // 禁止事件向外冒泡，防止誤觸父層 block
+            // 阻止冒泡，確保點擊子項目時不會觸發父層方塊的連結
             e.stopPropagation();
             
             const id = clickable.getAttribute('data-link-id');
