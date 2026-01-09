@@ -3,27 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美髮經營學-線上課程試看</title>
+    <title>活力美髮學堂 - 線上課程試看</title>
     <style>
         :root {
-            --dark-bg: #0a0a0a;
-            --panel-bg: #111111;
-            --gold-dim: #8a6d3b;
-            --gold-bright: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.3);
-            --text-silver: #c0c0c0;
+            --dark-bg: #0a0a0a; --panel-bg: #111111;
+            --gold-dim: #8a6d3b; --gold-bright: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3); --text-silver: #c0c0c0;
         }
 
         body {
             font-family: '微軟正黑體', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; 
-            margin: 0;
-            background-color: var(--dark-bg);
-            color: #fff;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; background-color: var(--dark-bg); color: #fff;
         }
 
         @keyframes gold-breath {
@@ -32,191 +23,122 @@
         }
 
         .container {
-            width: 900px;
-            max-width: 95%;
-            padding: 40px 30px; 
-            background: var(--panel-bg);
-            border: 2px solid var(--gold-dim); 
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 1);
+            width: 900px; max-width: 95%; padding: 35px;
+            background: var(--panel-bg); border: 2px solid var(--gold-dim);
+            position: relative; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
         /* 外部標籤文字 */
-        .map-label {
-            position: absolute;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--gold-dim);
-            writing-mode: vertical-rl; 
-            text-orientation: upright;
-            cursor: pointer; 
-            transition: 0.3s;
-            z-index: 10;
+        .ext-label {
+            position: absolute; font-size: 18px; font-weight: bold; color: var(--gold-dim);
+            writing-mode: vertical-rl; text-orientation: upright; cursor: pointer; transition: 0.3s;
         }
-        .map-label:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        
+        .ext-label:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
         .pos-preface { top: 35%; left: -35px; }
         .pos-mgt { top: 60%; left: -35px; }
         .pos-holding { top: 45%; right: -35px; }
 
         .top-bottom-label {
-            position: absolute; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            font-size: 20px; 
-            font-weight: bold;
-            color: var(--gold-dim); 
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-            z-index: 10;
+            position: absolute; left: 50%; transform: translateX(-50%);
+            font-size: 20px; font-weight: bold; color: var(--gold-dim);
+            cursor: pointer; transition: 0.3s; text-align: center; width: 150px;
         }
         .top-bottom-label:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
         .pos-price { top: 10px; }
         .pos-cost { bottom: 10px; }
 
         .management-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr; 
-            gap: 15px;
-            padding: 30px 0;
+            display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 15px;
+            padding: 35px 0; position: relative; border: 1px solid #222;
         }
 
         .block {
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--gold-dim);
+            padding: 15px; border-radius: 8px; text-align: center;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--gold-dim);
             animation: gold-breath 4s infinite ease-in-out;
-            transition: 0.3s;
         }
-        .block:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.05); }
 
         .main-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--gold-bright);
-            margin-bottom: 12px;
-            border-bottom: 1px dashed #333;
-            padding-bottom: 8px;
-            cursor: pointer;
+            font-size: 18px; font-weight: bold; color: var(--gold-bright);
+            margin-bottom: 10px; border-bottom: 1px dashed #333;
+            padding-bottom: 5px; cursor: pointer;
         }
+        .main-title:hover { color: #fff; text-shadow: 0 0 5px var(--gold-bright); }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; }
+        .sub-items { list-style: none; padding: 0; text-align: left; margin-top: 10px; }
         .sub-items li {
-            padding: 6px 0;
-            font-size: 15px;
-            color: var(--text-silver);
-            cursor: pointer;
-            transition: 0.2s;
+            margin-bottom: 5px; font-size: 15px; cursor: pointer;
+            color: var(--text-silver); transition: 0.3s;
         }
-        .sub-items li:hover { color: #fff; transform: translateX(5px); }
+        .sub-items li:hover { color: #fff; text-decoration: underline; padding-left: 5px; }
 
-        .side-text { font-size: 16px; color: var(--text-silver); cursor: pointer; margin-top: 10px; }
-        .side-text:hover { color: #fff; }
+        .side-link { font-size: 16px; font-weight: bold; cursor: pointer; color: var(--gold-dim); transition: 0.3s; }
+        .side-link:hover { color: #fff; text-decoration: underline; }
 
-        @media (max-width: 768px) {
-            .management-grid { grid-template-columns: 1fr; }
-            .map-label { display: none; }
-        }
+        .middle-content { display: flex; flex-direction: column; gap: 15px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="map-label pos-preface" onclick="jump('preface')">前言</div>
-        <div class="map-label pos-mgt" onclick="jump('mgt')">管理層</div>
-        <div class="map-label pos-holding" onclick="jump('holding')">控股層</div>
-        <div class="top-bottom-label pos-price" onclick="jump('price')">價格管理</div>
-        <div class="top-bottom-label pos-cost" onclick="jump('cost')">成本管理</div>
-
+        <div class="ext-label pos-preface" onclick="goto('https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/')">前言</div>
+        <div class="ext-label pos-management" onclick="goto('https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing')">管理層</div>
+        <div class="ext-label pos-holding" onclick="goto('https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing')">控股層</div>
+        
+        <div class="top-bottom-label pos-price" onclick="goto('https://www.webcoursestest.hairweb.net/價格管理')">價格管理</div>
+        <div class="top-bottom-label pos-cost" onclick="goto('https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing')">成本管理</div>
+        
         <div class="management-grid">
-            <div class="block">
-                <div class="main-title" onclick="jump('left_ext')">左外部管理</div>
-                <div class="side-text" onclick="jump('supplier')">供應商管理</div>
+            <div class="block" style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="main-title" onclick="goto('https://drive.google.com/file/d/1RGFvS6Xy1...')">左外部管理</div>
+                <div class="side-link" onclick="goto('https://www.webcoursestest.hairweb.net/供應商管理')">供應商管理</div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div class="middle-content">
                 <div class="block">
-                    <div class="main-title" onclick="jump('top_ext')">上外部管理</div>
+                    <div class="main-title" onclick="goto('https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing')">上外部管理</div>
                     <ul class="sub-items">
-                        <li onclick="jump('customer')">1. 顧客管理</li>
-                        <li onclick="jump('sentiment')">2. 客情管理</li>
-                        <li onclick="jump('booking')">3. 預約管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/顧客管理')">1. 顧客管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/客情管理')">2. 客情管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/預約管理')">3. 預約管理</li>
                     </ul>
                 </div>
+
                 <div class="block">
-                    <div class="main-title" onclick="jump('internal')">內部管理</div>
+                    <div class="main-title" onclick="goto('https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing')">內部管理</div>
                     <ul class="sub-items">
-                        <li onclick="jump('financial')">1. 財務管理</li>
-                        <li onclick="jump('talent')">2. 人才管理</li>
-                        <li onclick="jump('inventory')">3. 庫存管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/財務管理')">1. 財務管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/人才管理')">2. 人才管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/庫存管理')">3. 庫存管理</li>
                     </ul>
                 </div>
+
                 <div class="block">
-                    <div class="main-title" onclick="jump('bottom_ext')">下外部管理</div>
+                    <div class="main-title" onclick="goto('https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing')">下外部管理</div>
                     <ul class="sub-items">
-                        <li onclick="jump('marketing')">1. 行銷管理</li>
-                        <li onclick="jump('activity')">2. 活動管理</li>
-                        <li onclick="jump('community')">3. 社區管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/行銷管理')">1. 行銷管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/活動管理')">2. 活動管理</li>
+                        <li onclick="goto('https://www.webcoursestest.hairweb.net/社區管理')">3. 社區管理</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="block">
-                <div class="main-title" onclick="jump('right_ext')">右外部管理</div>
-                <div class="side-text" onclick="jump('brand')">品牌管理</div>
+            <div class="block" style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="main-title" onclick="goto('https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=sharing')">右外部管理</div>
+                <div class="side-link" onclick="goto('https://www.webcoursestest.hairweb.net/品牌管理')">品牌管理</div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 徹底打散網址字串，防止平台抓取 ---
-        const s = "sites.google.com/view/webcourse001/";
-        const d = "drive.google.com/file/d/";
-        const w = "www.webcoursestest.hairweb.net/";
-
-        const vault = {
-            'preface':   'https://' + s + '%E5%89%8D%E8%A8%80/',
-            'mgt':       'https://' + d + '1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
-            'holding':   'https://' + d + '19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing',
-            'price':     'https://' + w + '價格管理',
-            'cost':      'https://' + d + '14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
-            'left_ext':  'https://' + d + '1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view?usp=drive_link',
-            'right_ext': 'https://' + d + '1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link',
-            'top_ext':   'https://' + d + '1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing',
-            'internal':  'https://' + d + '1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing',
-            'bottom_ext':'https://' + d + '1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing',
-            'supplier':  'https://' + w + '供應商管理',
-            'customer':  'https://' + w + '顧客管理',
-            'sentiment': 'https://' + w + '客情管理',
-            'booking':   'https://' + w + '預約管理',
-            'financial': 'https://' + w + '財務管理',
-            'talent':    'https://' + w + '人才管理',
-            'inventory': 'https://' + w + '庫存管理',
-            'marketing': 'https://' + w + '行銷管理',
-            'activity':  'https://' + w + '活動管理',
-            'community': 'https://' + w + '社區管理',
-            'brand':     'https://' + w + '品牌管理'
-        };
-
-        function jump(key) {
-            const target = vault[key];
-            if (target) {
-                // 強制延遲一點點時間執行，確保頁面不被立刻關閉
-                setTimeout(() => {
-                    window.open(target, '_blank');
-                }, 50);
+        // 核心跳轉函數：確保只有在點擊時觸發，且不影響父頁面
+        function goto(url) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
             }
+            window.open(url, '_blank');
         }
-
-        // 禁止任何冒泡或預設行為
-        document.addEventListener('click', (e) => {
-            if(e.target.hasAttribute('onclick')) {
-                e.stopPropagation();
-            }
-        });
     </script>
 </body>
 </html>
