@@ -3,40 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>活力美髮學堂 - 購物車結帳</title>
+    <title>活力美髮學堂 - 炫彩購物車</title>
     <style>
         :root {
             --gold-main: #D4AF37;
             --gold-bright: #FFD700;
-            --bg-dark: #0A0A0A;
-            --card-bg: #1A1A1A;
-            --text-gray: #AAAAAA;
+            /* 炫彩配色 */
+            --color-1: #4158D0;
+            --color-2: #C850C0;
+            --color-3: #FFCC70;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--bg-dark);
-            color: #EEEEEE;
-            padding-bottom: 120px; /* 為底部固定欄留空間 */
+            /* 炫彩流體背景動畫 */
+            background: linear-gradient(45deg, #4158D0, #C850C0, #FFCC70, #4158D0);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #FFFFFF;
+            min-height: 100vh;
+            padding-bottom: 120px;
         }
 
-        /* 標題區域 */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         header {
-            padding: 25px 20px;
+            padding: 30px 20px;
             text-align: center;
-            background: linear-gradient(to bottom, #222, var(--bg-dark));
         }
 
         h1 {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             margin: 0;
-            background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
             font-weight: 900;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            color: #FFF;
         }
 
         .container {
@@ -44,68 +54,56 @@
             margin: auto;
         }
 
-        /* 卡片式產品列表 */
-        .cart-list {
-            margin-top: 10px;
-        }
-
+        /* 玻璃擬態卡片 */
         .cart-item-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 16px;
-            padding: 18px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .item-info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         .item-name {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: var(--gold-bright);
-            flex: 1;
-            padding-right: 10px;
+            color: #FFF;
+            margin-bottom: 5px;
         }
 
         .item-price-tag {
             font-size: 1rem;
-            color: #FFF;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
         }
 
-        /* 數量控制區 */
         .item-control-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid #333;
+            border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 15px;
         }
 
         .quantity-control {
             display: flex;
             align-items: center;
-            background: #000;
-            border-radius: 25px;
-            border: 1px solid #444;
-            padding: 2px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50px;
+            padding: 4px 8px;
         }
 
         .qty-button {
-            width: 32px;
-            height: 32px;
+            width: 35px;
+            height: 35px;
             background: none;
             border: none;
-            color: var(--gold-main);
-            font-size: 1.2rem;
+            color: #FFF;
+            font-size: 1.4rem;
             cursor: pointer;
         }
 
@@ -115,112 +113,101 @@
             border: none;
             color: #FFF;
             text-align: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
-        }
-
-        .subtotal-label {
-            font-size: 0.85rem;
-            color: var(--text-gray);
         }
 
         .subtotal-amount {
-            font-size: 1.1rem;
-            color: var(--gold-main);
-            font-weight: bold;
+            font-size: 1.2rem;
+            color: #FFF;
+            font-weight: 900;
         }
 
-        /* 底部結帳固定欄 */
+        /* 底部結帳欄：玻璃感 */
         .bottom-checkout-bar {
             position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(20, 20, 20, 0.95);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid var(--gold-main);
-            padding: 15px 20px 30px 20px;
+            bottom: 20px;
+            left: 4%;
+            width: 92%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 15px 25px;
             box-sizing: border-box;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 900;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
-        .total-info-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .total-info-box .label {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-        }
-
-        .total-info-box .amount {
-            font-size: 1.4rem;
-            color: var(--gold-bright);
-            font-weight: 800;
+        .amount {
+            font-size: 1.5rem;
+            color: #FFF;
+            font-weight: 900;
         }
 
         .checkout-button {
-            background: linear-gradient(135deg, var(--gold-dark, #B8860B), var(--gold-main));
-            color: #000;
-            padding: 12px 30px;
+            background: #FFF;
+            color: #4158D0;
+            padding: 12px 25px;
             border: none;
-            border-radius: 30px;
+            border-radius: 20px;
             font-weight: 900;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px var(--gold-glow, rgba(212, 175, 55, 0.4));
+            font-size: 1rem;
+            transition: transform 0.2s;
         }
 
-        /* 模態視窗優化 */
+        .checkout-button:active {
+            transform: scale(0.95);
+        }
+
+        /* 模態視窗夢幻化 */
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
         }
 
         .modal-content {
-            background: #111;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
             width: 85%;
-            padding: 25px;
-            border-radius: 24px;
-            border: 1px solid var(--gold-main);
+            padding: 30px;
+            border-radius: 30px;
+            color: #333;
             text-align: center;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
         }
 
         .modal-title {
-            color: var(--gold-main);
+            color: #4158D0;
+            font-weight: 900;
             margin-bottom: 20px;
-            font-size: 1.2rem;
         }
 
         .payment-box {
-            background: #000;
-            padding: 15px;
-            border-radius: 12px;
+            background: rgba(0,0,0,0.05);
+            padding: 20px;
+            border-radius: 20px;
             text-align: left;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
+            font-weight: 500;
         }
 
         .modal-close-btn {
+            margin-top: 20px;
             width: 100%;
-            padding: 12px;
-            background: var(--gold-main);
+            padding: 15px;
+            background: #4158D0;
+            color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             font-weight: bold;
         }
     </style>
@@ -238,15 +225,15 @@
 
 <div class="bottom-checkout-bar">
     <div class="total-info-box">
-        <span class="label">結帳總額 (TWD)</span>
-        <span class="amount" id="total-amount">0</span>
+        <div style="font-size: 0.8rem; opacity: 0.8;">總金額</div>
+        <div class="amount" id="total-amount">0</div>
     </div>
     <button class="checkout-button" onclick="startTaiwanPayCheckout()">立即結帳</button>
 </div>
 
 <div id="paymentModal" class="modal">
     <div class="modal-content">
-        <h2 class="modal-title">✅ 訂單已成立</h2>
+        <h2 class="modal-title">訂單成立 ✨</h2>
         <div id="paymentDetailsDisplay" class="payment-box"></div>
         <button class="modal-close-btn" onclick="closeModal()">我已記下帳號</button>
     </div>
@@ -256,27 +243,22 @@
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweR2_fhRhG1mviInGAaoUKXa_yr4dTWxBs-8EUIZIQGZeeM6uQgrWn0Vz7NlZDimRXZw/exec'; 
 
     const initialProducts = [
-        { id: 1, name: "沙龍經營學 (美髮創業課程)", price: 7000, quantity: 1 },
+        { id: 1, name: "沙龍經營學 (創業導師課程)", price: 7000, quantity: 1 },
     ];
 
     function renderCart() {
         const container = document.getElementById('cart-list');
         container.innerHTML = initialProducts.map(item => `
             <div class="cart-item-card">
-                <div class="item-info-row">
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-price-tag">$${item.price.toLocaleString()}</div>
-                </div>
+                <div class="item-name">${item.name}</div>
+                <div class="item-price-tag">單價 $${item.price.toLocaleString()}</div>
                 <div class="item-control-row">
                     <div class="quantity-control">
-                        <button class="qty-button" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <button class="qty-button" onclick="updateQuantity(${item.id}, -1)">−</button>
                         <input type="number" readonly value="${item.quantity}" class="quantity-input" id="qty-${item.id}">
                         <button class="qty-button" onclick="updateQuantity(${item.id}, 1)">+</button>
                     </div>
-                    <div style="text-align: right;">
-                        <div class="subtotal-label">項目小計</div>
-                        <div class="subtotal-amount" id="subtotal-${item.id}">$${(item.price * item.quantity).toLocaleString()}</div>
-                    </div>
+                    <div class="subtotal-amount" id="subtotal-${item.id}">$${(item.price * item.quantity).toLocaleString()}</div>
                 </div>
             </div>
         `).join('');
@@ -293,26 +275,23 @@
 
     function calculateTotal() {
         const total = initialProducts.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        document.getElementById('total-amount').textContent = total.toLocaleString();
+        document.getElementById('total-amount').textContent = '$' + total.toLocaleString();
     }
 
     function startTaiwanPayCheckout() {
-        const total = document.getElementById('total-amount').textContent.replace(/,/g, '');
-        
-        // 模擬顯示資訊
+        const total = document.getElementById('total-amount').textContent;
         const modal = document.getElementById('paymentModal');
         const display = document.getElementById('paymentDetailsDisplay');
         
         display.innerHTML = `
-            <p><strong>訂單金額：</strong> <span style="color:var(--gold-bright);">$${total}</span></p>
-            <p><strong>銀行代號：</strong> 005 (土地銀行)</p>
-            <p><strong>轉帳帳號：</strong><br><span style="font-size:1.1rem; letter-spacing:1px; color:#FFF;">0000130005245401</span></p>
-            <p style="color:#888; font-size:0.8rem; margin-top:10px;">* 請於 24 小時內完成轉帳以確保名額。</p>
+            <p style="margin:0 0 10px 0;"><strong>應付總額：</strong> <span style="color:#4158D0; font-size:1.2rem;">${total}</span></p>
+            <p style="margin:0 0 5px 0;"><strong>土地銀行 (005)</strong></p>
+            <p style="margin:0; font-family:monospace; font-size:1.2rem; letter-spacing:1px; background:#fff; padding:10px; border-radius:10px;">0000130005245401</p>
+            <p style="color:#666; font-size:0.8rem; margin-top:15px;">※ 轉帳後請截圖保留憑證。</p>
         `;
         
         modal.style.display = 'flex';
 
-        // 發送資料到後端 (維持原邏輯)
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
