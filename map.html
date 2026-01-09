@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&family=Caveat:wght@700&display=swap');
         
         body { 
             font-family: 'Noto Sans TC', sans-serif; 
@@ -16,37 +16,55 @@
             color: #2c3e50;
         }
 
+        /* 炫彩流體背景 */
         .dreamy-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: 
-                radial-gradient(circle at 15% 25%, rgba(162, 155, 254, 0.2) 0%, transparent 45%),
-                radial-gradient(circle at 85% 75%, rgba(255, 118, 117, 0.15) 0%, transparent 45%);
+                radial-gradient(circle at 15% 25%, rgba(162, 155, 254, 0.25) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(255, 118, 117, 0.2) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(255, 204, 112, 0.15) 0%, transparent 50%);
             z-index: -1;
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
 
         .serif { font-family: 'Noto Serif TC', serif; }
 
+        /* 導覽列 */
         .nav-glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         }
         .nav-link {
             font-size: 1rem;
-            color: #7f8c8d;
+            color: #94a3b8;
             transition: all 0.4s ease;
+            position: relative;
         }
         .active-tab {
-            color: #3498db;
-            text-shadow: 0 0 12px rgba(52, 152, 219, 0.5);
+            color: #6366f1;
             font-weight: 700;
         }
-
-        .grid-9-container {
-            max-width: 280px;
-            margin: 3rem auto;
+        .active-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: #6366f1;
+            border-radius: 50%;
         }
+
+        /* 九宮格 */
         .grid-9 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -65,54 +83,61 @@
             justify-content: center;
             font-size: 13px;
             font-weight: 700;
-            color: #95a5a6;
-            transition: all 0.5s ease;
-            border: 1px solid #f0f0f0;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+            border: 1px solid #f1f5f9;
         }
-
-        .grid-box:hover { transform: translateY(-5px); }
-        .box-1:hover { border-color: #ff7675; box-shadow: 0 0 20px rgba(255, 118, 117, 0.4); color: #ff7675; }
-        .box-2:hover { border-color: #74b9ff; box-shadow: 0 0 20px rgba(116, 185, 255, 0.4); color: #74b9ff; }
-        .box-3:hover { border-color: #55efc4; box-shadow: 0 0 20px rgba(85, 239, 196, 0.4); color: #55efc4; }
-        .center-box { background: #34495e; color: white !important; border: none; }
+        .center-box { background: #1e293b; color: white !important; border: none; }
 
         .main-text {
-            font-size: 1.25rem;
-            line-height: 2.2;
-            color: #34495e;
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #334155;
             text-align: justify;
         }
 
         .final-focus {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 40px;
             padding: 3rem 2rem;
-            margin: 4rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            position: relative;
+            border: 1px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
         }
-        .highlight-accent {
-            background: linear-gradient(120deg, rgba(162, 155, 254, 0.2) 0%, rgba(162, 155, 254, 0.2) 100%);
-            background-repeat: no-repeat;
-            background-size: 100% 40%;
-            background-position: 0 80%;
-            font-weight: 700;
-            color: #2d3436;
+
+        /* 藍筆手寫簽名 */
+        .signature-blue {
+            font-family: 'Caveat', cursive, 'Noto Sans TC';
+            color: #1e40af;
+            font-size: 3.2rem;
+            transform: rotate(-3deg);
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        /* 紅印章 */
+        .red-seal {
+            display: inline-flex;
+            width: 38px;
+            height: 38px;
+            border: 2px solid #dc2626;
+            color: #dc2626;
+            font-weight: 900;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            transform: rotate(10deg);
+            opacity: 0.8;
+            vertical-align: middle;
+            background: rgba(220, 38, 38, 0.05);
         }
 
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.8s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .tab-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 底部按鈕框架美化 */
-        .footer-btn {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .footer-btn:active {
-            transform: scale(0.95);
-        }
+        .footer-btn { transition: all 0.2s; }
+        .footer-btn:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
@@ -128,39 +153,61 @@
 
         <section id="guide" class="tab-content">
             <header class="mb-12">
-                <span class="text-xs tracking-[0.4em] text-indigo-400 font-bold mb-3 block uppercase">Chapter 01</span>
+                <span class="text-xs tracking-[0.4em] text-indigo-500 font-bold mb-3 block uppercase">Chapter 01</span>
                 <h1 class="serif text-4xl font-black mb-6 leading-tight">歡迎進入<br>《沙龍經營學》</h1>
-                <p class="main-text">親愛的學員你好！很高興能與你分享這套心智圖化的學習系統。為了幫助你發揮這份教材的最大價值，請先閱讀以下指南：</p>
+                <p class="main-text">親愛的學員你好！很高興能與你分享這套心智圖化的學習系統。為了幫助你發揮最大價值，請先閱讀指南：</p>
             </header>
 
             <div class="space-y-12">
                 <div>
                     <h2 class="serif text-2xl mb-6 font-bold">● 如何使用這份教材？</h2>
                     <p class="main-text">
-                        <strong class="text-indigo-500 underline decoration-indigo-100 decoration-4">層級展開：</strong><br>
-                        這是一份動態地圖。建議從中心主題開始，由內而外點擊「+」號展開子節點，這能幫助你建立結構化思維。
+                        <strong class="text-indigo-600 underline decoration-indigo-200 decoration-4">層級展開：</strong><br>
+                        這是一份動態地圖。建議從中心主題開始，由內而外點擊展開，幫助你建立結構化思維。
                     </p>
                     
-                    <div class="grid-9-container">
+                    <div class="max-w-[280px] mx-auto my-8">
                         <div class="grid-9">
-                            <div class="grid-box box-1">顧客</div><div class="grid-box box-2">客情</div><div class="grid-box box-3">預約</div>
-                            <div class="grid-box box-1">財務</div><div class="grid-box center-box">人才</div><div class="grid-box box-2">庫存</div>
-                            <div class="grid-box box-3">供應商</div><div class="grid-box box-1">行銷</div><div class="grid-box box-2">品牌</div>
+                            <div class="grid-box">營運</div><div class="grid-box">客戶</div><div class="grid-box">技術</div>
+                            <div class="grid-box">行銷</div><div class="grid-box center-box">地圖</div><div class="grid-box">人才</div>
+                            <div class="grid-box">財務</div><div class="grid-box">流程</div><div class="grid-box">格局</div>
                         </div>
                     </div>
-
-                    <p class="main-text">
-                        <strong class="text-indigo-500 underline decoration-indigo-100 decoration-4">搭配筆記：</strong><br>
-                        閱讀心智圖時，建議開啟 Notion 或筆記本，隨手記錄下啟發最大的亮點。
-                    </p>
                 </div>
 
                 <div>
                     <h2 class="serif text-2xl mb-6 font-bold">● 學習建議步驟</h2>
-                    <div class="main-text space-y-6">
-                        <p><strong>01 第一遍 (快速掃描)</strong><br>先看大綱，了解課程的整體全貌。</p>
-                        <p><strong>02 第二遍 (深度學習)</strong><br>針對各個分支細讀，並對照提供的補充資料。</p>
-                        <p><strong>03 第三遍 (實作應用)</strong><br>關閉心智圖，嘗試自己畫出重點，測試吸收程度。</p>
+                    <div class="main-text space-y-4">
+                        <p><strong>01 快速掃描</strong> - 先看大綱了解全貌。</p>
+                        <p><strong>02 深度學習</strong> - 針對分支細讀並對照影片。</p>
+                        <p><strong>03 實作應用</strong> - 嘗試畫出重點，測試吸收程度。</p>
+                    </div>
+                </div>
+
+                <div class="mt-16 relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-indigo-100 to-rose-100 rounded-[30px] blur opacity-50"></div>
+                    <div class="relative bg-white/60 backdrop-blur-md border border-white/80 rounded-[28px] p-8 shadow-xl shadow-indigo-50/50">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center shadow-lg shadow-indigo-100">
+                                <i class="fa-solid fa-copyright text-white"></i>
+                            </div>
+                            <h3 class="serif text-xl font-bold text-slate-800">權限與版權說明</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-[1.1rem] text-slate-600 leading-relaxed">
+                                本課程內容與心智圖連結僅供美業學員 <span class="text-indigo-600 font-bold">付費使用</span>。
+                            </p>
+                            <div class="bg-rose-50/80 border-l-4 border-rose-400 p-4 rounded-r-xl">
+                                <p class="text-sm text-rose-600 font-medium leading-loose">
+                                    <i class="fa-solid fa-circle-exclamation mr-1"></i>
+                                    嚴禁將連結外傳、截圖轉售或進行任何商業用途，讓我們共同守護創作者的環境。
+                                </p>
+                            </div>
+                            <div class="pt-4 flex items-center gap-2 text-indigo-500 font-bold">
+                                <span class="w-2 h-2 bg-indigo-400 rounded-full animate-pulse"></span>
+                                <p class="text-base">如果在學習過程中遇到問題，歡迎聯絡我！</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,64 +215,46 @@
 
         <section id="map" class="tab-content">
             <header class="mb-12">
-                <span class="text-xs tracking-[0.4em] text-indigo-400 font-bold mb-3 block uppercase">Chapter 02</span>
+                <span class="text-xs tracking-[0.4em] text-indigo-500 font-bold mb-3 block uppercase">Chapter 02</span>
                 <h1 class="serif text-4xl font-black mb-6 leading-tight">導航地圖</h1>
-                <p class="main-text font-bold italic text-slate-400">「創業不該是盲目摸索，而是一套清晰的導航地圖。」</p>
             </header>
 
             <div class="main-text space-y-10">
                 <p>各位好，我是活力美髮學堂的 <span class="serif font-black text-slate-800 border-b-2 border-yellow-400">葉老師</span>。</p>
-                <p>這幾年，我將多年的創業心法濃縮成了兩本書。但我發現，忙碌的經營者最缺的不是「資訊」，
-                    而是<span class="text-indigo-600 font-bold underline decoration-indigo-200">「架構」與「即戰力」</span>。</p>
+                <p>這套《沙龍經營學》心智圖庫，是為了忙碌經營者開發的<span class="text-indigo-600 font-bold underline decoration-indigo-200">「架構化即戰力」</span>工具。</p>
 
-                <p>因此，我決定打破傳統線上課程的冗長模式，親手開發了這套《沙龍經營學》心智圖庫。</p>
-
-                <div class="space-y-8 mt-16">
-                    <h3 class="serif text-2xl font-bold text-slate-800">為什麼這套課程與眾不同？</h3>
-                    <div class="space-y-6 text-base text-slate-500">
-                        <p><strong>全邏輯導引：</strong> 複雜經營拆解為可視化心智圖。哪裡遇瓶頸點哪裡，核心教學影片就在那裡。</p>
-                        <p><strong>導師制實戰工具：</strong> 同步開發專屬 App 與提詞工具。不再只是理論，而是提升產值的「數位武裝」。</p>
-                        <p><strong>去蕪存菁的效率：</strong> 不談虛幻口號，只談系統、管理客戶、以及提升經營者的格局。</p>
-                    </div>
-                </div>
-
-                <div class="final-focus">
-                    <p class="serif text-2xl leading-relaxed mb-8">
+                <div class="final-focus my-12">
+                    <p class="serif text-2xl leading-relaxed mb-6 text-center">
                         這是一套為了<br>
-                        <span class="highlight-accent">「真正想解決問題的人」</span><br>
+                        <span class="bg-indigo-50 px-2 text-indigo-600 font-bold">「真正想解決問題的人」</span><br>
                         而存在的系統。
                     </p>
-                    <div class="w-8 h-[1px] bg-slate-200 mx-auto mb-8"></div>
-                    <p class="text-base text-slate-500 leading-loose">
-                        我深知經營者的時間與能量都非常寶覺，<br>
-                        所以這套課程不追求大眾化，<br>
-                        只分享給懂得<span class="font-bold text-slate-800">「系統價值」</span>的專業人士。
-                    </p>
-                    <p class="serif text-xl mt-10 text-indigo-500 font-bold">
-                        現在，請跟隨這份心智圖，<br>開始重塑你的經營思維。
+                    <p class="text-base text-slate-500 text-center leading-loose">
+                        我深知經營者的時間寶貴，課程不追求大眾化，只分享給懂得系統價值的專業人士。
                     </p>
                 </div>
 
-                <div class="text-center pt-10">
-                    <p class="serif text-4xl font-black tracking-widest text-slate-800">葉老師</p>
+                <div class="text-center pt-10 pb-10">
+                    <div class="signature-container relative inline-block">
+                        <span class="signature-blue">葉老師</span>
+                        <div class="red-seal">葉</div>
+                    </div>
+                    <div class="text-[10px] text-slate-400 tracking-[0.3em] mt-4 uppercase font-bold">Founder of Hair Academy</div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg px-6 py-6 border-t border-slate-100 flex gap-4 justify-center items-center z-50">
-        
-        <a href="mailto:holy@hairweb.net" class="footer-btn flex-1 max-w-[160px] bg-slate-800 text-white px-4 py-3 rounded-2xl text-xs font-bold shadow-lg shadow-slate-200 flex items-center justify-center gap-2">
-            <i class="fa-solid fa-envelope text-base text-indigo-300"></i>
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl px-6 py-6 border-t border-slate-100 flex gap-4 justify-center items-center z-50">
+        <a href="mailto:holy@hairweb.net" class="footer-btn flex-1 max-w-[160px] bg-slate-800 text-white px-4 py-3.5 rounded-2xl text-xs font-bold shadow-lg shadow-slate-200 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-envelope text-indigo-300"></i>
             <span>EMAIL 聯絡</span>
         </a>
-
-        <a href="https://line.me/ti/g2/wcdR4eoN89tQEtA_kywtgf6ILX_BMO7-foFjzw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" class="footer-btn flex-1 max-w-[160px] bg-[#06C755] text-white px-4 py-3 rounded-2xl text-xs font-bold shadow-lg shadow-green-100 flex items-center justify-center gap-2">
+        <a href="https://line.me/ti/p/你的ID" class="footer-btn flex-1 max-w-[160px] bg-[#06C755] text-white px-4 py-3.5 rounded-2xl text-xs font-bold shadow-lg shadow-green-100 flex items-center justify-center gap-2">
             <i class="fa-brands fa-line text-lg"></i>
             <span>LINE 聯絡</span>
         </a>
-        
     </footer>
 
     <script>
@@ -243,5 +272,3 @@
     </script>
 </body>
 </html>
-
-
