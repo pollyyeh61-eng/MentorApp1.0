@@ -132,6 +132,9 @@
             <div class="form-group" style="flex:1;"><label>貴賓姓名</label><input type="text" id="name" oninput="autoSearch()"></div>
             <div class="form-group" style="flex:1.5;"><label>聯繫電話</label><input type="tel" id="phone" oninput="autoSearch()"></div>
         </div>
+            <div class="form-group" style="flex:1;"><label>血型</label><select id="blood"><option value="">選擇</option><option>A型</option><option>B型</option><option>O型</option><option>AB型</option></select></div>
+            <div class="form-group" style="flex:1;"><label>星座</label><select id="constellation"><option value="">選擇</option><option>牡羊座</option><option>金牛座</option><option>雙子座</option><option>巨蟹座</option><option>獅子座</option><option>處女座</option><option>天秤座</option><option>天蠍座</option><option>射手座</option><option>摩羯座</option><option>水瓶座</option><option>雙魚座</option></select></div>
+       
 
         <div class="form-group"><label>本次消費項目</label><input type="text" id="thisItem" placeholder="如：霧眉、深層洗髮"></div>
         <div class="form-group"><label>操作紀錄</label><textarea id="thisLog" rows="2" placeholder="使用的色號、藥水、捲度等..."></textarea></div>
@@ -141,9 +144,7 @@
         <div class="form-group"><label>提醒下次預約時間</label><input type="datetime-local" id="bookTime"></div>
 
         <div style="display: flex; gap: 8px;">
-            <div class="form-group" style="flex:1;"><label>血型</label><select id="blood"><option value="">選擇</option><option>A型</option><option>B型</option><option>O型</option><option>AB型</option></select></div>
-            <div class="form-group" style="flex:1;"><label>星座</label><select id="constellation"><option value="">選擇</option><option>牡羊座</option><option>金牛座</option><option>雙子座</option><option>巨蟹座</option><option>獅子座</option><option>處女座</option><option>天秤座</option><option>天蠍座</option><option>射手座</option><option>摩羯座</option><option>水瓶座</option><option>雙魚座</option></select></div>
-        </div>
+     </div>
         
         <div class="form-group"><label>心得備註</label><textarea id="note" rows="2"></textarea></div>
         
@@ -263,3 +264,4 @@
     </script>
 </body>
 </html>
+
