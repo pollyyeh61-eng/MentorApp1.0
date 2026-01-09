@@ -2,188 +2,360 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>經營地圖-線上課程試看</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>導師專屬工作台</title>
+    <link rel="manifest" href="manifest.json">
     <style>
         :root {
-            --dark-bg: #0a0a0a;
-            --panel-bg: #111111;
-            --gold-dim: #8a6d3b;
-            --gold-bright: #d4af37;
-            --text-silver: #c0c0c0;
-        }
-
-        /* 滿版基礎設定 */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: var(--dark-bg);
-            overflow-x: hidden; /* 防止左右滾動 */
+            --gold-light: #FFD700;
+            --gold-main: #D4AF37;
+            --gold-dark: #B8860B;
+            --bg-gradient: radial-gradient(circle at top, #2C2C2C 0%, #0A0A0A 100%);
         }
 
         body {
-            font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+            background: var(--bg-gradient);
+            color: #E0E0E0;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center; /* 讓地圖始終居中 */
-            color: #fff;
-        }
-
-        /* 調整容器為 100% 寬度，並設定最大寬度防止在大螢幕上過扁 */
-        .container {
-            width: 95%; /* 左右留一點緩衝 */
-            max-width: 1000px; /* 您也可以根據需要調大此數值，例如 1200px */
-            min-height: 80vh; 
-            padding: 60px 40px;
-            background: var(--panel-bg);
-            border: 2px solid var(--gold-dim);
-            position: relative;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 50px 20px;
             box-sizing: border-box;
         }
 
-        /* 外部連結文字 - 保持原樣但調整邊距 */
-        .external-link {
-            position: absolute;
-            font-weight: bold;
-            color: var(--gold-dim);
-            text-decoration: none;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            font-size: clamp(14px, 2vw, 18px); /* 隨螢幕縮放字體 */
-            transition: 0.3s;
-            z-index: 10;
-        }
-        .external-link:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-
-        .pos-preface { top: 35%; left: 10px; }
-        .pos-mgt { top: 60%; left: 10px; }
-        .pos-holding { top: 45%; right: 10px; }
-
-        .top-bot-link {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--gold-dim);
-            text-decoration: none;
-            font-size: clamp(16px, 3vw, 22px);
-            font-weight: bold;
-            transition: 0.3s;
-            z-index: 10;
-        }
-        .top-bot-link:hover { color: var(--gold-bright); }
-        .pos-price { top: 20px; }
-        .pos-cost { bottom: 20px; }
-
-        /* 九宮格佈局 - 使用響應式網格 */
-        .management-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 20px;
-            padding: 30px 0;
-        }
-
-        /* 手機模式自動切換為單欄，避免太擠 */
-        @media (max-width: 600px) {
-            .management-grid { grid-template-columns: 1fr; }
-            .pos-preface, .pos-mgt, .pos-holding { position: static; writing-mode: horizontal-tb; text-align: center; display: block; margin: 10px 0; }
-            .container { padding: 80px 20px; }
-        }
-
-        .block {
-            padding: 25px 20px;
-            border: 1px solid var(--gold-dim);
-            border-radius: 12px;
-            background: rgba(255,255,255,0.02);
+        header {
             text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+            letter-spacing: 6px;
+            font-weight: 800;
+            margin: 0;
+            filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.4));
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: var(--gold-main);
+            letter-spacing: 4px;
+            margin-top: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        /* 登入/註冊區塊樣式 */
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px 30px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            display: none; /* 由 JS 決定是否顯示 */
+            animation: fadeIn 0.8s ease;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--gold-main);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .auth-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            color: #000;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .auth-switch span {
+            color: var(--gold-light);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* 選單網格樣式 */
+        .menu-grid {
+            width: 100%;
+            max-width: 400px;
+            display: none; /* 初始隱藏 */
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .btn {
+            position: relative;
+            background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 22px;
+            padding: 26px 24px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        @keyframes border-glow {
+            0% { border-color: rgba(212, 175, 55, 0.4); }
+            50% { border-color: rgba(255, 215, 0, 0.8); }
+            100% { border-color: rgba(212, 175, 55, 0.4); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .icon-box {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #333, #000);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            margin-right: 22px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .text-content {
             display: flex;
             flex-direction: column;
-            justify-content: center;
         }
 
-        .main-title {
-            font-size: 20px;
+        .btn-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .btn-desc {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        .remote-tag {
+            margin-left: auto;
+            background: rgba(0,0,0,0.4);
+            color: var(--gold-main);
+            font-size: 0.65rem;
             font-weight: bold;
-            color: var(--gold-bright);
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #333;
-            padding-bottom: 10px;
-            text-decoration: none;
-            display: block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--gold-dark);
         }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; margin: 0; }
-        .sub-items li a {
-            display: block;
-            padding: 8px 0;
-            font-size: 16px;
-            color: var(--text-silver);
-            text-decoration: none;
-            transition: 0.2s;
+        footer {
+            margin-top: auto;
+            padding: 50px 20px;
+            font-size: 0.7rem;
+            color: #444;
+            letter-spacing: 2px;
+            text-align: center;
         }
-        .sub-items li a:hover { color: #fff; text-decoration: underline; padding-left: 8px; }
-
-        .side-link {
-            color: var(--text-silver);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .side-link:hover { color: #fff; text-decoration: underline; }
-
-        .middle-stack { display: flex; flex-direction: column; gap: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/" target="_blank" class="external-link pos-preface">前言</a>
-    <a href="https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing" target="_blank" class="external-link pos-mgt">管理層</a>
-    <a href="https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing" target="_blank" class="external-link pos-holding">控股層</a>
-    
-    <a href="https://www.webcoursestest.hairweb.net/價格管理" target="_blank" class="top-bot-link pos-price">價格管理</a>
-    <a href="https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing" target="_blank" class="top-bot-link pos-cost">成本管理</a>
+    <header>
+        <h1>導師專屬</h1>
+        <div class="subtitle">Personal Mentor Station</div>
+    </header>
 
-    <div class="management-grid">
-        <div class="block">
-            <a href="https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view" target="_blank" class="main-title">左外部管理</a>
-            <a href="https://www.webcoursestest.hairweb.net/供應商管理" target="_blank" class="side-link">供應商管理</a>
+    <div id="authSection" class="auth-container">
+        <h2 id="authTitle" style="text-align: center; color: var(--gold-light); margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">會員登入</h2>
+        
+        <div class="input-group">
+            <label>電子郵件</label>
+            <input type="email" id="email" placeholder="example@mail.com">
         </div>
 
-        <div class="middle-stack">
-            <div class="block">
-                <a href="https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view" target="_blank" class="main-title">上外部管理</a>
-                <ul class="sub-items">
-                    <li><a href="https://www.webcoursestest.hairweb.net/顧客管理" target="_blank">1. 顧客管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/客情管理" target="_blank">2. 客情管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/預約管理" target="_blank">3. 預約管理</a></li>
-                </ul>
-            </div>
-            <div class="block">
-                <a href="https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view" target="_blank" class="main-title">內部管理</a>
-                <ul class="sub-items">
-                    <li><a href="https://www.webcoursestest.hairweb.net/財務管理" target="_blank">1. 財務管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/人才管理" target="_blank">2. 人才管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/庫存管理" target="_blank">3. 庫存管理</a></li>
-                </ul>
-            </div>
-            <div class="block">
-                <a href="https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view" target="_blank" class="main-title">下外部管理</a>
-                <ul class="sub-items">
-                    <li><a href="https://www.webcoursestest.hairweb.net/行銷管理" target="_blank">1. 行銷管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/活動管理" target="_blank">2. 活動管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/社區管理" target="_blank">3. 社區管理</a></li>
-                </ul>
+        <div class="input-group">
+            <label>登入密碼</label>
+            <input type="password" id="password" placeholder="請輸入密碼">
+        </div>
+
+        <div id="registerFields" style="display: none;">
+            <div class="input-group">
+                <label>確認密碼</label>
+                <input type="password" id="confirmPassword" placeholder="再次確認密碼">
             </div>
         </div>
 
-        <div class="block">
-            <a href="https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view" target="_blank" class="main-title">右外部管理</a>
-            <a href="https://www.webcoursestest.hairweb.net/品牌管理" target="_blank" class="side-link">品牌管理</a>
+        <button class="auth-submit" onclick="handleAuth()">進入系統</button>
+
+        <div class="auth-switch">
+            <span id="switchText" onclick="toggleAuthMode()">尚未擁有帳號？立即註冊</span>
         </div>
     </div>
-</div>
 
+    <div id="mainMenu" class="menu-grid">
+        <a href="http://www.webcoursestest.hairweb.net" class="btn">
+            <div class="icon-box">🗺️</div>
+            <div class="text-content">
+                <span class="btn-title">經營地圖</span>
+                <span class="btn-desc">戰略佈局與核心思維</span>
+            </div>
+        </a>
+
+        <a href="https://www.client.hairweb.net" class="btn">
+            <div class="icon-box">👥</div>
+            <div class="text-content">
+                <span class="btn-title">客戶管理</span>
+                <span class="btn-desc">學員名單與成長進度</span>
+            </div>
+        </a>
+
+        <div class="btn" onclick="alert('💡 提詞機工具提示：\n\n即將開始下載工具組，請在電腦端安裝使用。'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing';">
+            <div class="icon-box">🛠️</div>
+            <div class="text-content">
+                <span class="btn-title">實戰工具</span>
+                <span class="btn-desc">電腦端專業拍攝工具組</span>
+            </div>
+            <span class="remote-tag">PC ONLY</span>
+        </div>
+
+        <a href="https://line.me/ti/p/您的ID" class="btn" style="border-color: rgba(255, 215, 0, 0.7); animation: border-glow 3s infinite;">
+            <div class="icon-box" style="background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); color: black;">💬</div>
+            <div class="text-content">
+                <span class="btn-title" style="color: var(--gold-light);">導師諮詢</span>
+                <span class="btn-desc">一對一尊榮私密對話</span>
+            </div>
+        </a>
+
+        <button onclick="logout()" style="background: none; border: none; color: #444; margin-top: 20px; cursor: pointer; text-decoration: underline;">登出系統</button>
+    </div>
+
+    <footer>© 2025 MENTOR EXCLUSIVE ALL RIGHTS RESERVED</footer>
+
+    <script>
+        let isLoginMode = true;
+
+        // 頁面加載時檢查登入狀態
+        window.onload = function() {
+            const userToken = localStorage.getItem('mentor_session');
+            if (userToken) {
+                showMenu();
+            } else {
+                document.getElementById('authSection').style.display = 'block';
+            }
+        };
+
+        // 切換 登入/註冊 模式
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const authTitle = document.getElementById('authTitle');
+            const registerFields = document.getElementById('registerFields');
+            const switchText = document.getElementById('switchText');
+
+            if (isLoginMode) {
+                authTitle.innerText = '會員登入';
+                registerFields.style.display = 'none';
+                switchText.innerText = '尚未擁有帳號？立即註冊';
+            } else {
+                authTitle.innerText = '導師註冊';
+                registerFields.style.display = 'block';
+                switchText.innerText = '已有帳號？前往登入';
+            }
+        }
+
+        // 處理驗證邏輯
+        function handleAuth() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            if (!email || !pass) {
+                alert('請完整填寫資訊');
+                return;
+            }
+
+            // 此處未來可介接資料庫 API
+            // 目前先以模擬成功為主
+            localStorage.setItem('mentor_session', 'active_user_' + Date.now());
+            
+            const msg = isLoginMode ? '歡迎回來，尊貴的導師' : '註冊成功，歡迎加入';
+            alert(msg);
+            
+            showMenu();
+        }
+
+        function showMenu() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'flex';
+        }
+
+        function logout() {
+            if(confirm('確定要登出嗎？')) {
+                localStorage.removeItem('mentor_session');
+                location.reload();
+            }
+        }
+
+        // Service Worker 註冊
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </body>
 </html>
