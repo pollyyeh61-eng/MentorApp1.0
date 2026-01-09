@@ -51,7 +51,6 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 外部標籤文字 */
         .external-link-text {
             position: absolute;
             font-size: 18px;
@@ -183,21 +182,24 @@
     </div>
 
     <script>
+        // 依照您 GitHub 上的檔名精確修改
         const linkUrls = {
-            'total-preface': 'https://www.webcoursestest.hairweb.net/前言',
-            'customer-mgt': 'https://www.webcoursestest.hairweb.net/顧客管理',
-            'sentiment-mgt': 'https://www.webcoursestest.hairweb.net/客情管理',
-            'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理',
-            'financial-mgt': 'https://www.webcoursestest.hairweb.net/財務管理',
-            'talent-mgt': 'https://www.webcoursestest.hairweb.net/人才管理',
-            'inventory-mgt': 'https://www.webcoursestest.hairweb.net/庫存管理',
-            'marketing-mgt': 'https://www.webcoursestest.hairweb.net/行銷管理',
-            'activity-mgt': 'https://www.webcoursestest.hairweb.net/活動管理',
-            'community-mgt': 'https://www.webcoursestest.hairweb.net/社區管理',
-            'supplier-mgt': 'https://www.webcoursestest.hairweb.net/供應商管理',
-            'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理',
-            'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
-            // 以下保留總覽用的 Google Drive 連結
+            // 子頁面 (相對路徑)
+            'total-preface': '13前言.html',
+            'customer-mgt': '1顧客管理.html',
+            'sentiment-mgt': '2客情管理.html',
+            'booking-mgt': '3預約管理.html',
+            'financial-mgt': '4財務管理.html',
+            'talent-mgt': '5人才管理.html',
+            'inventory-mgt': '6庫存管理.html',
+            'marketing-mgt': '7行銷管理.html',
+            'activity-mgt': '8活動管理.html',
+            'community-mgt': '9社區管理.html',
+            'supplier-mgt': '10供應商管理.html',
+            'brand-mgt': '11品牌管理.html',
+            'top-price-mgt': '12價格管理.html',
+            
+            // 外部連結 (雲端硬碟)
             'total-management': 'https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
             'total-holding-label': 'https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
@@ -208,19 +210,22 @@
             'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link'
         };
 
-        // 監聽所有點擊
         document.addEventListener('click', (e) => {
             const clickable = e.target.closest('[data-link-id]');
             if (!clickable) return;
 
-            // 阻止冒泡，確保點擊子項目時不會觸發父層方塊的連結
             e.stopPropagation();
             
             const id = clickable.getAttribute('data-link-id');
             const url = linkUrls[id];
             
             if (url) {
-                window.open(url, '_blank');
+                // 如果是 html 檔案，在原視窗開啟；如果是 https 連結，開新分頁
+                if (url.endsWith('.html')) {
+                    window.location.href = url;
+                } else {
+                    window.open(url, '_blank');
+                }
             }
         });
     </script>
