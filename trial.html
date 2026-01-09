@@ -2,168 +2,199 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>經營地圖-線上課程試看</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
-            --dark-bg: #0a0a0a;
-            --panel-bg: #111111;
+            --bg: #0a0a0a;
+            --panel: #111111;
+            --gold: #d4af37;
             --gold-dim: #8a6d3b;
-            --gold-bright: #d4af37;
-            --text-silver: #c0c0c0;
+            --silver: #c0c0c0;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            overflow: hidden; 
         }
 
         body {
             font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
-            background-color: var(--dark-bg);
-            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
         }
 
-        .container {
-            width: 900px;
-            padding: 50px 40px;
-            background: var(--panel-bg);
+        .full-screen-map {
+            width: 100vw;
+            height: 100vh;
+            padding: 1vh 1vw;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1200px; 
+            height: 98%;
+            background: var(--panel);
             border: 2px solid var(--gold-dim);
             position: relative;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 60px;
+            box-sizing: border-box;
+            box-shadow: 0 0 50px #000;
         }
 
-        /* 外部連結文字 - 恢復最原始的 A 標籤 */
-        .external-link {
+        /* 主標題樣式調整 */
+        .main-header {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .nav-label {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--gold-dim);
+            text-decoration: none;
+            transition: 0.3s;
+            margin: 10px 0;
+        }
+        .nav-label:hover { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+
+        .side-tag {
             position: absolute;
+            font-size: 18px;
             font-weight: bold;
             color: var(--gold-dim);
             text-decoration: none;
             writing-mode: vertical-rl;
             text-orientation: upright;
-            font-size: 18px;
             transition: 0.3s;
-            z-index: 10;
+            z-index: 5;
         }
-        .external-link:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
+        .side-tag:hover { color: var(--gold); }
 
-        .pos-preface { top: 35%; left: -35px; }
-        .pos-mgt { top: 60%; left: -35px; }
-        .pos-holding { top: 45%; right: -35px; }
-
-        .top-bot-link {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--gold-dim);
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-            transition: 0.3s;
-            z-index: 10;
-        }
-        .top-bot-link:hover { color: var(--gold-bright); }
-        .pos-price { top: 15px; }
-        .pos-cost { bottom: 15px; }
-
-        /* 九宮格佈局 */
-        .management-grid {
+        .grid-layout {
+            flex-grow: 1;
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
             gap: 15px;
-            padding: 20px 0;
+            margin: 10px 0;
         }
 
-        .block {
-            padding: 20px;
+        .mgt-block {
             border: 1px solid var(--gold-dim);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.02);
-            text-align: center;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.03);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            padding: 15px 20px;
+            transition: 0.3s;
         }
 
-        .main-title {
+        .block-title {
             font-size: 18px;
             font-weight: bold;
-            color: var(--gold-bright);
-            margin-bottom: 12px;
-            border-bottom: 1px dashed #333;
-            padding-bottom: 8px;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 10px;
             text-decoration: none;
-            display: block;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
         }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; margin: 0; }
-        .sub-items li a {
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item-list li a {
             display: block;
-            padding: 6px 0;
-            font-size: 15px;
-            color: var(--text-silver);
+            padding: 8px 0;
+            color: var(--silver);
             text-decoration: none;
+            font-size: 15px;
             transition: 0.2s;
         }
-        .sub-items li a:hover { color: #fff; text-decoration: underline; padding-left: 5px; }
+        .item-list li a:hover { color: #fff; text-decoration: underline; padding-left: 5px; }
 
-        .side-link {
-            color: var(--text-silver);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
+        .hint-text { font-size: 11px; color: #555; margin-top: 2px; }
+
+        .center-stack { display: flex; flex-direction: column; gap: 10px; }
+
+        @media (max-height: 800px) {
+            .main-header { font-size: 24px; margin-bottom: 10px; }
+            .nav-label { font-size: 18px; }
+            .block-title { font-size: 16px; }
+            .item-list li a { font-size: 14px; padding: 5px 0; }
         }
-        .side-link:hover { color: #fff; text-decoration: underline; }
-
-        .middle-stack { display: flex; flex-direction: column; gap: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/" target="_blank" class="external-link pos-preface">前言</a>
-    <a href="https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing" target="_blank" class="external-link pos-mgt">管理層</a>
-    <a href="https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing" target="_blank" class="external-link pos-holding">控股層</a>
-    
-    <a href="https://www.webcoursestest.hairweb.net/價格管理" target="_blank" class="top-bot-link pos-price">價格管理</a>
-    <a href="https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing" target="_blank" class="top-bot-link pos-cost">成本管理</a>
+<div class="full-screen-map">
+    <div class="main-container">
+        <div class="main-header">經營地圖 - 線上課程試看</div>
 
-    <div class="management-grid">
-        <div class="block">
-            <a href="https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view" target="_blank" class="main-title">左外部管理</a>
-            <a href="https://www.webcoursestest.hairweb.net/供應商管理" target="_blank" class="side-link">供應商管理</a>
+        <a href="https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/" target="_blank" class="side-tag" style="top:35%; left:15px;">前言</a>
+        <a href="https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing" target="_blank" class="side-tag" style="top:60%; left:15px;">管理層</a>
+        <a href="https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing" target="_blank" class="side-tag" style="top:45%; right:15px;">控股層</a>
+        
+        <a href="https://www.webcoursestest.hairweb.net/價格管理" target="_blank" class="nav-label">價格管理</a>
+
+        <div class="grid-layout">
+            <div class="mgt-block">
+                <a href="https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view" target="_blank" class="block-title">左外部管理</a>
+                <a href="https://www.webcoursestest.hairweb.net/供應商管理" target="_blank" style="color:var(--silver); text-decoration:none; text-align:center; font-weight:bold; font-size:15px;">供應商管理</a>
+            </div>
+
+            <div class="center-stack">
+                <div class="mgt-block">
+                    <a href="https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view" target="_blank" class="block-title">上外部管理</a>
+                    <ul class="item-list">
+                        <li><a href="https://www.webcoursestest.hairweb.net/顧客管理" target="_blank">1. 顧客管理系統<div class="hint-text">(點擊進入)</div></a></li>
+                        <li><a href="https://www.webcoursestest.hairweb.net/客情管理" target="_blank">2. 客情分析報告</a></li>
+                        <li><a href="https://www.webcoursestest.hairweb.net/預約管理" target="_blank">3. 預約管理系統</a></li>
+                    </ul>
+                </div>
+                <div class="mgt-block">
+                    <a href="https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view" target="_blank" class="block-title">核心內部管理</a>
+                    <ul class="item-list">
+                        <li><a href="https://www.webcoursestest.hairweb.net/財務管理" target="_blank">1. 財務收銀系統<div class="hint-text">(點擊進入)</div></a></li>
+                        <li><a href="https://www.webcoursestest.hairweb.net/人才管理" target="_blank">2. 人才訓練系統<div class="hint-text">(點擊進入)</div></a></li>
+                        <li><a href="https://www.webcoursestest.hairweb.net/庫存管理" target="_blank">3. 庫存金庫系統<div class="hint-text">(點擊進入)</div></a></li>
+                    </ul>
+                </div>
+                <div class="mgt-block">
+                    <a href="https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view" target="_blank" class="block-title">下外部管理</a>
+                    <ul class="item-list">
+                        <li><a href="https://www.webcoursestest.hairweb.net/行銷管理" target="_blank">1. 行銷漏斗策略</a></li>
+                        <li><a href="https://www.webcoursestest.hairweb.net/活動管理" target="_blank">2. 活動管理</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mgt-block">
+                <a href="https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view" target="_blank" class="block-title">右外部管理</a>
+                <a href="https://www.webcoursestest.hairweb.net/品牌管理" target="_blank" style="color:var(--silver); text-decoration:none; text-align:center; font-weight:bold; font-size:15px;">品牌視覺資產</a>
+            </div>
         </div>
 
-        <div class="middle-stack">
-            <div class="block">
-                <a href="https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view" target="_blank" class="main-title">上外部管理</a>
-                <ul class="sub-items">
-                    <li><a href="https://www.webcoursestest.hairweb.net/顧客管理" target="_blank">1. 顧客管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/客情管理" target="_blank">2. 客情管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/預約管理" target="_blank">3. 預約管理</a></li>
-                </ul>
-            </div>
-            <div class="block">
-                <a href="https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view" target="_blank" class="main-title">內部管理</a>
-                <ul class="sub-items">
-                    <li><a href="https://www.webcoursestest.hairweb.net/財務管理" target="_blank">1. 財務管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/人才管理" target="_blank">2. 人才管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/庫存管理" target="_blank">3. 庫存管理</a></li>
-                </ul>
-            </div>
-            <div class="block">
-                <a href="https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view" target="_blank" class="main-title">下外部管理</a>
-                <ul class="sub-items">
-                    <li><a href="https://www.webcoursestest.hairweb.net/行銷管理" target="_blank">1. 行銷管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/活動管理" target="_blank">2. 活動管理</a></li>
-                    <li><a href="https://www.webcoursestest.hairweb.net/社區管理" target="_blank">3. 社區管理</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="block">
-            <a href="https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view" target="_blank" class="main-title">右外部管理</a>
-            <a href="https://www.webcoursestest.hairweb.net/品牌管理" target="_blank" class="side-link">品牌管理</a>
-        </div>
+        <a href="https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing" target="_blank" class="nav-label">成本管理</a>
     </div>
 </div>
 
