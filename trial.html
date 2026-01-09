@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美髮經營學-線上課程試看</title>
     <style>
-        /* --- 奢華黑金核心樣式 --- */
         :root {
-            --dark-bg: #0a0a0a;         /* 深黑底色 */
-            --panel-bg: #111111;        /* 區塊深灰底 */
-            --gold-dim: #8a6d3b;        /* 低調暗金 */
-            --gold-bright: #d4af37;     /* 奢華亮金 */
+            --dark-bg: #0a0a0a;
+            --panel-bg: #111111;
+            --gold-dim: #8a6d3b;
+            --gold-bright: #d4af37;
             --gold-glow: rgba(212, 175, 55, 0.3);
-            --text-silver: #c0c0c0;     /* 次要文字銀灰 */
+            --text-silver: #c0c0c0;
         }
 
         body {
@@ -26,11 +25,11 @@
             color: #fff;
         }
 
-        /* --- 1. 新增：回到首頁浮動鍵樣式 (右上角) --- */
+        /* --- 按鈕已改至左上角 (left: 20px) --- */
         .home-btn {
             position: fixed;
             top: 20px;
-            right: 20px;
+            left: 20px;
             width: 50px;
             height: 50px;
             background: rgba(17, 17, 17, 0.8);
@@ -54,7 +53,6 @@
             font-size: 24px;
         }
 
-        /* 呼吸動畫：4秒循環 */
         @keyframes gold-breath {
             0%, 100% { border-color: var(--gold-dim); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
             50% { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-glow); }
@@ -71,7 +69,6 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 外部文字連結樣式 */
         .external-link-text {
             position: absolute;
             font-size: 18px;
@@ -106,7 +103,6 @@
         .text-top-mgt { top: 5px; } 
         .text-cost-mgt { bottom: 5px; } 
 
-        /* 主要 Grid 佈局 */
         .management-grid {
             display: grid;
             grid-template-columns: 1fr 2fr 1fr; 
@@ -116,7 +112,6 @@
             border: 1px solid #222;
         }
 
-        /* 呼吸感按鈕元件 */
         .block {
             padding: 15px;
             border-radius: 8px;
@@ -128,7 +123,6 @@
             animation: gold-breath 4s infinite ease-in-out;
         }
 
-        /* 滑鼠滑過 - 獨立光譜色設定 */
         .block-side[data-link-id="left-external"]:hover { border-color: #00ff88 !important; box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); transform: translateY(-3px); }
         .block-side[data-link-id="right-external"]:hover { border-color: #00ccff !important; box-shadow: 0 0 20px rgba(0, 204, 255, 0.5); transform: translateY(-3px); }
         .block-top:hover { border-color: #ffe600 !important; box-shadow: 0 0 20px rgba(255, 230, 0, 0.5); transform: translateY(-3px); }
@@ -218,6 +212,7 @@
     </div>
 
     <script>
+        // 腳本邏輯保持不變...
         const linkUrls = {
             'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
