@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&family=Caveat:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&family=Dancing+Script:wght@600&display=swap');
         
         body { 
             font-family: 'Noto Sans TC', sans-serif; 
@@ -104,32 +104,16 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.03);
         }
 
-        /* 藍筆手寫簽名 */
+        /* 藍筆細緻手寫簽名 */
         .signature-blue {
-            font-family: 'Caveat', cursive, 'Noto Sans TC';
-            color: #1e40af;
-            font-size: 3.2rem;
-            transform: rotate(-3deg);
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        /* 紅印章 */
-        .red-seal {
-            display: inline-flex;
-            width: 38px;
-            height: 38px;
-            border: 2px solid #dc2626;
-            color: #dc2626;
-            font-weight: 900;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            font-size: 1.2rem;
-            transform: rotate(10deg);
-            opacity: 0.8;
-            vertical-align: middle;
-            background: rgba(220, 38, 38, 0.05);
+            font-family: 'Dancing Script', 'Noto Sans TC', cursive;
+            color: #2563eb; /* 鋼筆藍色 */
+            font-size: 2.2rem; /* 調小尺寸 */
+            transform: rotate(-2deg);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .tab-content { display: none; }
@@ -234,12 +218,11 @@
                     </p>
                 </div>
 
-                <div class="text-center pt-10 pb-10">
-                    <div class="signature-container relative inline-block">
+                <div class="flex justify-end pt-10 pb-10">
+                    <div class="text-right">
                         <span class="signature-blue">葉老師</span>
-                        <div class="red-seal">葉</div>
+                        <div class="text-[10px] text-slate-400 tracking-[0.2em] uppercase font-bold pr-2">Founder & Instructor</div>
                     </div>
-                    <div class="text-[10px] text-slate-400 tracking-[0.3em] mt-4 uppercase font-bold">Founder of Hair Academy</div>
                 </div>
             </div>
         </section>
