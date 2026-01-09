@@ -27,7 +27,6 @@
 
         .serif { font-family: 'Noto Serif TC', serif; }
 
-        /* 導覽列藝術發光 */
         .nav-glass {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(15px);
@@ -44,7 +43,6 @@
             font-weight: 700;
         }
 
-        /* 藝術九宮格 */
         .grid-9-container {
             max-width: 280px;
             margin: 3rem auto;
@@ -72,14 +70,12 @@
             border: 1px solid #f0f0f0;
         }
 
-        /* 九宮格發光效果 */
         .grid-box:hover { transform: translateY(-5px); }
         .box-1:hover { border-color: #ff7675; box-shadow: 0 0 20px rgba(255, 118, 117, 0.4); color: #ff7675; }
         .box-2:hover { border-color: #74b9ff; box-shadow: 0 0 20px rgba(116, 185, 255, 0.4); color: #74b9ff; }
         .box-3:hover { border-color: #55efc4; box-shadow: 0 0 20px rgba(85, 239, 196, 0.4); color: #55efc4; }
         .center-box { background: #34495e; color: white !important; border: none; }
 
-        /* 文字增強 */
         .main-text {
             font-size: 1.25rem;
             line-height: 2.2;
@@ -87,7 +83,6 @@
             text-align: justify;
         }
 
-        /* 特別強調區塊 (Final Focus) */
         .final-focus {
             background: rgba(255, 255, 255, 0.6);
             border-radius: 40px;
@@ -110,6 +105,14 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.8s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* 底部按鈕框架美化 */
+        .footer-btn {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .footer-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
@@ -121,7 +124,7 @@
         <button onclick="openTab('map')" class="nav-link">導航地圖</button>
     </nav>
 
-    <main class="pt-24 px-6 pb-32 max-w-2xl mx-auto">
+    <main class="pt-24 px-6 pb-40 max-w-2xl mx-auto">
 
         <section id="guide" class="tab-content">
             <header class="mb-12">
@@ -211,16 +214,18 @@
 
     </main>
 
-    <footer class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md px-8 py-5 border-t border-slate-100 flex justify-between items-center z-50">
-        <div class="flex flex-col gap-1">
-            <a href="mailto:holy@hairweb.net" class="text-[11px] text-slate-400 tracking-wider hover:text-indigo-500 transition-colors">
-                <i class="fa-solid fa-envelope mr-1"></i> holy@hairweb.net
-            </a>
-            <span class="text-[9px] text-slate-300 tracking-[0.2em] uppercase">Salon Management</span>
-        </div>
-        <a href="#" class="bg-[#06C755] text-white px-5 py-2 rounded-full text-xs font-bold shadow-lg shadow-green-100 flex items-center gap-2">
-            <i class="fa-brands fa-line text-base"></i> LINE 聯絡
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg px-6 py-6 border-t border-slate-100 flex gap-4 justify-center items-center z-50">
+        
+        <a href="mailto:holy@hairweb.net" class="footer-btn flex-1 max-w-[160px] bg-slate-800 text-white px-4 py-3 rounded-2xl text-xs font-bold shadow-lg shadow-slate-200 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-envelope text-base text-indigo-300"></i>
+            <span>EMAIL 聯絡</span>
         </a>
+
+        <a href="https://line.me/ti/p/你的ID" class="footer-btn flex-1 max-w-[160px] bg-[#06C755] text-white px-4 py-3 rounded-2xl text-xs font-bold shadow-lg shadow-green-100 flex items-center justify-center gap-2">
+            <i class="fa-brands fa-line text-lg"></i>
+            <span>LINE 聯絡</span>
+        </a>
+        
     </footer>
 
     <script>
@@ -237,5 +242,4 @@
         document.getElementById("defaultOpen").click();
     </script>
 </body>
-
 </html>
