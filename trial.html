@@ -51,7 +51,7 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* 外部連結文字 */
+        /* 外部標籤 */
         .external-link-text {
             position: absolute;
             font-size: 18px;
@@ -60,7 +60,9 @@
             writing-mode: vertical-rl; 
             text-orientation: upright;
             cursor: pointer;
+            transition: 0.3s;
         }
+        .external-link-text:hover { color: var(--gold-bright); }
         .text-preface { top: 50%; left: -65px; transform: translateY(-50%); }
         .text-management { top: 50%; left: -35px; transform: translateY(-50%); }
         .text-holding { top: 50%; right: -65px; transform: translateY(-50%); } 
@@ -74,7 +76,9 @@
             color: var(--gold-dim); 
             cursor: pointer;
             text-align: center;
+            transition: 0.3s;
         }
+        .top-bottom-mgt-text:hover { color: var(--gold-bright); }
         .text-top-mgt { top: 5px; } 
         .text-cost-mgt { bottom: 5px; } 
 
@@ -93,6 +97,8 @@
             border: 1px solid var(--gold-dim);
             transition: 0.3s;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
         .block:hover { border-color: var(--gold-bright); background: rgba(255, 255, 255, 0.08); }
 
@@ -103,6 +109,7 @@
             color: var(--gold-bright);
             border-bottom: 1px dashed #333;
             padding-bottom: 5px;
+            pointer-events: none; /* 點擊穿透 */
         }
 
         .sub-items { list-style: none; padding: 0; text-align: left; }
@@ -113,11 +120,14 @@
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
+            transition: 0.2s;
         }
-        .sub-items li:hover { color: #fff; background: rgba(212, 175, 55, 0.2); text-decoration: underline; }
+        .sub-items li:hover { color: #fff; background: rgba(212, 175, 55, 0.2); }
 
         .middle-content { display: flex; flex-direction: column; gap: 15px; }
         .side-block { height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .side-link-text { color: var(--gold-dim); font-weight: bold; cursor: pointer; }
+        .side-link-text:hover { color: #fff; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -135,7 +145,7 @@
         <div class="management-grid">
             <div class="side-block block" data-link-id="left-external">
                 <div class="main-title">左外部管理</div>
-                <div data-link-id="supplier-mgt" style="color: var(--gold-dim);">供應商管理</div>
+                <div class="side-link-text" data-link-id="supplier-mgt">供應商管理</div>
             </div>
 
             <div class="middle-content">
@@ -169,15 +179,15 @@
 
             <div class="side-block block" data-link-id="right-external">
                 <div class="main-title">右外部管理</div>
-                <div data-link-id="brand-mgt" style="color: var(--gold-dim);">品牌管理</div>
+                <div class="side-link-text" data-link-id="brand-mgt">品牌管理</div>
             </div>
         </div>
     </div>
 
     <script>
-        const baseUrl = 'https://www.webcoursestest.hairweb.net/';
+        // 完全使用您提供的正確網址
         const linkUrls = {
-            'top-price-mgt': baseUrl + encodeURIComponent('價格管理'),
+            'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
             'total-preface': 'https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/',
             'total-management': 'https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
@@ -187,33 +197,31 @@
             'bottom-external-overview': 'https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing',
             'left-external': 'https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view?usp=drive_link',
             'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link',
-            'customer-mgt': baseUrl + encodeURIComponent('顧客管理'),
-            'sentiment-mgt': baseUrl + encodeURIComponent('客情管理'),
-            'booking-mgt': baseUrl + encodeURIComponent('預約管理'),
-            'financial-mgt': baseUrl + encodeURIComponent('財務管理'),
-            'talent-mgt': baseUrl + encodeURIComponent('人才管理'),
-            'inventory-mgt': baseUrl + encodeURIComponent('庫存管理'),
-            'marketing-mgt': baseUrl + encodeURIComponent('行銷管理'),
-            'activity-mgt': baseUrl + encodeURIComponent('活動管理'),
-            'community-mgt': baseUrl + encodeURIComponent('社區管理'),
-            'supplier-mgt': baseUrl + encodeURIComponent('供應商管理'),
-            'brand-mgt': baseUrl + encodeURIComponent('品牌管理'),
+            'customer-mgt': 'https://www.webcoursestest.hairweb.net/顧客管理',
+            'sentiment-mgt': 'https://www.webcoursestest.hairweb.net/客情管理',
+            'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理', 
+            'financial-mgt': 'https://www.webcoursestest.hairweb.net/財務管理',
+            'talent-mgt': 'https://www.webcoursestest.hairweb.net/人才管理',
+            'inventory-mgt': 'https://www.webcoursestest.hairweb.net/庫存管理',
+            'marketing-mgt': 'https://www.webcoursestest.hairweb.net/行銷管理',
+            'activity-mgt': 'https://www.webcoursestest.hairweb.net/活動管理',
+            'community-mgt': 'https://www.webcoursestest.hairweb.net/社區管理',
+            'supplier-mgt': 'https://www.webcoursestest.hairweb.net/供應商管理',
+            'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理',
         };
 
-        // 核心跳轉邏輯修正
+        // 修改點擊監聽邏輯：確保優先點擊最內層
         document.addEventListener('click', (e) => {
-            // 尋找最近的帶有 data-link-id 的元素
-            const target = e.target.closest('[data-link-id]');
-            if (!target) return;
+            const clickable = e.target.closest('[data-link-id]');
+            if (!clickable) return;
 
-            // 阻止預設與冒泡
+            // 禁止事件向外冒泡，防止誤觸父層 block
             e.stopPropagation();
             
-            const id = target.getAttribute('data-link-id');
+            const id = clickable.getAttribute('data-link-id');
             const url = linkUrls[id];
             
             if (url) {
-                console.log("正在跳轉到：" + id);
                 window.open(url, '_blank');
             }
         });
