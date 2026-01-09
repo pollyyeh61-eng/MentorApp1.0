@@ -130,7 +130,7 @@
                 <div class="icon-box">📊</div>
                 <div class="text-content"><span class="btn-title">客戶管理</span><span class="btn-desc">客情分析與數據資產管理</span></div>
             </div>
-           <div class="btn-card locked" onclick="toolTip(https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=drive_link)">
+            <div class="btn-card locked" onclick="toolTip()">
                 <div class="icon-box">🛠️</div>
                 <div class="text-content"><span class="btn-title">實戰工具</span><span class="btn-desc">電腦端專業拍攝工具組</span></div>
                 <span class="remote-tag">PC ONLY</span>
@@ -149,7 +149,7 @@
             <input type="password" id="password" placeholder="通行密碼">
             <div id="registerOnly" style="display:none;">
                 <div class="terms-box">條款：本系統資源僅供成員學習使用，嚴禁轉載。</div>
-                <label><input type="checkbox" id="agreeCheck" onchange="checkReg()"> 我已閱讀並同意條款</label>
+                <label><input type="checkbox" id="agreeCheck"> 我已閱讀並同意條款</label>
             </div>
             <button class="submit-btn" id="mainSubmitBtn">立即進入</button>
             <p onclick="closeAuth()" style="text-decoration:underline; cursor:pointer; font-size:0.8rem; margin-top:15px; color:#555;">取消返回</p>
@@ -191,9 +191,8 @@
         setPersistence(auth, browserLocalPersistence);
 
         let currentUser = null;
-        let currentMode = 'login';
 
-        // --- 核心功能：雙向儲存 ---
+        // --- 核心：圖片上傳與壓縮 ---
         window.handleImageUpload = (input) => {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -216,15 +215,14 @@
             }
         };
 
+        // --- 核心：雙向同步儲存 ---
         window.dualSave = async () => {
             const btn = document.getElementById('updateInfoBtn');
             const newName = document.getElementById('editName').value;
             const avatarData = document.getElementById('avatarPreview').src;
             try {
                 btn.innerText = "同步中..."; btn.disabled = true;
-                // 雲端儲存
                 await updateProfile(auth.currentUser, { displayName: newName });
-                // 本地儲存
                 localStorage.setItem('local_name_' + currentUser.uid, newName);
                 localStorage.setItem('local_avatar_' + currentUser.uid, avatarData);
                 document.getElementById('userNameDisplay').innerText = newName || "成員";
@@ -233,14 +231,13 @@
             finally { btn.innerText = "雙向同步儲存"; btn.disabled = false; }
         };
 
-        window.openMemberInfo = () => {
-            document.getElementById('infoModal').style.display = 'flex';
-            document.getElementById('editName').value = localStorage.getItem('local_name_' + currentUser.uid) || currentUser?.displayName || "";
-            document.getElementById('avatarPreview').src = localStorage.getItem('local_avatar_' + currentUser.uid) || currentUser?.photoURL || "https://via.placeholder.com/90";
-            document.getElementById('updateInfoBtn').classList.remove('needs-save');
+        // --- 核心：實戰工具連結 ---
+        window.toolTip = () => { 
+            if(!currentUser) return openAuth('login'); 
+            window.location.href = 'https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; 
         };
 
-        // --- 基礎邏輯 ---
+        // --- 介面控制 ---
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             const isAuth = !!user;
@@ -257,11 +254,17 @@
         });
 
         window.openAuth = (mode) => {
-            currentMode = mode;
             document.getElementById('authModal').style.display = 'flex';
             document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
             document.getElementById('registerOnly').style.display = mode === 'login' ? 'none' : 'block';
         };
+        window.openMemberInfo = () => {
+            document.getElementById('infoModal').style.display = 'flex';
+            document.getElementById('editName').value = localStorage.getItem('local_name_' + currentUser.uid) || currentUser?.displayName || "";
+            document.getElementById('avatarPreview').src = localStorage.getItem('local_avatar_' + currentUser.uid) || currentUser?.photoURL || "https://via.placeholder.com/90";
+            document.getElementById('updateInfoBtn').classList.remove('needs-save');
+        };
+
         window.closeAuth = () => document.getElementById('authModal').style.display = 'none';
         window.closeInfo = () => document.getElementById('infoModal').style.display = 'none';
         window.triggerBreathe = () => document.getElementById('updateInfoBtn').classList.add('needs-save');
@@ -269,18 +272,15 @@
         document.getElementById('email').value = localStorage.getItem('cached_email') || '';
 
         document.getElementById('mainSubmitBtn').onclick = async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value, password = document.getElementById('password').value;
             try {
-                if(currentMode === 'login') await signInWithEmailAndPassword(auth, email, password);
+                if(document.getElementById('modalTitle').innerText === '成員進入') await signInWithEmailAndPassword(auth, email, password);
                 else await createUserWithEmailAndPassword(auth, email, password);
             } catch(e) { alert(e.message); }
         };
 
         window.appJump = (url) => { if(!currentUser) return openAuth('login'); window.location.href = url; };
         window.handleLogout = () => { if(confirm("確定登出？")) signOut(auth); };
-        window.toolTip = () => { if(!currentUser) return openAuth('login'); window.location.href='https://drive.google.com/drive/folders/1JEdIR-TwbMObLMUGZum1f9h2KdWgSc51?usp=sharing'; };
     </script>
 </body>
 </html>
-
