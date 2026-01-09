@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美髮經營學-黑金版導師平台</title>
+    <title>美髮經營學-經營地圖</title>
     <style>
         :root {
             --dark-bg: #0a0a0a;
@@ -23,10 +23,9 @@
             margin: 0;
             background-color: var(--dark-bg);
             color: #fff;
-            overflow-x: hidden;
         }
 
-        /* 左上角圓形回首頁按鈕 */
+        /* 導航按鈕 */
         .home-btn {
             position: fixed;
             top: 20px;
@@ -34,8 +33,6 @@
             width: 50px;
             height: 50px;
             background: rgba(17, 17, 17, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 2px solid var(--gold-dim);
             border-radius: 50%;
             display: flex;
@@ -43,197 +40,143 @@
             justify-content: center;
             text-decoration: none;
             z-index: 9999;
-            animation: gold-breath 4s infinite ease-in-out;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
-        .home-btn:hover {
-            transform: scale(1.1);
-            border-color: var(--gold-bright);
-        }
-        .home-btn span { font-size: 24px; }
+        .home-btn:hover { border-color: var(--gold-bright); transform: scale(1.1); }
+        .home-btn span { font-size: 24px; color: gold; }
 
-        @keyframes gold-breath {
-            0%, 100% { border-color: var(--gold-dim); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
-            50% { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-glow); }
-        }
-
+        /* 主容器 */
         .container {
             width: 900px;
-            max-width: 90%;
-            padding: 50px 40px; 
-            box-sizing: border-box;
+            max-width: 95%;
+            padding: 60px 50px; 
             background: var(--panel-bg);
             border: 2px solid var(--gold-dim); 
             position: relative;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
-            margin: 40px 0;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
         }
 
-        .external-link-text {
+        /* 側邊與標題文字 */
+        .external-link-text, .top-bottom-mgt-text {
             position: absolute;
-            font-size: 16px;
             font-weight: bold;
             color: var(--gold-dim);
-            writing-mode: vertical-rl; 
-            text-orientation: upright;
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        .external-link-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        
-        .text-preface { top: 35%; left: -30px; }
-        .text-management { top: 60%; left: -30px; }
-        .text-holding-label { top: 35%; right: -30px; }
-        .text-holding { top: 60%; right: -30px; } 
-
-        .top-bottom-mgt-text {
-            position: absolute; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            font-size: 18px; 
-            font-weight: bold;
-            color: var(--gold-dim); 
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 150px; 
-            text-align: center;
-            z-index: 10; 
+            transition: 0.3s;
         }
-        .top-bottom-mgt-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        .text-top-mgt { top: 15px; } 
-        .text-cost-mgt { bottom: 15px; } 
+        .external-link-text:hover, .top-bottom-mgt-text:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
 
+        .text-preface { top: 35%; left: -35px; writing-mode: vertical-rl; text-orientation: upright; }
+        .text-management { top: 60%; left: -35px; writing-mode: vertical-rl; text-orientation: upright; }
+        .text-holding-label { top: 35%; right: -35px; writing-mode: vertical-rl; text-orientation: upright; }
+
+        .text-top-mgt { top: 15px; left: 50%; transform: translateX(-50%); width: 100px; text-align: center; }
+        .text-cost-mgt { bottom: 15px; left: 50%; transform: translateX(-50%); width: 100px; text-align: center; }
+
+        /* 九宮格網格 */
         .management-grid {
             display: grid;
-            grid-template-columns: 1fr 2fr 1fr; 
+            grid-template-columns: 1fr 2fr 1fr;
             gap: 20px;
-            padding: 20px 0; 
-            position: relative;
         }
 
         .block {
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--gold-dim);
-            transition: all 0.4s ease;
-            cursor: pointer; 
-            animation: gold-breath 4s infinite ease-in-out;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            background: rgba(255, 255, 255, 0.02);
+            text-align: center;
+            transition: 0.4s;
         }
-
-        .block-side:hover { border-color: #00ff88 !important; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); transform: translateY(-5px); }
-        .block-top:hover { border-color: #ffe600 !important; box-shadow: 0 0 20px rgba(255, 230, 0, 0.3); transform: translateY(-5px); }
-        .block-middle:hover { border-color: #ff9900 !important; box-shadow: 0 0 20px rgba(255, 153, 0, 0.3); transform: translateY(-5px); }
-        .block-bottom:hover { border-color: #ff0077 !important; box-shadow: 0 0 20px rgba(255, 0, 119, 0.3); transform: translateY(-5px); }
+        .block:hover { transform: translateY(-5px); border-color: var(--gold-bright); }
 
         .main-title {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
             color: var(--gold-bright);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 8px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 5px;
         }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; margin: 0; }
-        .sub-items li { 
-            padding: 4px 0;
-            font-size: 14px; 
-            cursor: pointer; 
-            color: var(--text-silver); 
-            transition: 0.2s; 
-        }
-        .sub-items li:hover { color: #fff; transform: translateX(5px); }
-
-        .side-link-text {
-            font-size: 16px; 
-            font-weight: bold; 
+        .sub-items { list-style: none; padding: 0; text-align: left; }
+        .sub-items li {
+            padding: 5px 0;
+            font-size: 15px;
             color: var(--text-silver);
-            transition: 0.3s;
+            cursor: pointer;
+            transition: 0.2s;
         }
+        .sub-items li:hover { color: #fff; padding-left: 5px; }
 
-        .middle-content { display: flex; flex-direction: column; gap: 20px; }
+        .side-link-text { font-size: 16px; color: var(--text-silver); cursor: pointer; }
 
         @media (max-width: 768px) {
             .management-grid { grid-template-columns: 1fr; }
             .external-link-text { display: none; }
-            .container { padding: 40px 15px; }
         }
     </style>
 </head>
 <body>
 
-    <a href="https://sites.google.com/view/webcourse001/" class="home-btn" title="回到首頁">
+    <a href="https://sites.google.com/view/webcourse001/" class="home-btn" id="nav-home">
         <span>🏠</span>
     </a>
 
     <div class="container">
-        <div class="external-link-text text-preface" data-link-id="total-preface">前言</div>
-        <div class="external-link-text text-management" data-link-id="total-management">管理層</div>
-        <div class="external-link-text text-holding-label" data-link-id="total-holding-label">控股層</div>
-        
-        <div class="top-bottom-mgt-text text-top-mgt" data-link-id="top-price-mgt">價格管理</div>
-        <div class="top-bottom-mgt-text text-cost-mgt" data-link-id="bottom-cost-mgt">成本管理</div>
-        
+        <div class="external-link-text text-preface" data-id="total-preface">前言</div>
+        <div class="external-link-text text-management" data-id="total-management">管理層</div>
+        <div class="external-link-text text-holding-label" data-id="total-holding-label">控股層</div>
+        <div class="top-bottom-mgt-text text-top-mgt" data-id="top-price-mgt">價格管理</div>
+        <div class="top-bottom-mgt-text text-cost-mgt" data-id="bottom-cost-mgt">成本管理</div>
+
         <div class="management-grid">
-            <div class="block block-side" data-link-id="left-external">
+            <div class="block">
                 <div class="main-title">左外部管理</div>
-                <div class="side-link-text" data-link-id="supplier-mgt">供應商管理</div> 
+                <div class="side-link-text" data-id="supplier-mgt">供應商管理</div>
             </div>
 
-            <div class="middle-content">
-                <div class="block block-top" data-link-id="top-external-overview">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="block">
                     <div class="main-title">上外部管理</div>
                     <ul class="sub-items">
-                        <li data-link-id="customer-mgt">1. 顧客管理</li>
-                        <li data-link-id="sentiment-mgt">2. 客情管理</li>
-                        <li data-link-id="booking-mgt">3. 預約管理</li>
+                        <li data-id="customer-mgt">1. 顧客管理</li>
+                        <li data-id="sentiment-mgt">2. 客情管理</li>
+                        <li data-id="booking-mgt">3. 預約管理</li>
                     </ul>
                 </div>
-
-                <div class="block block-middle" data-link-id="internal-operations-overview">
+                <div class="block">
                     <div class="main-title">內部管理</div>
                     <ul class="sub-items">
-                        <li data-link-id="financial-mgt">1. 財務管理</li>
-                        <li data-link-id="talent-mgt">2. 人才管理</li>
-                        <li data-link-id="inventory-mgt">3. 庫存管理</li>
+                        <li data-id="financial-mgt">1. 財務管理</li>
+                        <li data-id="talent-mgt">2. 人才管理</li>
+                        <li data-id="inventory-mgt">3. 庫存管理</li>
                     </ul>
                 </div>
-
-                <div class="block block-bottom" data-link-id="bottom-external-overview">
+                <div class="block">
                     <div class="main-title">下外部管理</div>
                     <ul class="sub-items">
-                        <li data-link-id="marketing-mgt">1. 行銷管理</li>
-                        <li data-link-id="activity-mgt">2. 活動管理</li>
-                        <li data-link-id="community-mgt">3. 社區管理</li>
+                        <li data-id="marketing-mgt">1. 行銷管理</li>
+                        <li data-id="activity-mgt">2. 活動管理</li>
+                        <li data-id="community-mgt">3. 社區管理</li>
                     </ul>
                 </div>
             </div>
 
-            <div class="block block-side" data-link-id="right-external">
+            <div class="block">
                 <div class="main-title">右外部管理</div>
-                <div class="side-link-text" data-link-id="brand-mgt">品牌管理</div>
+                <div class="side-link-text" data-id="brand-mgt">品牌管理</div>
             </div>
         </div>
     </div>
 
     <script>
-        const linkUrls = {
+        const urls = {
             'top-price-mgt': 'https://www.webcoursestest.hairweb.net/價格管理',
             'bottom-cost-mgt': 'https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing',
             'total-preface': 'https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/',
             'total-management': 'https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing',
             'total-holding-label': 'https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing',
-            'top-external-overview': 'https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing',
-            'internal-operations-overview': 'https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing',
-            'bottom-external-overview': 'https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing',
-            'left-external': 'https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view?usp=drive_link',
-            'right-external': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=drive_link',
             'customer-mgt': 'https://www.webcoursestest.hairweb.net/顧客管理',
             'sentiment-mgt': 'https://www.webcoursestest.hairweb.net/客情管理',
             'booking-mgt': 'https://www.webcoursestest.hairweb.net/預約管理',
@@ -244,22 +187,22 @@
             'activity-mgt': 'https://www.webcoursestest.hairweb.net/活動管理',
             'community-mgt': 'https://www.webcoursestest.hairweb.net/社區管理',
             'supplier-mgt': 'https://www.webcoursestest.hairweb.net/供應商管理',
-            'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理',
+            'brand-mgt': 'https://www.webcoursestest.hairweb.net/品牌管理'
         };
 
+        // 核心修正：點擊事件處理
         document.addEventListener('DOMContentLoaded', () => {
-            const clickableElements = document.querySelectorAll('[data-link-id]');
-            clickableElements.forEach(element => {
-                element.addEventListener('click', (event) => {
-                    const linkId = element.getAttribute('data-link-id');
-                    const url = linkUrls[linkId];
-                    if (url && url !== '#') {
-                        // 強化：阻止事件冒泡並強制在新視窗開啟，避免干擾目前頁面
-                        event.preventDefault();
-                        event.stopPropagation();
-                        window.open(url, '_blank');
+            const items = document.querySelectorAll('[data-id]');
+            items.forEach(item => {
+                item.onclick = function(e) {
+                    e.preventDefault(); // 絕對禁止預設跳轉
+                    e.stopPropagation(); // 絕對禁止冒泡
+                    const targetUrl = urls[this.getAttribute('data-id')];
+                    if (targetUrl) {
+                        window.open(targetUrl, '_blank');
                     }
-                });
+                    return false;
+                };
             });
         });
     </script>
