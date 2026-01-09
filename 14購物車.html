@@ -1,825 +1,331 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>活力美髮學堂 - 購物車結帳</title>
-
     <style>
-
-        /* --- 簡約風格 CSS Start --- */
+        :root {
+            --gold-main: #D4AF37;
+            --gold-bright: #FFD700;
+            --bg-dark: #0A0A0A;
+            --card-bg: #1A1A1A;
+            --text-gray: #AAAAAA;
+        }
 
         body {
-
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             margin: 0;
-
-            padding: 20px;
-
-            background-color: #f4f4f9; /* 淺灰色背景 */
-
-            color: #333;
-
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: #EEEEEE;
+            padding-bottom: 120px; /* 為底部固定欄留空間 */
         }
 
-
-
-        .container {
-
-            max-width: 900px;
-
-            margin: auto;
-
-            background: #fff;
-
-            padding: 30px;
-
-            border-radius: 8px;
-
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 輕微陰影 */
-
+        /* 標題區域 */
+        header {
+            padding: 25px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #222, var(--bg-dark));
         }
-
-
 
         h1 {
-
-            color: #5d4a4a; /* 稍微深沉的顏色，代表專業 */
-
-            text-align: center;
-
-            margin-bottom: 30px;
-
-            border-bottom: 2px solid #eaeaea;
-
-            padding-bottom: 15px;
-
+            font-size: 1.4rem;
+            margin: 0;
+            background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            letter-spacing: 1px;
         }
 
-
-
-        .cart-table {
-
-            width: 100%;
-
-            border-collapse: collapse;
-
-            margin-bottom: 20px;
-
+        .container {
+            width: 92%;
+            margin: auto;
         }
 
-
-
-        .cart-table th, .cart-table td {
-
-            padding: 12px 15px;
-
-            text-align: left;
-
-            border-bottom: 1px solid #eee; /* 輕薄的邊線 */
-
+        /* 卡片式產品列表 */
+        .cart-list {
+            margin-top: 10px;
         }
 
+        .cart-item-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
 
+        .item-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
 
-        .cart-table th {
-
-            background-color: #f8f8f8;
-
+        .item-name {
+            font-size: 1.1rem;
             font-weight: bold;
-
-            color: #777;
-
-            text-transform: uppercase;
-
-            font-size: 0.9em;
-
+            color: var(--gold-bright);
+            flex: 1;
+            padding-right: 10px;
         }
 
-
-
-        .cart-item-row:hover {
-
-            background-color: #fafafa;
-
+        .item-price-tag {
+            font-size: 1rem;
+            color: #FFF;
         }
 
-
+        /* 數量控制區 */
+        .item-control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
 
         .quantity-control {
-
             display: flex;
-
             align-items: center;
-
+            background: #000;
+            border-radius: 25px;
+            border: 1px solid #444;
+            padding: 2px;
         }
-
-
-
-        .quantity-input {
-
-            width: 50px;
-
-            text-align: center;
-
-            border: 1px solid #ccc;
-
-            padding: 5px;
-
-            margin: 0 5px;
-
-            border-radius: 4px;
-
-        }
-
-
 
         .qty-button {
-
-            background-color: #fff;
-
-            color: #5d4a4a;
-
-            border: 1px solid #ccc;
-
-            padding: 5px 10px;
-
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            color: var(--gold-main);
+            font-size: 1.2rem;
             cursor: pointer;
-
-            font-size: 1.1em;
-
-            border-radius: 4px;
-
-            transition: background-color 0.2s;
-
         }
 
-
-
-        .qty-button:hover {
-
-            background-color: #eaeaea;
-
+        .quantity-input {
+            width: 40px;
+            background: none;
+            border: none;
+            color: #FFF;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
         }
 
-
-
-        .cart-summary {
-
-            text-align: right;
-
-            padding-top: 20px;
-
-            border-top: 2px solid #5d4a4a; /* 強調總計 */
-
+        .subtotal-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
         }
 
-
-
-        .cart-summary p {
-
-            margin: 8px 0;
-
-            font-size: 1.1em;
-
+        .subtotal-amount {
+            font-size: 1.1rem;
+            color: var(--gold-main);
+            font-weight: bold;
         }
 
-
-
-        .cart-summary strong {
-
-            font-size: 1.4em;
-
-            color: #d9534f; /* 顯眼的總價 */
-
+        /* 底部結帳固定欄 */
+        .bottom-checkout-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--gold-main);
+            padding: 15px 20px 30px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 900;
         }
 
+        .total-info-box {
+            display: flex;
+            flex-direction: column;
+        }
 
+        .total-info-box .label {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .total-info-box .amount {
+            font-size: 1.4rem;
+            color: var(--gold-bright);
+            font-weight: 800;
+        }
 
         .checkout-button {
-
-            background-color: #5d4a4a;
-
-            color: white;
-
-            padding: 12px 25px;
-
+            background: linear-gradient(135deg, var(--gold-dark, #B8860B), var(--gold-main));
+            color: #000;
+            padding: 12px 30px;
             border: none;
-
-            border-radius: 4px;
-
-            cursor: pointer;
-
-            font-size: 1.1em;
-
-            margin-top: 15px;
-
-            transition: background-color 0.3s;
-
+            border-radius: 30px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px var(--gold-glow, rgba(212, 175, 55, 0.4));
         }
 
-
-
-        .checkout-button:hover {
-
-            background-color: #4a3c3c;
-
-        }
-
-
-
-        .price-col, .subtotal-col {
-
-            text-align: right;
-
-            min-width: 80px;
-
-        }
-
-        
-
-        /* --- 模態視窗 CSS Start --- */
-
+        /* 模態視窗優化 */
         .modal {
-
-            display: none; /* 預設隱藏 */
-
-            position: fixed; 
-
-            z-index: 1000; 
-
-            left: 0;
-
-            top: 0;
-
-            width: 100%;
-
-            height: 100%;
-
-            overflow: auto;
-
-            background-color: rgba(0,0,0,0.4); /* 黑色半透明背景 */
-
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
         }
-
-
 
         .modal-content {
-
-            background-color: #fefefe;
-
-            margin: 15% auto; /* 居中 */
-
-            padding: 30px;
-
-            border: 1px solid #888;
-
-            width: 80%;
-
-            max-width: 500px;
-
-            border-radius: 8px;
-
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-
-            position: relative;
-
+            background: #111;
+            width: 85%;
+            padding: 25px;
+            border-radius: 24px;
+            border: 1px solid var(--gold-main);
             text-align: center;
-
+            animation: slideUp 0.3s ease-out;
         }
 
-
-
-        .modal-content h2 {
-
-            color: #5d4a4a;
-
-            border-bottom: 1px solid #eee;
-
-            padding-bottom: 10px;
-
-            margin-top: 0;
-
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-
-
-        #paymentDetailsDisplay {
-
-            text-align: left;
-
-            padding: 15px;
-
-            background-color: #f9f9f9;
-
-            border: 1px dashed #ccc;
-
+        .modal-title {
+            color: var(--gold-main);
             margin-bottom: 20px;
-
-            line-height: 1.6;
-
+            font-size: 1.2rem;
         }
 
-        
-
-        #paymentDetailsDisplay p {
-
-            margin: 5px 0;
-
+        .payment-box {
+            background: #000;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
-
-
-
-        .close-button {
-
-            color: #aaa;
-
-            float: right;
-
-            font-size: 28px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            position: absolute;
-
-            right: 15px;
-
-            top: 5px;
-
-        }
-
-
-
-        .close-button:hover,
-
-        .close-button:focus {
-
-            color: #000;
-
-            text-decoration: none;
-
-        }
-
-
 
         .modal-close-btn {
-
-            background-color: #5d4a4a;
-
-            color: white;
-
-            padding: 10px 20px;
-
+            width: 100%;
+            padding: 12px;
+            background: var(--gold-main);
             border: none;
-
-            border-radius: 4px;
-
-            cursor: pointer;
-
+            border-radius: 12px;
+            font-weight: bold;
         }
-
-
-
-        .modal-close-btn:hover {
-
-            background-color: #4a3c3c;
-
-        }
-
-        /* --- 模態視窗 CSS End --- */
-
     </style>
-
 </head>
-
 <body>
 
-
+<header>
+    <h1>活力美髮學堂</h1>
+</header>
 
 <div class="container">
-
-    <h1>活力美髮學堂 - 購物車 </h1>
-
-
-
-    <table class="cart-table">
-
-        <thead>
-
-            <tr>
-
-                <th>項目 (美髮產品/課程)</th>
-
-                <th class="price-col">單價 (TWD)</th>
-
-                <th>數量</th>
-
-                <th class="subtotal-col">小計 (TWD)</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody id="cart-items">
-
-            </tbody>
-
-    </table>
-
-
-
-    <div class="cart-summary">
-
-        <p>商品總額：<span id="subtotal">0</span> TWD</p>
-
-        <p>運費/服務費：<span id="shipping-fee">0</span> TWD</p>
-
-        <p><strong>結帳總金額：<span id="total-amount">0</span> TWD</strong></p>
-
-        <button class="checkout-button" onclick="startTaiwanPayCheckout()">前往結帳</button>
-
-    </div>
-
-
-
+    <div id="cart-list" class="cart-list">
+        </div>
 </div>
 
-
+<div class="bottom-checkout-bar">
+    <div class="total-info-box">
+        <span class="label">結帳總額 (TWD)</span>
+        <span class="amount" id="total-amount">0</span>
+    </div>
+    <button class="checkout-button" onclick="startTaiwanPayCheckout()">立即結帳</button>
+</div>
 
 <div id="paymentModal" class="modal">
-
     <div class="modal-content">
-
-        <span class="close-button" onclick="closeModal()">&times;</span>
-
-        <h2>✅ 訂單已成立，請完成付款</h2>
-
-        <div id="paymentDetailsDisplay"></div>
-
-        <button class="modal-close-btn" onclick="closeModal()">確認並關閉</button>
-
+        <h2 class="modal-title">✅ 訂單已成立</h2>
+        <div id="paymentDetailsDisplay" class="payment-box"></div>
+        <button class="modal-close-btn" onclick="closeModal()">我已記下帳號</button>
     </div>
-
 </div>
 
-
-
 <script>
-
-    // --- 購物車邏輯 (JavaScript) Start ---
-
-
-
-    // ⚠️ 必填：替換成您部署 Apps Script 後得到的「網頁應用程式網址」！
-
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweR2_fhRhG1mviInGAaoUKXa_yr4dTWxBs-8EUIZIQGZeeM6uQgrWn0Vz7NlZDimRXZw/exec'; 
 
-
-
-    // 模擬美髮學堂的產品資料 (作為初始數據)
-
     const initialProducts = [
-
         { id: 1, name: "沙龍經營學 (美髮創業課程)", price: 7000, quantity: 1 },
-
     ];
 
-
-
-    const shippingFee = 0; // 固定運費
-
-
-
-    // 關閉模態視窗的函數
-
-    function closeModal() {
-
-        document.getElementById('paymentModal').style.display = 'none';
-
-    }
-
-    
-
-    // ... (renderCartItem, renderCart, updateQuantity, manualUpdateQuantity, calculateItemSubtotal, calculateTotal 保持不變) ...
-
-
-
-    function renderCartItem(item) {
-
-        const subtotal = item.price * item.quantity;
-
-        return `<tr id="item-${item.id}" class="cart-item-row">
-
-                    <td>${item.name}</td>
-
-                    <td class="price-col">${item.price.toFixed(0)}</td>
-
-                    <td><div class="quantity-control">
-
-                        <button class="qty-button" onclick="updateQuantity(${item.id}, -1)">-</button>
-
-                        <input type="number" min="1" value="${item.quantity}" class="quantity-input" id="qty-${item.id}" onchange="manualUpdateQuantity(${item.id}, this.value)">
-
-                        <button class="qty-button" onclick="updateQuantity(${item.id}, 1)">+</button>
-
-                    </div></td>
-
-                    <td class="subtotal-col" id="subtotal-${item.id}">${subtotal.toFixed(0)}</td>
-
-                </tr>`;
-
-    }
-
-
-
     function renderCart() {
-
-        const cartItemsContainer = document.getElementById('cart-items');
-
-        cartItemsContainer.innerHTML = '';
-
-        initialProducts.forEach(item => { cartItemsContainer.innerHTML += renderCartItem(item); });
-
+        const container = document.getElementById('cart-list');
+        container.innerHTML = initialProducts.map(item => `
+            <div class="cart-item-card">
+                <div class="item-info-row">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price-tag">$${item.price.toLocaleString()}</div>
+                </div>
+                <div class="item-control-row">
+                    <div class="quantity-control">
+                        <button class="qty-button" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <input type="number" readonly value="${item.quantity}" class="quantity-input" id="qty-${item.id}">
+                        <button class="qty-button" onclick="updateQuantity(${item.id}, 1)">+</button>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="subtotal-label">項目小計</div>
+                        <div class="subtotal-amount" id="subtotal-${item.id}">$${(item.price * item.quantity).toLocaleString()}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
         calculateTotal();
-
     }
-
-
 
     function updateQuantity(id, delta) {
-
         const item = initialProducts.find(p => p.id === id);
-
         if (item) {
-
-            let newQuantity = item.quantity + delta;
-
-            if (newQuantity < 1) { newQuantity = 1; }
-
-            item.quantity = newQuantity;
-
-            document.getElementById(`qty-${id}`).value = newQuantity;
-
-            calculateItemSubtotal(id);
-
-            calculateTotal();
-
+            item.quantity = Math.max(1, item.quantity + delta);
+            renderCart();
         }
-
     }
-
-    
-
-    function manualUpdateQuantity(id, value) {
-
-        const item = initialProducts.find(p => p.id === id);
-
-        if (item) {
-
-            let newQuantity = parseInt(value, 10);
-
-            if (isNaN(newQuantity) || newQuantity < 1) {
-
-                newQuantity = 1;
-
-                document.getElementById(`qty-${id}`).value = newQuantity;
-
-            }
-
-            item.quantity = newQuantity;
-
-            calculateItemSubtotal(id);
-
-            calculateTotal();
-
-        }
-
-    }
-
-
-
-    function calculateItemSubtotal(id) {
-
-        const item = initialProducts.find(p => p.id === id);
-
-        if (item) {
-
-            const subtotal = item.price * item.quantity;
-
-            document.getElementById(`subtotal-${id}`).textContent = subtotal.toFixed(0);
-
-        }
-
-    }
-
-
 
     function calculateTotal() {
-
-        let itemsSubtotal = 0;
-
-        initialProducts.forEach(item => { itemsSubtotal += item.price * item.quantity; });
-
-        const totalAmount = itemsSubtotal + shippingFee;
-
-        document.getElementById('subtotal').textContent = itemsSubtotal.toFixed(0);
-
-        document.getElementById('shipping-fee').textContent = shippingFee.toFixed(0);
-
-        document.getElementById('total-amount').textContent = totalAmount.toFixed(0);
-
+        const total = initialProducts.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        document.getElementById('total-amount').textContent = total.toLocaleString();
     }
-
-    
-
-    // **新增：獨立的模態視窗顯示函數**
-
-    function displayPaymentModal(amount, code, account, orderId) {
-
-        const paymentHtml = `
-
-            <p><strong>美髮大師：</strong>您的訂單已送出！訂單編號：${orderId}</p>
-
-            <hr style="border-color: #5d4a4a;">
-
-            <p><strong>結帳總金額：</strong><span style="color:#d9534f; font-size:1.4em;">${amount} TWD</span></p>
-
-            <p><strong>銀行代號：</strong> ${code} (土地銀行)</p>
-
-            <p><strong>轉帳帳號：</strong> <span style="font-weight: bold; color: #333;">${account}</span></p>
-
-            <p style="font-size:0.9em; color:#888;">請務必轉帳正確金額，並保留交易證明。有任何問題請洽：holy@hairweb.net</p>
-
-        `;
-
-        
-
-        const modal = document.getElementById('paymentModal');
-
-        document.getElementById('paymentDetailsDisplay').innerHTML = paymentHtml;
-
-        modal.style.display = 'block';
-
-    }
-
-
-
-
-
-    /**
-
-     * 💰 處理台灣 Pay 結帳的函數 (向 Apps Script 後端發送請求)
-
-     */
 
     function startTaiwanPayCheckout() {
-
-        const totalAmountElement = document.getElementById('total-amount');
-
-        const finalTotal = totalAmountElement ? parseInt(totalAmountElement.textContent) : 0;
-
+        const total = document.getElementById('total-amount').textContent.replace(/,/g, '');
         
-
-        if (finalTotal <= 0) {
-
-            alert("購物車是空的，請先加入商品或課程。");
-
-            return;
-
-        }
-
+        // 模擬顯示資訊
+        const modal = document.getElementById('paymentModal');
+        const display = document.getElementById('paymentDetailsDisplay');
         
+        display.innerHTML = `
+            <p><strong>訂單金額：</strong> <span style="color:var(--gold-bright);">$${total}</span></p>
+            <p><strong>銀行代號：</strong> 005 (土地銀行)</p>
+            <p><strong>轉帳帳號：</strong><br><span style="font-size:1.1rem; letter-spacing:1px; color:#FFF;">0000130005245401</span></p>
+            <p style="color:#888; font-size:0.8rem; margin-top:10px;">* 請於 24 小時內完成轉帳以確保名額。</p>
+        `;
+        
+        modal.style.display = 'flex';
 
-        // 1. 準備要發送到後端的數據
-
-        const orderData = {
-
-            items: initialProducts.filter(p => p.quantity > 0), 
-
-            subtotal: parseInt(document.getElementById('subtotal').textContent),
-
-            shipping: shippingFee,
-
-            totalAmount: finalTotal
-
-        };
-
-
-
-        // 2. 發送 POST 請求到 Apps Script (使用 'no-cors' 模式以避免本地測試的限制)
-
+        // 發送資料到後端 (維持原邏輯)
         fetch(APPS_SCRIPT_URL, {
-
             method: 'POST',
-
-            // ❗ 由於使用 mode: 'no-cors'，headers 必須簡化或移除 ❗
-
-            // 'Content-Type' 標頭可能會導致預檢請求失敗，在 no-cors 模式下會被忽略，
-
-            // 但為確保兼容性，我們只傳送 body，讓 Apps Script 自動處理
-
-            // headers: { 'Content-Type': 'application/json' }, // 暫時註釋掉
-
-            
-
-            mode: 'no-cors', // 繞過瀏覽器的跨域安全檢查
-
-            body: JSON.stringify(orderData),
-
-        })
-
-        .then(response => {
-
-            // 由於 mode: 'no-cors'，response.json() 會失敗，因為響應類型變成了 'opaque'
-
-            // 因此，這裡的成功判斷將只基於請求是否成功發出
-
-            console.log("請求已發送到 Apps Script。請檢查您的 Gmail 收件箱/垃圾郵件。");
-
-            
-
-            // ❗由於無法讀取JSON，我們必須模擬顯示成功訊息和虛擬帳號❗
-
-            // 這是本地測試的犧牲，當您將網站部署到 HTTPS 網域時，請刪除 mode: 'no-cors' 並恢復正常的 JSON 處理。
-
-            
-
-            // 後端回傳的資料
-
-            const simulatedData = {
-
-                orderId: "TEST-00000",
-
-                bankCode: "005",
-
-                virtualAccount: "0000130005245401",
-
-                totalAmount: finalTotal
-
-            };
-
-            
-
-            displayPaymentModal(
-
-                simulatedData.totalAmount, 
-
-                simulatedData.bankCode, 
-
-                simulatedData.virtualAccount,
-
-                simulatedData.orderId + " " // 標記為模擬數據
-
-            );
-
-            
-
-            // 拋出錯誤以阻止 .catch 區塊執行（因為 no-cors 導致響應不透明）
-
-            throw new Error('No-CORS 模式下無法讀取響應，已模擬成功');
-
-        })
-
-        .catch((error) => {
-
-            // 如果請求連發送都失敗 (例如 Apps Script URL 錯誤或網路斷線)，則執行這裡
-
-            if (error.message !== 'No-CORS 模式下無法讀取響應，已模擬成功') {
-
-                console.error('網路通訊或 Apps Script 處理失敗:', error);
-
-                alert("無法連線到訂單處理伺服器，請檢查網路或 Apps Script URL 是否正確。");
-
-            }
-
+            mode: 'no-cors',
+            body: JSON.stringify({ items: initialProducts, total: total }),
         });
-
     }
 
-
-
-
-
-    // 頁面載入時，先繪製一次購物車
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
 
     document.addEventListener('DOMContentLoaded', renderCart);
-
-
-
-    // --- 購物車邏輯 (JavaScript) End ---
-
 </script>
 
-
-
 </body>
-
 </html>
