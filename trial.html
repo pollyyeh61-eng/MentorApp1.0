@@ -3,142 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>活力美髮學堂 - 線上課程試看</title>
     <style>
+        /* 完全複製 Monitor 2.0 的黑金奢華質感 */
         :root {
-            --dark-bg: #0a0a0a; --panel-bg: #111111;
-            --gold-dim: #8a6d3b; --gold-bright: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.3); --text-silver: #c0c0c0;
+            --bg-dark: #0a0a0a;
+            --panel-bg: #111111;
+            --gold-line: #8a6d3b;
+            --gold-text: #d4af37;
+            --silver-text: #c0c0c0;
         }
 
         body {
+            background-color: var(--bg-dark);
+            color: #fff;
             font-family: '微軟正黑體', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; margin: 0; background-color: var(--dark-bg); color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
 
-        @keyframes gold-breath {
-            0%, 100% { border-color: var(--gold-dim); box-shadow: 0 0 5px rgba(138, 109, 59, 0.2); }
-            50% { border-color: var(--gold-bright); box-shadow: 0 0 15px var(--gold-glow); }
+        .map-container {
+            width: 800px;
+            padding: 40px;
+            border: 2px solid var(--gold-line);
+            position: relative;
+            background: var(--panel-bg);
         }
 
-        .container {
-            width: 900px; max-width: 95%; padding: 35px;
-            background: var(--panel-bg); border: 2px solid var(--gold-dim);
-            position: relative; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
+        .top-title {
+            text-align: center;
+            font-size: 24px;
+            color: var(--gold-text);
+            margin-bottom: 30px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        /* 外部標籤文字 */
-        .ext-label {
-            position: absolute; font-size: 18px; font-weight: bold; color: var(--gold-dim);
-            writing-mode: vertical-rl; text-orientation: upright; cursor: pointer; transition: 0.3s;
-        }
-        .ext-label:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        .pos-preface { top: 35%; left: -35px; }
-        .pos-mgt { top: 60%; left: -35px; }
-        .pos-holding { top: 45%; right: -35px; }
-
-        .top-bottom-label {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            font-size: 20px; font-weight: bold; color: var(--gold-dim);
-            cursor: pointer; transition: 0.3s; text-align: center; width: 150px;
-        }
-        .top-bottom-label:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
-        .pos-price { top: 10px; }
-        .pos-cost { bottom: 10px; }
-
-        .management-grid {
-            display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 15px;
-            padding: 35px 0; position: relative; border: 1px solid #222;
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 15px;
         }
 
-        .block {
-            padding: 15px; border-radius: 8px; text-align: center;
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--gold-dim);
-            animation: gold-breath 4s infinite ease-in-out;
+        .col-block {
+            border: 1px solid var(--gold-line);
+            border-radius: 12px;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .main-title {
-            font-size: 18px; font-weight: bold; color: var(--gold-bright);
-            margin-bottom: 10px; border-bottom: 1px dashed #333;
-            padding-bottom: 5px; cursor: pointer;
+        .section-title {
+            color: var(--gold-text);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
         }
-        .main-title:hover { color: #fff; text-shadow: 0 0 5px var(--gold-bright); }
 
-        .sub-items { list-style: none; padding: 0; text-align: left; margin-top: 10px; }
-        .sub-items li {
-            margin-bottom: 5px; font-size: 15px; cursor: pointer;
-            color: var(--text-silver); transition: 0.3s;
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        .sub-items li:hover { color: #fff; text-decoration: underline; padding-left: 5px; }
 
-        .side-link { font-size: 16px; font-weight: bold; cursor: pointer; color: var(--gold-dim); transition: 0.3s; }
-        .side-link:hover { color: #fff; text-decoration: underline; }
+        .item-list li {
+            color: var(--silver-text);
+            padding: 8px 0;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-        .middle-content { display: flex; flex-direction: column; gap: 15px; }
+        .item-list li:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .side-text {
+            color: var(--gold-text);
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="ext-label pos-preface" onclick="goto('https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/')">前言</div>
-        <div class="ext-label pos-management" onclick="goto('https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing')">管理層</div>
-        <div class="ext-label pos-holding" onclick="goto('https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing')">控股層</div>
-        
-        <div class="top-bottom-label pos-price" onclick="goto('https://www.webcoursestest.hairweb.net/價格管理')">價格管理</div>
-        <div class="top-bottom-label pos-cost" onclick="goto('https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing')">成本管理</div>
-        
-        <div class="management-grid">
-            <div class="block" style="display:flex; flex-direction:column; justify-content:center;">
-                <div class="main-title" onclick="goto('https://drive.google.com/file/d/1RGFvS6Xy1...')">左外部管理</div>
-                <div class="side-link" onclick="goto('https://www.webcoursestest.hairweb.net/供應商管理')">供應商管理</div>
+<div class="map-container">
+    <div class="top-title" onclick="openLink('price')">價格管理</div>
+
+    <div class="main-grid">
+        <div class="col-block">
+            <div class="side-text" onclick="openLink('left')">左外部管理</div>
+            <p style="text-align:center; color:#888; font-size:14px; margin-top:15px; cursor:pointer;" onclick="openLink('supplier')">供應商協作</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div class="col-block">
+                <div class="section-title">上外部管理</div>
+                <ul class="item-list">
+                    <li onclick="openLink('customer')">1. 顧客管理系統<div class="hint">(點擊進入)</div></li>
+                    <li onclick="openLink('sentiment')">2. 客情分析報告</li>
+                </ul>
             </div>
 
-            <div class="middle-content">
-                <div class="block">
-                    <div class="main-title" onclick="goto('https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view?usp=sharing')">上外部管理</div>
-                    <ul class="sub-items">
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/顧客管理')">1. 顧客管理</li>
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/客情管理')">2. 客情管理</li>
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/預約管理')">3. 預約管理</li>
-                    </ul>
-                </div>
-
-                <div class="block">
-                    <div class="main-title" onclick="goto('https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view?usp=sharing')">內部管理</div>
-                    <ul class="sub-items">
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/財務管理')">1. 財務管理</li>
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/人才管理')">2. 人才管理</li>
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/庫存管理')">3. 庫存管理</li>
-                    </ul>
-                </div>
-
-                <div class="block">
-                    <div class="main-title" onclick="goto('https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view?usp=sharing')">下外部管理</div>
-                    <ul class="sub-items">
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/行銷管理')">1. 行銷管理</li>
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/活動管理')">2. 活動管理</li>
-                        <li onclick="goto('https://www.webcoursestest.hairweb.net/社區管理')">3. 社區管理</li>
-                    </ul>
-                </div>
+            <div class="col-block">
+                <div class="section-title">核心內部管理</div>
+                <ul class="item-list">
+                    <li onclick="openLink('finance')">1. 財務收銀系統<div class="hint">(點擊進入)</div></li>
+                    <li onclick="openLink('talent')">2. 人才訓練系統<div class="hint">(點擊進入)</div></li>
+                    <li onclick="openLink('stock')">3. 庫存金庫系統<div class="hint">(點擊進入)</div></li>
+                </ul>
             </div>
 
-            <div class="block" style="display:flex; flex-direction:column; justify-content:center;">
-                <div class="main-title" onclick="goto('https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view?usp=sharing')">右外部管理</div>
-                <div class="side-link" onclick="goto('https://www.webcoursestest.hairweb.net/品牌管理')">品牌管理</div>
+            <div class="col-block">
+                <div class="section-title">下外部管理</div>
+                <ul class="item-list">
+                    <li onclick="openLink('marketing')">1. 行銷漏斗策略</li>
+                    <li onclick="openLink('community')">2. 社區美感經營</li>
+                </ul>
             </div>
         </div>
-    </div>
 
-    <script>
-        // 核心跳轉函數：確保只有在點擊時觸發，且不影響父頁面
-        function goto(url) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            window.open(url, '_blank');
+        <div class="col-block">
+            <div class="side-text" onclick="openLink('right')">右外部管理</div>
+            <p style="text-align:center; color:#888; font-size:14px; margin-top:15px; cursor:pointer;" onclick="openLink('brand')">品牌視覺資產</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 模仿 Monitor 2.0 的純手動觸發機制
+    function openLink(key) {
+        const urls = {
+            'price': 'https://www.webcoursestest.hairweb.net/價格管理',
+            'customer': 'https://www.webcoursestest.hairweb.net/顧客管理',
+            'finance': 'https://www.webcoursestest.hairweb.net/財務管理',
+            'talent': 'https://www.webcoursestest.hairweb.net/人才管理',
+            'stock': 'https://www.webcoursestest.hairweb.net/庫存管理',
+            'left': 'https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view',
+            'right': 'https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view',
+            'supplier': 'https://www.webcoursestest.hairweb.net/供應商管理',
+            'brand': 'https://www.webcoursestest.hairweb.net/品牌管理'
+        };
+
+        const target = urls[key];
+        if (target) {
+            // 阻止預設行為，純粹執行新視窗開啟
+            event.preventDefault();
+            event.stopPropagation();
+            window.open(target, '_blank');
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
