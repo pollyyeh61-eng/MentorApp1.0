@@ -2,127 +2,170 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <title>經營地圖-線上課程試看</title>
     <style>
-        :root { --g: #d4af37; --s: #c0c0c0; --b: #0a0a0a; --p: #111; }
-        body { background: var(--b); color: #fff; font-family: '微軟正黑體', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        
-        /* 呼吸燈效果保留 */
-        @keyframes breath { 0%, 100% { border-color: #8a6d3b; } 50% { border-color: var(--g); box-shadow: 0 0 15px rgba(212,175,55,0.2); } }
+        :root {
+            --dark-bg: #0a0a0a;
+            --panel-bg: #111111;
+            --gold-dim: #8a6d3b;
+            --gold-bright: #d4af37;
+            --text-silver: #c0c0c0;
+        }
 
-        .box { width: 900px; padding: 40px; border: 2px solid #8a6d3b; background: var(--p); position: relative; box-shadow: 0 20px 50px #000; }
-        
-        /* 外部標籤文字 */
-        .ext-v { position: absolute; color: #8a6d3b; font-weight: bold; writing-mode: vertical-rl; cursor: pointer; font-size: 18px; transition: 0.3s; z-index: 10; }
-        .ext-v:hover { color: #fff; text-shadow: 0 0 10px var(--g); }
-        
-        .top-bot { position: absolute; left: 50%; transform: translateX(-50%); color: #8a6d3b; font-weight: bold; font-size: 20px; cursor: pointer; transition: 0.3s; z-index: 10; }
-        .top-bot:hover { color: #fff; }
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-        .grid { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 15px; padding: 30px 0; }
-        .blk { border: 1px solid #8a6d3b; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.02); animation: breath 4s infinite ease-in-out; }
-        
-        .tit { color: var(--g); font-weight: bold; font-size: 18px; margin-bottom: 10px; border-bottom: 1px dashed #444; padding-bottom: 8px; cursor: pointer; text-align: center; }
-        .lst { list-style: none; padding: 0; text-align: left; }
-        .lst li { color: var(--s); padding: 6px 0; cursor: pointer; font-size: 15px; transition: 0.2s; }
-        .lst li:hover { color: #fff; transform: translateX(5px); }
-        
-        .side-link { color: var(--s); cursor: pointer; font-size: 16px; font-weight: bold; text-align: center; margin-top: 10px; display: block; }
+        .container {
+            width: 900px;
+            padding: 50px 40px;
+            background: var(--panel-bg);
+            border: 2px solid var(--gold-dim);
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+        }
+
+        /* 外部連結文字 - 恢復最原始的 A 標籤 */
+        .external-link {
+            position: absolute;
+            font-weight: bold;
+            color: var(--gold-dim);
+            text-decoration: none;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 18px;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .external-link:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-bright); }
+
+        .pos-preface { top: 35%; left: -35px; }
+        .pos-mgt { top: 60%; left: -35px; }
+        .pos-holding { top: 45%; right: -35px; }
+
+        .top-bot-link {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gold-dim);
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .top-bot-link:hover { color: var(--gold-bright); }
+        .pos-price { top: 15px; }
+        .pos-cost { bottom: 15px; }
+
+        /* 九宮格佈局 */
+        .management-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 15px;
+            padding: 20px 0;
+        }
+
+        .block {
+            padding: 20px;
+            border: 1px solid var(--gold-dim);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .main-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--gold-bright);
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 8px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sub-items { list-style: none; padding: 0; text-align: left; margin: 0; }
+        .sub-items li a {
+            display: block;
+            padding: 6px 0;
+            font-size: 15px;
+            color: var(--text-silver);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .sub-items li a:hover { color: #fff; text-decoration: underline; padding-left: 5px; }
+
+        .side-link {
+            color: var(--text-silver);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
         .side-link:hover { color: #fff; text-decoration: underline; }
+
+        .middle-stack { display: flex; flex-direction: column; gap: 15px; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <div class="ext-v" style="top:35%; left:-40px;" onmousedown="go('pfc')">前言</div>
-    <div class="ext-v" style="top:60%; left:-40px;" onmousedown="go('mgt')">管理層</div>
-    <div class="ext-v" style="top:45%; right:-40px;" onmousedown="go('hld')">控股層</div>
+<div class="container">
+    <a href="https://sites.google.com/view/webcourse001/%E5%89%8D%E8%A8%80/" target="_blank" class="external-link pos-preface">前言</a>
+    <a href="https://drive.google.com/file/d/1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view?usp=sharing" target="_blank" class="external-link pos-mgt">管理層</a>
+    <a href="https://drive.google.com/file/d/19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view?usp=sharing" target="_blank" class="external-link pos-holding">控股層</a>
     
-    <div class="top-bot" style="top:10px;" onmousedown="go('pri')">價格管理</div>
-    <div class="top-bot" style="bottom:10px;" onmousedown="go('cos')">成本管理</div>
-    
-    <div class="grid">
-        <div class="blk" style="display:flex; flex-direction:column; justify-content:center;">
-            <div class="tit" onmousedown="go('lex')">左外部管理</div>
-            <a class="side-link" onmousedown="go('spl')">供應商管理</a>
+    <a href="https://www.webcoursestest.hairweb.net/價格管理" target="_blank" class="top-bot-link pos-price">價格管理</a>
+    <a href="https://drive.google.com/file/d/14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view?usp=sharing" target="_blank" class="top-bot-link pos-cost">成本管理</a>
+
+    <div class="management-grid">
+        <div class="block">
+            <a href="https://drive.google.com/file/d/1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view" target="_blank" class="main-title">左外部管理</a>
+            <a href="https://www.webcoursestest.hairweb.net/供應商管理" target="_blank" class="side-link">供應商管理</a>
         </div>
 
-        <div style="display:flex; flex-direction:column; gap:15px;">
-            <div class="blk">
-                <div class="tit" onmousedown="go('uex')">上外部管理</div>
-                <ul class="lst">
-                    <li onmousedown="go('cus')">1. 顧客管理</li>
-                    <li onmousedown="go('stm')">2. 客情管理</li>
-                    <li onmousedown="go('bok')">3. 預約管理</li>
+        <div class="middle-stack">
+            <div class="block">
+                <a href="https://drive.google.com/file/d/1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view" target="_blank" class="main-title">上外部管理</a>
+                <ul class="sub-items">
+                    <li><a href="https://www.webcoursestest.hairweb.net/顧客管理" target="_blank">1. 顧客管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/客情管理" target="_blank">2. 客情管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/預約管理" target="_blank">3. 預約管理</a></li>
                 </ul>
             </div>
-            
-            <div class="blk">
-                <div class="tit" onmousedown="go('inm')">內部管理</div>
-                <ul class="lst">
-                    <li onmousedown="go('fin')">1. 財務管理</li>
-                    <li onmousedown="go('hr')">2. 人才管理</li>
-                    <li onmousedown="go('stk')">3. 庫存管理</li>
+            <div class="block">
+                <a href="https://drive.google.com/file/d/1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view" target="_blank" class="main-title">內部管理</a>
+                <ul class="sub-items">
+                    <li><a href="https://www.webcoursestest.hairweb.net/財務管理" target="_blank">1. 財務管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/人才管理" target="_blank">2. 人才管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/庫存管理" target="_blank">3. 庫存管理</a></li>
                 </ul>
             </div>
-
-            <div class="blk">
-                <div class="tit" onmousedown="go('bex')">下外部管理</div>
-                <ul class="lst">
-                    <li onmousedown="go('mkt')">1. 行銷管理</li>
-                    <li onmousedown="go('act')">2. 活動管理</li>
-                    <li onmousedown="go('com')">3. 社區管理</li>
+            <div class="block">
+                <a href="https://drive.google.com/file/d/1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view" target="_blank" class="main-title">下外部管理</a>
+                <ul class="sub-items">
+                    <li><a href="https://www.webcoursestest.hairweb.net/行銷管理" target="_blank">1. 行銷管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/活動管理" target="_blank">2. 活動管理</a></li>
+                    <li><a href="https://www.webcoursestest.hairweb.net/社區管理" target="_blank">3. 社區管理</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="blk" style="display:flex; flex-direction:column; justify-content:center;">
-            <div class="tit" onmousedown="go('rex')">右外部管理</div>
-            <a class="side-link" onmousedown="go('brd')">品牌管理</a>
+        <div class="block">
+            <a href="https://drive.google.com/file/d/1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view" target="_blank" class="main-title">右外部管理</a>
+            <a href="https://www.webcoursestest.hairweb.net/品牌管理" target="_blank" class="side-link">品牌管理</a>
         </div>
     </div>
 </div>
-
-<script>
-    // 網址碎片化，防止 Google 協作平台偵測到完整連結而產生劫持
-    const _H = "https://";
-    const _D = "drive.google.com/file/d/";
-    const _S = "sites.google.com/view/webcourse001/";
-    const _W = "www.webcoursestest.hairweb.net/";
-
-    const m = {
-        'pfc': _H + _S + '%E5%89%8D%E8%A8%80/',
-        'mgt': _H + _D + '1OFOMi1jE9KRMp2eHoL1T4eeGUm3peq9g/view',
-        'hld': _H + _D + '19jz8RCEfCmmBI_ki8mlXP0BeEa7NIM14/view',
-        'pri': _H + _W + '價格管理',
-        'cos': _H + _D + '14qUKcjBlMhrGQpNFsb5CUxfUWHeBagkP/view',
-        'lex': _H + _D + '1DaYJLu4EH68bJcOUMOY46Tem85JxRByF/view',
-        'rex': _H + _D + '1MU1Z2cH0L5sNmV-TqaWWp9zUvRiDoxyV/view',
-        'uex': _H + _D + '1cFAh4to7Jyau-JrV75RzHXexsyTGuePA/view',
-        'inm': _H + _D + '1WqYvrwuDqktlYV94Blb3ETpxL5rJ4cG5/view',
-        'bex': _H + _D + '1T6i6smjMgfm40HrLm3zzoC5FrTuOCTbG/view',
-        'cus': _H + _W + '顧客管理',
-        'stm': _H + _W + '客情管理',
-        'bok': _H + _W + '預約管理',
-        'fin': _H + _W + '財務管理',
-        'hr':  _H + _W + '人才管理',
-        'stk': _H + _W + '庫存管理',
-        'mkt': _H + _W + '行銷管理',
-        'act': _H + _W + '活動管理',
-        'com': _H + _W + '社區管理',
-        'spl': _H + _W + '供應商管理',
-        'brd': _H + _W + '品牌管理'
-    };
-
-    function go(k) {
-        // 使用 mousedown 觸發並立即開啟，繞過多數劫持腳本
-        if (event) { event.preventDefault(); event.stopPropagation(); }
-        const u = m[k];
-        if (u) {
-            const win = window.open(u, '_blank');
-            if (win) win.opener = null;
-        }
-    }
-</script>
 
 </body>
 </html>
