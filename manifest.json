@@ -1,4 +1,5 @@
 {
+  "id": "mentor-app",
   "short_name": "導師平台",
   "name": "沙龍經營學線上課程-導師專屬",
   "lang": "zh-TW",
@@ -16,7 +17,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#D4AF37",
@@ -25,7 +26,15 @@
       "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "narrow"
+      "form_factor": "narrow",
+      "label": "導師平台介面"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "導師平台電腦版"
     }
   ]
 }
