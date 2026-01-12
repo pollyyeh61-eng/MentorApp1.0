@@ -1,5 +1,5 @@
 // 這是 Service Worker 的工作說明書
-const CACHE_NAME = 'vitality-hair-v1';
+const CACHE_NAME = '導師專屬平台';
 const ASSETS = [
   './',
   './index.html',
@@ -23,4 +23,5 @@ self.addEventListener('fetch', (event) => {
       return response || fetch(event.request);
     })
   );
+
 });
