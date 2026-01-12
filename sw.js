@@ -35,6 +35,21 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
+      // 核心：監聽網路請求，這是手機版判定 PWA 的關鍵
+self.addEventListener('fetch', (event) => {
+  // 如果是註冊或登入的 POST 請求，直接連網
+  if (event.request.method === 'POST') {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      // 優先回傳快取，沒有快取就上網抓
+      return response || fetch(event.request);
     })
   );
 });
+    })
+  );
+});
+
