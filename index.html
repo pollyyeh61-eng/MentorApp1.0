@@ -108,6 +108,10 @@
             <button onclick="openAuth('login')">登入</button>
             <button onclick="openAuth('register')" style="background:var(--gold-main); color:black;">註冊進入</button>
         </div>
+        // 如果已經有登入資訊，直接跳轉到課程主頁
+if (localStorage.getItem('userToken')) { 
+    window.location.href = 'dashboard.html'; // 換成你的課程主頁路徑
+}
         <div id="navUserInfo" class="nav-user-info">
             <span id="userNameDisplay" style="color:var(--gold-main); font-weight:bold;">成員</span>
             <button onclick="openMemberInfo()" style="color:#aaa; background:none; border:none; text-decoration:underline; cursor:pointer;">會員中心</button>
@@ -328,4 +332,5 @@
 </script>
 </body>
 </html>
+
 
