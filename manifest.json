@@ -5,13 +5,13 @@
   "lang": "zh-TW",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -23,14 +23,14 @@
   "theme_color": "#D4AF37",
   "screenshots": [
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "導師平台介面"
+      "label": "導師平台手機版"
     },
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "wide",
