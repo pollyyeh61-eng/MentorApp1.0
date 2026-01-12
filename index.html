@@ -100,10 +100,6 @@
         .needs-save { animation: gold-breathing 2s infinite ease-in-out; background: var(--gold-bright) !important; color: #000; }
         .terms-box { height: 80px; overflow-y: auto; background: #050505; font-size: 0.75rem; margin: 15px 0; padding: 12px; text-align: left; color: #777; border-radius: 8px; }
         
-        // 如果已經有登入資訊，直接跳轉到課程主頁
-if (localStorage.getItem('userToken')) { 
-    window.location.href = 'dashboard.html'; // 換成你的課程主頁路徑
-}
     </style>
 </head>
 <body>
@@ -334,6 +330,7 @@ if (localStorage.getItem('userToken')) {
 </script>
 </body>
 </html>
+
 
 
 
