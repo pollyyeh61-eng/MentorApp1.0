@@ -1,11 +1,11 @@
 {
-  "short_name": "活力美髮學堂",
-  "name": "沙龍經營學線上課程",
+  "short_name": "導師平台",
+  "name": "沙龍經營學線上課程-導師專屬",
   "lang": "zh-TW",
   "icons": [
     {
       "src": "logo.png",
-      "sizes": "512x512", 
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
@@ -25,8 +25,7 @@
       "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "線上課程平台"
+      "form_factor": "narrow"
     }
   ]
 }
