@@ -105,7 +105,14 @@
             100% { box-shadow: 0 0 5px var(--gold-main); transform: scale(1); }
         }
         .needs-save { animation: gold-breathing 2s infinite ease-in-out; background: var(--gold-bright) !important; color: #000; }
-        .terms-box { height: 80px; overflow-y: auto; background: #050505; font-size: 0.75rem; margin: 15px 0; padding: 12px; text-align: left; color: #777; border-radius: 8px; }
+        
+        /* 條款視窗樣式優化 */
+        .terms-box { 
+            height: 150px; overflow-y: auto; background: #050505; font-size: 0.75rem; 
+            margin: 15px 0; padding: 12px; text-align: left; color: #bbb; border-radius: 8px; 
+            border: 1px solid #333; line-height: 1.6;
+        }
+        .terms-box h4 { color: var(--gold-main); margin: 10px 0 5px 0; font-size: 0.85rem; }
         
     </style>
 </head>
@@ -181,12 +188,40 @@
     <div class="modal-overlay" id="authModal">
         <div class="auth-card">
             <h2 id="modalTitle">成員進入</h2>
-            <input type="email" id="email" placeholder="Email" oninput="saveLocal()">
-            <input type="password" id="password" placeholder="通行密碼">
-            <div id="registerOnly" style="display:none;">
-                <div class="terms-box">條款：本系統資源僅供成員學習使用，嚴禁轉載。</div>
-                <label><input type="checkbox" id="agreeCheck"> 我已閱讀並同意條款</label>
+            <div style="margin-top:20px;">
+                <input type="email" id="email" placeholder="Email" oninput="saveLocal()">
+                <input type="password" id="password" placeholder="通行密碼" style="margin-top:10px;">
             </div>
+            
+            <div id="registerOnly" style="display:none;">
+                <label style="margin-top:15px;">2026 學員服務與個資保護條款</label>
+                <div class="terms-box">
+                    <strong>為確保 活力美髮學堂（以下簡稱「本平台」）之種子學員權益，請詳閱以下條款：</strong><br><br>
+                    <h4>一、 帳號安全與權限規範</h4>
+                    1. 專屬權限：本平台核發之帳號僅限學員本人使用，嚴禁轉借、租賃。<br>
+                    2. 安全義務：凡經正確帳密登入之行為（如核銷、扣款），均視為學員本人操作。
+                    
+                    <h4>二、 會員個資與數據處理</h4>
+                    1. 個資授權：學員透過 App 蒐集之顧客名單，所有權歸屬學員經營之沙龍所有。本平台僅提供技術支持。<br>
+                    2. 隱私保護：本平台採用 AES 加密技術，未經授權不得將數據提供給第三方進行商業用途。
+                    
+                    <h4>三、 金流、儲值與點數管理</h4>
+                    1. 功能定義：App 內「錢包餘額」僅供內部管理記錄，本平台不代收、不經手任何實際法定貨幣。<br>
+                    2. 對帳責任：學員應定期複核帳務。若因操作錯誤導致之紛爭，由學員與其顧客自行協商解決。
+                    
+                    <h4>四、 系統免責聲明</h4>
+                    1. 開發階段：本系統處於「種子測試階段」。若因電信故障、天災或攻擊導致中斷，本平台不負損害賠償責任。<br>
+                    2. 更新義務：學員應配合更新至最新版本以確保數據安全。
+                    
+                    <h4>五、 爭議解決</h4>
+                    本協議之解釋與適用，以 [台灣/高雄] 地方法院為第一審管轄法院。
+                </div>
+                <label style="display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="agreeCheck" style="width: 18px; height: 18px;"> 
+                    <span>我已閱讀並同意條款</span>
+                </label>
+            </div>
+
             <button class="submit-btn" id="mainSubmitBtn">立即進入</button>
             <p onclick="closeAuth()" style="text-decoration:underline; cursor:pointer; font-size:0.8rem; margin-top:15px; color:#555;">取消返回</p>
         </div>
@@ -228,6 +263,7 @@
 
         let currentUser = null;
 
+        // 頭像處理與儲存
         window.handleImageUpload = (input) => {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -290,6 +326,8 @@
             document.getElementById('authModal').style.display = 'flex';
             document.getElementById('modalTitle').innerText = mode === 'login' ? '成員進入' : '申請入駐';
             document.getElementById('registerOnly').style.display = mode === 'login' ? 'none' : 'block';
+            // 開啟時重置勾選
+            document.getElementById('agreeCheck').checked = false;
         };
 
         window.openMemberInfo = () => {
@@ -305,16 +343,37 @@
         window.saveLocal = () => localStorage.setItem('cached_email', document.getElementById('email').value);
         document.getElementById('email').value = localStorage.getItem('cached_email') || '';
 
+        // 登入/註冊按鈕邏輯
         document.getElementById('mainSubmitBtn').onclick = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const isRegister = document.getElementById('modalTitle').innerText === '申請入駐';
+
+            if (!email || !password) {
+                alert("請填寫 Email 與密碼");
+                return;
+            }
+
+            if (isRegister) {
+                // 檢查是否勾選條款
+                if (!document.getElementById('agreeCheck').checked) {
+                    alert("請閱讀並勾選同意「學員服務與個資保護條款」方可註冊。");
+                    return;
+                }
+            }
+
             try {
-                if(document.getElementById('modalTitle').innerText === '成員進入') {
+                if(!isRegister) {
                     await signInWithEmailAndPassword(auth, email, password);
                 } else {
                     await createUserWithEmailAndPassword(auth, email, password);
                 }
-            } catch(e) { alert("進入失敗: " + e.message); }
+            } catch(e) { 
+                let msg = e.message;
+                if(e.code === 'auth/weak-password') msg = "密碼強度不足（需至少 6 碼）";
+                if(e.code === 'auth/email-already-in-use') msg = "此 Email 已被註冊";
+                alert("操作失敗: " + msg); 
+            }
         };
 
         window.appJump = (url) => { 
@@ -326,22 +385,5 @@
             if(confirm("確定登出？")) signOut(auth); 
         };
     </script>
-    <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('導師平台 PWA 啟動成功！'))
-        .catch(err => console.error('註冊失敗：', err));
-    });
-  }
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
