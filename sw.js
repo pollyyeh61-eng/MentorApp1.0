@@ -1,5 +1,5 @@
-const CACHE_NAME = 'mentor-final-v2'; // 每次更新務必改這個名字，如 v2, v3
-const CACHE_NAME = 'mentor-v2';
+const CACHE_NAME = 'mentor-final-v3'; // 每次更新務必改這個名字，如 v2, v3
+const CACHE_NAME = 'mentor-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -98,6 +98,7 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
 
 
 
