@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VOGUE 美業預約系統</title>
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --gold-dim: rgba(212, 175, 55, 0.15);
+            --gold-bright: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.5);
+            --status-wait: #ff4d4d;
+            --status-done: #00ff00;
+        }
+
+        body {
+            background-color: var(--dark-bg); color: #fff;
+            font-family: 'PingFang TC', sans-serif; margin: 0;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding-bottom: 120px;
+        }
+
+        /* --- 返回首頁按鈕：修正為真正的跳轉 --- */
+        .home-btn {
+            position: fixed; top: 15px; left: 15px; z-index: 10000;
+            background: #000; border: 2px solid var(--gold-bright);
+            color: var(--gold-bright); padding: 10px 18px;
+            border-radius: 12px; font-size: 14px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+        }
+
+        .panel { display: none; width: 92%; max-width: 420px; padding-top: 65px; }
+        .panel.active { display: block; }
+
+        /* 輪播區樣式 */
+        .carousel-section { width: 100%; position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; }
+        .main-display-area { position: relative; width: 100%; height: 300px; display: flex; justify-content: center; align-items: center; margin-top: 15px; }
+        #main-photo { width: 230px; height: 290px; object-fit: cover; border-radius: 18px; border: 2px solid var(--gold-bright); box-shadow: 0 0 20px var(--gold-glow); z-index: 5; }
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 1px solid var(--gold-bright); border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.8); color: var(--gold-bright); z-index: 10; cursor: pointer; }
+        .prev-btn { left: 10px; } .next-btn { right: 10px; }
+
+        .glass-card { background: linear-gradient(145deg, #111, #000); border: 1px solid var(--gold-dim); border-radius: 24px; padding: 22px; margin-bottom: 20px; width: 100%; box-sizing: border-box; }
+        
+        /* --- 修正處：時間與日期不溢出的 CSS --- */
+        select, input { width: 100%; padding: 15px; margin-bottom: 12px; background: #080808; border: 1.5px solid #222; border-radius: 12px; color: #fff; box-sizing: border-box; font-size: 15px; outline: none; }
+        .date-time-row { display: flex; gap: 8px; margin-bottom: 12px; width: 100%; box-sizing: border-box; }
+        .date-time-row input { flex: 1; width: 0; min-width: 0; margin-bottom: 0; padding: 12px 8px; font-size: 13px; }
+
+        /* 服務項目 10 項網格 */
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .service-item { background: #111; border: 1px solid #333; border-radius: 10px; padding: 12px 5px; font-size: 13px; text-align: center; cursor: pointer; color: #888; }
+        .service-item.selected { border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(212, 175, 55, 0.15); box-shadow: 0 0 10px var(--gold-glow); }
+
+        .btn { width: 100%; padding: 16px; border-radius: 15px; border: 1.8px solid var(--gold-bright); background: transparent; color: var(--gold-bright); font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 3px; }
+
+        /* 狀態標籤與月曆 */
+        .status-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; border: 1px solid currentColor; margin-left: 5px; }
+        .status-wait { color: var(--status-wait); }
+        .status-done { color: var(--status-done); }
+
+        .calendar-table { width: 100%; border-collapse: collapse; color: #ccc; }
+        .calendar-table td { height: 40px; text-align: center; cursor: pointer; border-radius: 8px; position: relative; }
+        .calendar-table td.has-event::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: var(--gold-bright); border-radius: 50%; }
+
+        /* 歷史清單 */
+        .history-item { background: rgba(255,255,255,0.04); padding: 15px; border-radius: 18px; margin-bottom: 12px; border-left: 4px solid var(--gold-bright); }
+        .tab-switcher { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; background: #111; border-radius: 50px; padding: 5px; width: 240px; border: 1px solid #333; z-index: 1000; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #666; font-size: 14px; cursor: pointer; }
+        .tab-btn.active { background: var(--gold-bright); color: #000; border-radius: 40px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <button class="home-btn" onclick="window.location.href='index.html'">🏠 返回首頁</button>
+
+    <div id="client" class="panel active">
+        <h1 style="color:var(--gold-bright); text-align:center; letter-spacing:10px; margin: 10px 0 5px;">VOGUE</h1>
+        
+        <div class="carousel-section">
+            <h4 style="color:var(--gold-bright); font-weight:300; margin:0; font-size:14px;">✨ 髮型溝通 (點選欲回傳照片)</h4>
+            <div class="main-display-area">
+                <div class="nav-arrow prev-btn" onclick="prevImg()">&#10094;</div>
+                <img id="main-photo" src="https://via.placeholder.com/230x290/111/d4af37?text=VOGUE" alt="展示">
+                <div class="nav-arrow next-btn" onclick="nextImg()">&#10095;</div>
+            </div>
+            <p id="photo-counter" style="color:#666; font-size:12px; margin-top:10px;">0 / 0</p>
+            <button class="btn" style="width:80%; margin-top:10px; font-size:14px;" onclick="document.getElementById('photo-input').click()">📷 上傳我的參考照</button>
+            <input type="file" id="photo-input" style="display:none" accept="image/*" onchange="handleFileUpload(event)">
+        </div>
+        
+        <div class="glass-card">
+            <select id="selDesigner">
+                <option value="不指定">不指定 (由現場安排)</option>
+                <option value="設計師 A">預約 設計師 A</option>
+                <option value="設計師 B">預約 設計師 B</option>
+            </select>
+            <input type="text" id="custName" placeholder="顧客姓名">
+            <input type="tel" id="custPhone" placeholder="聯繫電話">
+            
+            <div class="service-grid">
+                <div class="service-item" onclick="toggleService(this)">洗髮</div>
+                <div class="service-item" onclick="toggleService(this)">剪髮</div>
+                <div class="service-item" onclick="toggleService(this)">洗加剪</div>
+                <div class="service-item" onclick="toggleService(this)">單色染髮</div>
+                <div class="service-item" onclick="toggleService(this)">雙色染髮</div>
+                <div class="service-item" onclick="toggleService(this)">漂髮設計</div>
+                <div class="service-item" onclick="toggleService(this)">熱塑燙髮</div>
+                <div class="service-item" onclick="toggleService(this)">冷塑燙髮</div>
+                <div class="service-item" onclick="toggleService(this)">頭皮護理</div>
+                <div class="service-item" onclick="toggleService(this)">髮質護理</div>
+            </div>
+
+            <div class="date-time-row">
+                <input type="date" id="appDate">
+                <input type="time" id="appTime">
+            </div>
+
+            <button class="btn" onclick="addBooking()">送出預約並回傳照片</button>
+        </div>
+
+        <h3 style="color:var(--gold-bright); margin-left:10px;">預約接單狀態</h3>
+        <div id="my-list"></div>
+    </div>
+
+    <div id="designer" class="panel">
+        <h1 style="text-align:center; color:var(--gold-bright);">管理後台</h1>
+        <div id="designer-content"></div>
+    </div>
+
+    <div class="tab-switcher">
+        <button class="tab-btn active" id="btn-client" onclick="switchTab('client')">客戶入口</button>
+        <button class="tab-btn" id="btn-designer" onclick="switchTab('designer')">設計師後台</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCOhBN9TH3UJSOSx5XVyQ08f_2RUckvXYU",
+            authDomain: "holyhairsalon-f73bf.firebaseapp.com",
+            databaseURL: "https://holyhairsalon-f73bf-default-rtdb.firebaseio.com",
+            projectId: "holyhairsalon-f73bf",
+            storageBucket: "holyhairsalon-f73bf.firebasestorage.app",
+            messagingSenderId: "960169055224",
+            appId: "1:960169055224:web:2dd9017ef2e96803bf3c0d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const bookingRef = ref(db, 'vogue_bookings');
+
+        // 全域掛載確保 HTML 可以呼叫
+        window.switchTab = (t) => {
+            if(t === 'designer') {
+                const code = prompt("請輸入管理碼");
+                if(code !== '0000') return;
+            }
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(t).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + t).classList.add('active');
+        };
+
+        window.toggleService = (el) => el.classList.toggle('selected');
+
+        let photoList = JSON.parse(localStorage.getItem('vogue_local_photos') || '[]');
+        let currentIdx = 0;
+
+        // 保留輪播與上傳功能
+        window.handleFileUpload = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (f) => {
+                photoList.push(f.target.result);
+                localStorage.setItem('vogue_local_photos', JSON.stringify(photoList));
+                currentIdx = photoList.length - 1; renderGallery();
+            };
+            reader.readAsDataURL(file);
+        };
+        window.renderGallery = () => {
+            const main = document.getElementById('main-photo');
+            const cnt = document.getElementById('photo-counter');
+            if(photoList.length > 0) { main.src = photoList[currentIdx]; cnt.innerText = `${currentIdx + 1} / ${photoList.length}`; }
+        };
+        window.nextImg = () => { if(photoList.length){ currentIdx = (currentIdx + 1) % photoList.length; renderGallery(); } };
+        window.prevImg = () => { if(photoList.length){ currentIdx = (currentIdx - 1 + photoList.length) % photoList.length; renderGallery(); } };
+
+        // 預約功能 (包含 Status 狀態)
+        window.addBooking = () => {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            if(!name || !phone) { alert("必填姓名電話"); return; }
+            const services = Array.from(document.querySelectorAll('.service-item.selected')).map(el => el.innerText);
+            push(bookingRef, {
+                name, phone,
+                services,
+                date: document.getElementById('appDate').value,
+                time: document.getElementById('appTime').value,
+                status: "待接單", 
+                timestamp: Date.now()
+            }).then(() => alert("預約成功！"));
+        };
+
+        // 讀取資料：包含客戶看的「接單狀態」與設計師的「接單按鈕」
+        onValue(bookingRef, (snap) => {
+            const data = snap.val();
+            const myList = document.getElementById('my-list');
+            const designerList = document.getElementById('designer-content');
+            myList.innerHTML = ""; designerList.innerHTML = "";
+            if(data) {
+                Object.keys(data).reverse().forEach(key => {
+                    const b = data[key];
+                    const stClass = b.status === "已接單" ? "status-done" : "status-wait";
+                    const itemHtml = `
+                        <div class="history-item">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span><b>${b.name}</b> <span class="status-badge ${stClass}">${b.status}</span></span>
+                                <small>${b.date} ${b.time}</small>
+                            </div>
+                            <div style="font-size:12px; color:#999; margin-top:5px;">項目：${b.services.join(', ')}</div>
+                            </div>
+                    `;
+                    myList.innerHTML += itemHtml;
+                    
+                    const dHtml = itemHtml.replace('</div>', `<button onclick="accept('${key}')" style="margin-top:10px; background:var(--gold-bright); border:none; padding:4px 10px; border-radius:4px;">${b.status==='已接單'?'已處理':'點擊接單'}</button></div>`);
+                    designerList.innerHTML += dHtml;
+                });
+            }
+        });
+
+        window.accept = (key) => update(ref(db, `vogue_bookings/${key}`), { status: "已接單" });
+
+        window.onload = () => { renderGallery(); };
+    </script>
+</body>
+</html>
